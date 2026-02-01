@@ -3,6 +3,7 @@ import {
   ALTERNATE_SCREEN_EXIT,
   CELL_ALIVE,
   CELL_DEAD,
+  COL_SEPARATOR,
   CURSOR_HIDE,
   CURSOR_HOME,
   CURSOR_SHOW,
@@ -20,22 +21,30 @@ async function write(s: string) {
 }
 
 async function enterAltScreen() {
-  await write(ALTERNATE_SCREEN_ENTER); // alternate screen buffer
-  await write(CURSOR_HIDE); // hide cursor
+  await write(ALTERNATE_SCREEN_ENTER);
+  await write(CURSOR_HIDE);
 }
 
 async function leaveAltScreen() {
-  await write(CURSOR_SHOW); // show cursor
-  await write(ALTERNATE_SCREEN_EXIT); // return to normal buffer
+  await write(CURSOR_SHOW);
+  await write(ALTERNATE_SCREEN_EXIT);
 }
 
-function renderGrid(): string {
+type Size = { columns: number; rows: number };
+
+function getSize(): { columns: number; rows: number } {
   const { columns, rows } = Deno.consoleSize();
+  const spacedColumns = Math.floor(columns / 2);
+  return { columns: spacedColumns, rows };
+}
+
+function renderGrid({ columns, rows }: Size): string {
   const lines: string[] = [];
   for (let r = 0; r < rows; r++) {
     let line = "";
     for (let c = 0; c < columns; c++) {
       line += Math.random() < 0.5 ? CELL_ALIVE : CELL_DEAD;
+      line += COL_SEPARATOR;
     }
     lines.push(line);
   }
@@ -46,9 +55,11 @@ async function main() {
   const once = Deno.args.includes("--once");
   try {
     await enterAltScreen();
-    await write(SCREEN_CLEAR); // clear screen
-    await write(CURSOR_HOME); // move to 0,0
-    await write(renderGrid());
+    await write(SCREEN_CLEAR);
+    await write(CURSOR_HOME);
+    const size = getSize();
+
+    await write(renderGrid(size));
 
     if (once) {
       await new Promise((res) => setTimeout(res, 250));
@@ -56,7 +67,9 @@ async function main() {
     }
 
     // Enable raw mode for interactive key handling (Deno 2.x)
-    const anyStdin = Deno.stdin as unknown as { setRaw?: (mode: boolean) => void };
+    const anyStdin = Deno.stdin as unknown as {
+      setRaw?: (mode: boolean) => void;
+    };
     if (typeof anyStdin.setRaw === "function") {
       anyStdin.setRaw(true);
     }
@@ -69,11 +82,13 @@ async function main() {
       if (ch === KEY_QUIT_LOWER || ch === KEY_QUIT_UPPER) break;
       if (ch === KEY_REFRESH_LOWER || ch === KEY_REFRESH_UPPER) {
         await write(CURSOR_HOME);
-        await write(renderGrid());
+        await write(renderGrid(size));
       }
     }
   } finally {
-    const anyStdin2 = Deno.stdin as unknown as { setRaw?: (mode: boolean) => void };
+    const anyStdin2 = Deno.stdin as unknown as {
+      setRaw?: (mode: boolean) => void;
+    };
     if (typeof anyStdin2.setRaw === "function") {
       anyStdin2.setRaw(false);
     }

@@ -1,4 +1,18 @@
-const ESC = "\x1b[";
+import {
+  ALTERNATE_SCREEN_ENTER,
+  ALTERNATE_SCREEN_EXIT,
+  CELL_ALIVE,
+  CELL_DEAD,
+  CURSOR_HIDE,
+  CURSOR_HOME,
+  CURSOR_SHOW,
+  KEY_QUIT_LOWER,
+  KEY_QUIT_UPPER,
+  KEY_REFRESH_LOWER,
+  KEY_REFRESH_UPPER,
+  SCREEN_CLEAR,
+} from "./constants.ts";
+
 const encoder = new TextEncoder();
 
 async function write(s: string) {
@@ -6,13 +20,13 @@ async function write(s: string) {
 }
 
 async function enterAltScreen() {
-  await write(`${ESC}?1049h`); // alternate screen buffer
-  await write(`${ESC}?25l`); // hide cursor
+  await write(ALTERNATE_SCREEN_ENTER); // alternate screen buffer
+  await write(CURSOR_HIDE); // hide cursor
 }
 
 async function leaveAltScreen() {
-  await write(`${ESC}?25h`); // show cursor
-  await write(`${ESC}?1049l`); // return to normal buffer
+  await write(CURSOR_SHOW); // show cursor
+  await write(ALTERNATE_SCREEN_EXIT); // return to normal buffer
 }
 
 function renderGrid(): string {
@@ -21,7 +35,7 @@ function renderGrid(): string {
   for (let r = 0; r < rows; r++) {
     let line = "";
     for (let c = 0; c < columns; c++) {
-      line += Math.random() < 0.5 ? "#" : ".";
+      line += Math.random() < 0.5 ? CELL_ALIVE : CELL_DEAD;
     }
     lines.push(line);
   }
@@ -32,8 +46,8 @@ async function main() {
   const once = Deno.args.includes("--once");
   try {
     await enterAltScreen();
-    await write(`${ESC}2J`); // clear screen
-    await write(`${ESC}H`); // move to 0,0
+    await write(SCREEN_CLEAR); // clear screen
+    await write(CURSOR_HOME); // move to 0,0
     await write(renderGrid());
 
     if (once) {
@@ -52,9 +66,9 @@ async function main() {
       const n = await Deno.stdin.read(buf);
       if (n === null) break;
       const ch = String.fromCharCode(buf[0]);
-      if (ch === "q" || ch === "Q") break;
-      if (ch === "r" || ch === "R") {
-        await write(`${ESC}H`);
+      if (ch === KEY_QUIT_LOWER || ch === KEY_QUIT_UPPER) break;
+      if (ch === KEY_REFRESH_LOWER || ch === KEY_REFRESH_UPPER) {
+        await write(CURSOR_HOME);
         await write(renderGrid());
       }
     }

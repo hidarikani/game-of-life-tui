@@ -33,9 +33,12 @@ async function leaveAltScreen() {
 type Size = { columns: number; rows: number };
 
 function getSize(): { columns: number; rows: number } {
-  const { columns, rows } = Deno.consoleSize();
-  const spacedColumns = Math.floor(columns / 2);
-  return { columns: spacedColumns, rows };
+  try {
+    const { columns, rows } = Deno.consoleSize();
+    return { columns: Math.floor(columns / 2), rows };
+  } catch {
+    return { columns: 40, rows: 24 };
+  }
 }
 
 function renderGrid({ columns, rows }: Size): string {

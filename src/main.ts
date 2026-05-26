@@ -74,7 +74,7 @@ async function main() {
       setRaw?: (mode: boolean) => void;
     };
     if (typeof anyStdin.setRaw === "function") {
-      anyStdin.setRaw(true);
+      try { anyStdin.setRaw(true); } catch { /* no TTY */ }
     }
 
     const buf = new Uint8Array(1);
@@ -93,7 +93,7 @@ async function main() {
       setRaw?: (mode: boolean) => void;
     };
     if (typeof anyStdin2.setRaw === "function") {
-      anyStdin2.setRaw(false);
+      try { anyStdin2.setRaw(false); } catch { /* no TTY */ }
     }
     await leaveAltScreen();
   }

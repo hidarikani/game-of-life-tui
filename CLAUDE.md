@@ -18,6 +18,23 @@ Do not modify files in any other worktree (`main`, `dev`).
 # Run once and exit
 deno task run:agent
 
+## Git workflow
+
+This repo uses worktrees. Never use `git -C` or `git checkout` to switch branches — use the `gh` CLI for PR operations and stay in the `agent` worktree.
+
+Merge PRs with squash:
+
+```bash
+gh pr merge <number> --squash
+```
+
+After merging, reset `agent` to `main` and force push:
+
+```bash
+git fetch origin main && git reset --hard origin/main
+git push --force origin agent
+```
+
 ## Architecture
 
 Two files:

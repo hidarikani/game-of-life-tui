@@ -15,14 +15,8 @@ Do not modify files in any other worktree (`main`, `dev`).
 ## Commands
 
 ```bash
-# Run the TUI interactively
-deno run main.ts
-
-# Run once and exit (useful for non-interactive testing)
-deno run main.ts --once
-
-# Run with auto-reload on file changes
-deno task dev
+# Run once and exit
+deno task run:agent
 
 ## Architecture
 

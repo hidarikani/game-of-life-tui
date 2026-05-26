@@ -13,7 +13,7 @@ Tested on Deno v2.5.
 Run the game interactively:
 
 ```bash
-deno run game-of-life.ts
+deno task run:watch
 ```
 
 Interactive Controls
@@ -24,7 +24,7 @@ Interactive Controls
 Run once without interactive mode (useful for testing):
 
 ```bash
-deno run game-of-life.ts --once
+deno task run:once
 ```
 
 This will display the grid briefly and exit automatically.

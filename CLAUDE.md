@@ -16,19 +16,19 @@ Do not modify files in any other worktree (`main`, `dev`).
 
 ```bash
 # Run the TUI interactively
-deno run game-of-life.ts
+deno run main.ts
 
 # Run once and exit (useful for non-interactive testing)
-deno run game-of-life.ts --once
-```
+deno run main.ts --once
 
-`deno.json` defines a `dev` task (`deno run --watch main.ts`) but `main.ts` does not yet exist — use the commands above directly.
+# Run with auto-reload on file changes
+deno task dev
 
 ## Architecture
 
 Two files:
 
 - **`constants.ts`** — all ANSI escape sequences (alternate screen, cursor control, screen clear) and key/cell character literals. Any new terminal control codes or configurable constants belong here.
-- **`game-of-life.ts`** — entry point. Owns the TUI lifecycle: enter/leave alternate screen, raw-mode stdin, the render loop, and `renderGrid`. Currently `renderGrid` generates a random grid on every call (Game of Life evolution logic is not yet implemented).
+- **`main.ts`** — entry point. Owns the TUI lifecycle: enter/leave alternate screen, raw-mode stdin, the render loop, and `renderGrid`. Currently `renderGrid` generates a random grid on every call (Game of Life evolution logic is not yet implemented).
 
 The grid width is halved from the terminal column count (`Math.floor(columns / 2)`) to compensate for the `COL_SEPARATOR` space between each cell, keeping cells square on a standard terminal.

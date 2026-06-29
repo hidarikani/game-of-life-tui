@@ -1,45 +1,16 @@
 import {
-  ALTERNATE_SCREEN_ENTER,
-  ALTERNATE_SCREEN_EXIT,
   CELL_ALIVE,
   CELL_DEAD,
   COL_SEPARATOR,
-  CURSOR_HIDE,
   CURSOR_HOME,
-  CURSOR_SHOW,
   KEY_QUIT_LOWER,
   KEY_QUIT_UPPER,
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
   SCREEN_CLEAR,
 } from "./constants.ts";
-
-const encoder = new TextEncoder();
-
-async function write(s: string) {
-  await Deno.stdout.write(encoder.encode(s));
-}
-
-async function enterAltScreen() {
-  await write(ALTERNATE_SCREEN_ENTER);
-  await write(CURSOR_HIDE);
-}
-
-async function leaveAltScreen() {
-  await write(CURSOR_SHOW);
-  await write(ALTERNATE_SCREEN_EXIT);
-}
-
-type Size = { columns: number; rows: number };
-
-function getSize(): { columns: number; rows: number } {
-  try {
-    const { columns, rows } = Deno.consoleSize();
-    return { columns: Math.floor(columns / 2), rows };
-  } catch {
-    return { columns: 40, rows: 24 };
-  }
-}
+import { enterAltScreen, getSize, leaveAltScreen, write } from "./terminal.ts";
+import type { Size } from "./terminal.ts";
 
 function renderGrid({ columns, rows }: Size): string {
   const lines: string[] = [];

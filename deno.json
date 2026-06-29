@@ -5,6 +5,7 @@
     "run:agent": "deno run src/main.ts --once"
   },
   "imports": {
+    "@hidarikani/game-of-life-engine": "jsr:@hidarikani/game-of-life-engine@^0.4.0",
     "@std/assert": "jsr:@std/assert@1"
   }
 }

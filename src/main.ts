@@ -2,14 +2,21 @@ import {
   CELL_ALIVE,
   CELL_DEAD,
   COL_SEPARATOR,
-  CURSOR_HOME,
   KEY_QUIT_LOWER,
   KEY_QUIT_UPPER,
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
-  SCREEN_CLEAR,
 } from "./constants.ts";
-import { enterAltScreen, getSize, leaveAltScreen, write } from "./terminal.ts";
+import {
+  clearScreen,
+  disableRawMode,
+  enableRawMode,
+  enterAltScreen,
+  getSize,
+  leaveAltScreen,
+  readKey,
+  write,
+} from "./terminal.ts";
 import type { Size } from "./terminal.ts";
 
 function renderGrid({ columns, rows }: Size): string {
@@ -29,8 +36,7 @@ async function main() {
   const once = Deno.args.includes("--once");
   try {
     await enterAltScreen();
-    await write(SCREEN_CLEAR);
-    await write(CURSOR_HOME);
+    await clearScreen();
     const size = getSize();
 
     await write(renderGrid(size));
@@ -40,32 +46,19 @@ async function main() {
       return;
     }
 
-    // Enable raw mode for interactive key handling (Deno 2.x)
-    const anyStdin = Deno.stdin as unknown as {
-      setRaw?: (mode: boolean) => void;
-    };
-    if (typeof anyStdin.setRaw === "function") {
-      try { anyStdin.setRaw(true); } catch { /* no TTY */ }
-    }
+    enableRawMode();
 
-    const buf = new Uint8Array(1);
     while (true) {
-      const n = await Deno.stdin.read(buf);
-      if (n === null) break;
-      const ch = String.fromCharCode(buf[0]);
+      const ch = await readKey();
+      if (ch === null) break;
       if (ch === KEY_QUIT_LOWER || ch === KEY_QUIT_UPPER) break;
       if (ch === KEY_REFRESH_LOWER || ch === KEY_REFRESH_UPPER) {
-        await write(CURSOR_HOME);
+        await clearScreen();
         await write(renderGrid(size));
       }
     }
   } finally {
-    const anyStdin2 = Deno.stdin as unknown as {
-      setRaw?: (mode: boolean) => void;
-    };
-    if (typeof anyStdin2.setRaw === "function") {
-      try { anyStdin2.setRaw(false); } catch { /* no TTY */ }
-    }
+    disableRawMode();
     await leaveAltScreen();
   }
 }

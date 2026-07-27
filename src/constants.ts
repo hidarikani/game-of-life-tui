@@ -9,11 +9,6 @@ export const CURSOR_SHOW = `${ESC}?25h`;
 export const SCREEN_CLEAR = `${ESC}2J`;
 export const CURSOR_HOME = `${ESC}H`;
 
-// Cell characters
-export const CELL_ALIVE = "#";
-export const CELL_DEAD = ".";
-export const COL_SEPARATOR = " ";
-
 // Keyboard commands
 export const KEY_QUIT_LOWER = "q";
 export const KEY_QUIT_UPPER = "Q";

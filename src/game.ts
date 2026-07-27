@@ -1,15 +1,38 @@
-import { CELL_ALIVE, CELL_DEAD, COL_SEPARATOR } from "./constants.ts";
 import type { Size } from "./terminal.ts";
+import { Engine, Grid, PatternLib } from "@hidarikani/game-of-life-engine";
+import type { GridSize } from "@hidarikani/game-of-life-engine";
+
+let gridSize: GridSize | null = null;
+let engine: Engine | null = null;
 
 export function renderGrid({ columns, rows }: Size): string {
-  const lines: string[] = [];
-  for (let r = 0; r < rows; r++) {
-    let line = "";
-    for (let c = 0; c < columns; c++) {
-      line += Math.random() < 0.5 ? CELL_ALIVE : CELL_DEAD;
-      line += COL_SEPARATOR;
+  const lib = PatternLib.fromBuiltInData();
+  const pulsar = lib.getPatternByKey("pulsar");
+
+  const proposedGridSize: GridSize = { w: columns, h: rows };
+
+  if (gridSize === null) {
+    gridSize = proposedGridSize;
+  } else {
+    if (
+      gridSize.w !== proposedGridSize.w || gridSize.h !== proposedGridSize.h
+    ) {
+      gridSize = proposedGridSize;
+      engine = null;
     }
-    lines.push(line);
   }
-  return lines.join("\n");
+
+  const firstGeneration = new Grid({ gridSize });
+
+  firstGeneration.writeGrid({
+    inner: pulsar.generations[0],
+    offset: { x: 1, y: 2 },
+  });
+
+  if (engine === null) {
+    engine = new Engine({ firstGeneration });
+  }
+
+  engine.evolveGrid();
+  return engine.toString();
 }

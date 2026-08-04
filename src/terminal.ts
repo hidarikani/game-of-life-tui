@@ -1,11 +1,12 @@
 import {
   ALTERNATE_SCREEN_ENTER,
   ALTERNATE_SCREEN_EXIT,
-  CURSOR_HOME,
   CURSOR_HIDE,
+  CURSOR_HOME,
   CURSOR_SHOW,
   SCREEN_CLEAR,
 } from "./constants.ts";
+import type { GridSize } from "@hidarikani/game-of-life-engine";
 
 const encoder = new TextEncoder();
 
@@ -13,14 +14,12 @@ export async function write(s: string) {
   await Deno.stdout.write(encoder.encode(s));
 }
 
-export type Size = { columns: number; rows: number };
-
-export function getSize(): Size {
+export function getSize(): GridSize {
   try {
     const { columns, rows } = Deno.consoleSize();
-    return { columns: Math.floor(columns / 2), rows };
+    return { w: Math.floor(columns / 2), h: rows };
   } catch {
-    return { columns: 40, rows: 24 };
+    return { w: 40, h: 24 };
   }
 }
 
@@ -44,14 +43,18 @@ type RawStdin = { setRaw?: (mode: boolean) => void };
 export function enableRawMode() {
   const stdin = Deno.stdin as unknown as RawStdin;
   if (typeof stdin.setRaw === "function") {
-    try { stdin.setRaw(true); } catch { /* no TTY */ }
+    try {
+      stdin.setRaw(true);
+    } catch { /* no TTY */ }
   }
 }
 
 export function disableRawMode() {
   const stdin = Deno.stdin as unknown as RawStdin;
   if (typeof stdin.setRaw === "function") {
-    try { stdin.setRaw(false); } catch { /* no TTY */ }
+    try {
+      stdin.setRaw(false);
+    } catch { /* no TTY */ }
   }
 }
 

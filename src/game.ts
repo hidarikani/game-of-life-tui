@@ -1,28 +1,26 @@
-import type { Size } from "./terminal.ts";
 import { Engine, Grid, PatternLib } from "@hidarikani/game-of-life-engine";
 import type { GridSize } from "@hidarikani/game-of-life-engine";
 
-let gridSize: GridSize | null = null;
+let acceptedSize: GridSize | null = null;
 let engine: Engine | null = null;
 
-export function renderGrid({ columns, rows }: Size): string {
+export function renderGrid(proposedSize: GridSize): string {
   const lib = PatternLib.fromBuiltInData();
   const pulsar = lib.getPatternByKey("pulsar");
 
-  const proposedGridSize: GridSize = { w: columns, h: rows };
-
-  if (gridSize === null) {
-    gridSize = proposedGridSize;
+  if (acceptedSize === null) {
+    acceptedSize = proposedSize;
   } else {
     if (
-      gridSize.w !== proposedGridSize.w || gridSize.h !== proposedGridSize.h
+      acceptedSize.w !== proposedSize.w ||
+      acceptedSize.h !== proposedSize.h
     ) {
-      gridSize = proposedGridSize;
+      acceptedSize = proposedSize;
       engine = null;
     }
   }
 
-  const firstGeneration = new Grid({ gridSize });
+  const firstGeneration = new Grid({ gridSize: acceptedSize });
 
   firstGeneration.writeGrid({
     inner: pulsar.generations[0],

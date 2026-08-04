@@ -6,6 +6,7 @@
   },
   "imports": {
     "@hidarikani/game-of-life-engine": "jsr:@hidarikani/game-of-life-engine@0.5.0",
-    "@std/assert": "jsr:@std/assert@1"
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/cli": "jsr:@std/cli@^1.0.32"
   }
 }

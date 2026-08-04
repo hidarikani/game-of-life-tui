@@ -1,12 +1,87 @@
+import { parseArgs } from "@std/cli/parse-args";
 import {
   ALTERNATE_SCREEN_ENTER,
   ALTERNATE_SCREEN_EXIT,
   CURSOR_HIDE,
   CURSOR_HOME,
   CURSOR_SHOW,
+  DEFAULT_NON_INTERACTIVE_GRID_HEIGHT,
+  DEFAULT_NON_INTERACTIVE_GRID_WIDTH,
+  MIN_GENERATIONS,
+  PATTERN_KEYS,
   SCREEN_CLEAR,
 } from "./constants.ts";
 import type { GridSize } from "@hidarikani/game-of-life-engine";
+import { MIN_GRID_SIZE } from "./constants.ts";
+import { CLIArgs } from "./types/terminal.ts";
+
+export function handleArguments(): CLIArgs {
+  const {
+    interactive,
+    gridWidth: gridWidthRaw,
+    gridHeight: gridHeightRaw,
+    patternKey,
+    generations: generationsRaw,
+  } = parseArgs(
+    Deno.args,
+    {
+      boolean: ["interactive"],
+      string: [
+        "pattern-key",
+        "grid-width",
+        "grid-height",
+        "generations",
+      ],
+      default: {
+        interactive: true,
+        "pattern-key": PATTERN_KEYS.PULSAR,
+        "grid-width": DEFAULT_NON_INTERACTIVE_GRID_WIDTH.toString(),
+        "grid-height": DEFAULT_NON_INTERACTIVE_GRID_HEIGHT.toString(),
+        generations: MIN_GENERATIONS.toString(),
+      },
+      alias: {
+        "pattern-key": "patternKey",
+        "grid-width": "gridWidth",
+        "grid-height": "gridHeight",
+      },
+      negatable: ["interactive"],
+    },
+  );
+
+  const gridWidthParsed = Number(gridWidthRaw);
+  const gridHeightParsed = Number(gridHeightRaw);
+  const generationsParsed = Number(generationsRaw);
+
+  if (!Number.isInteger(gridWidthParsed) && gridWidthParsed >= MIN_GRID_SIZE) {
+    throw new Error(
+      `arg grid-width must be an integer equal or larger than ${MIN_GRID_SIZE}`,
+    );
+  }
+
+  if (
+    !Number.isInteger(gridHeightParsed) && gridHeightParsed >= MIN_GRID_SIZE
+  ) {
+    throw new Error(
+      `arg grid-width must be an integer equal or larger than ${MIN_GRID_SIZE}`,
+    );
+  }
+
+  if (
+    !Number.isInteger(generationsParsed) && generationsParsed >= MIN_GENERATIONS
+  ) {
+    throw new Error(
+      `arg "generations" must be an integer equal or larger than ${MIN_GENERATIONS}`,
+    );
+  }
+
+  return {
+    interactive,
+    gridWidth: gridWidthParsed,
+    gridHeight: gridHeightParsed,
+    patternKey,
+    generations: generationsParsed,
+  };
+}
 
 const encoder = new TextEncoder();
 

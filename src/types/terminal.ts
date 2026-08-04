@@ -1,4 +1,7 @@
 export type CLIArgs = {
-  once: boolean;
+  interactive: boolean;
   patternKey: string;
+  gridWidth: number;
+  gridHeight: number;
+  generations: number;
 };

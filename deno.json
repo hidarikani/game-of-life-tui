@@ -1,8 +1,5 @@
 {
   "tasks": {
-    "run:watch": "deno run --watch src/main.ts",
-    "run:once": "deno run src/main.ts --once",
-    "run:agent": "deno run src/main.ts --once"
   },
   "imports": {
     "@hidarikani/game-of-life-engine": "jsr:@hidarikani/game-of-life-engine@0.5.0",

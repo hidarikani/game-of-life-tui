@@ -1,5 +1,7 @@
 {
   "tasks": {
+    "test": "deno test",
+    "test:watch": "deno test --watch"
   },
   "imports": {
     "@hidarikani/game-of-life-engine": "jsr:@hidarikani/game-of-life-engine@0.5.0",

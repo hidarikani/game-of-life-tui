@@ -31,6 +31,30 @@ git fetch origin main && git reset --hard origin/main
 git push --force origin agent
 ```
 
+## Testing
+
+Uses Deno's built-in test runner with `@std/assert`. Tests are hierarchical — `Deno.test()` with nested `t.step()`.
+
+After every code change, run tests with:
+
+```bash
+deno task test:agent
+```
+
+To re-run tests automatically on file changes during development:
+
+```bash
+deno task test:watch
+```
+
+Test files live alongside source. Example:
+```
+|- src
+  |- terminal
+     |- terminal.ts
+     |- terminal.test.ts
+```
+
 ## Architecture
 
 - **`src/constants.ts`** — all ANSI escape sequences (alternate screen, cursor control, screen clear) and key/cell character literals. Any new terminal control codes or configurable constants belong here.

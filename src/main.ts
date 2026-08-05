@@ -16,7 +16,7 @@ import {
   leaveAltScreen,
   readKey,
   write,
-} from "./terminal.ts";
+} from "./terminal/terminal.ts";
 
 async function doNonInteractive(
   gridWidth: number,

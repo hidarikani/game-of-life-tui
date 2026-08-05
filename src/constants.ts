@@ -19,6 +19,6 @@ export const PATTERN_KEYS = {
 };
 
 export const MIN_GRID_SIZE = 3 as const;
-export const DEFAULT_NON_INTERACTIVE_GRID_WIDTH = 100;
-export const DEFAULT_NON_INTERACTIVE_GRID_HEIGHT = 100;
+export const DEFAULT_GRID_WIDTH = 100;
+export const DEFAULT_GRID_HEIGHT = 100;
 export const MIN_GENERATIONS = 1 as const;

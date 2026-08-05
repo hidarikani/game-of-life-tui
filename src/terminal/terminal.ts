@@ -5,8 +5,8 @@ import {
   CURSOR_HIDE,
   CURSOR_HOME,
   CURSOR_SHOW,
-  DEFAULT_NON_INTERACTIVE_GRID_HEIGHT,
-  DEFAULT_NON_INTERACTIVE_GRID_WIDTH,
+  DEFAULT_GRID_HEIGHT as DEFAULT_GRID_HEIGHT,
+  DEFAULT_GRID_WIDTH as DEFAULT_GRID_WIDTH,
   MIN_GENERATIONS,
   PATTERN_KEYS,
   SCREEN_CLEAR,
@@ -35,8 +35,8 @@ export function handleArguments(): CLIArgs {
       default: {
         interactive: true,
         "pattern-key": PATTERN_KEYS.PULSAR,
-        "grid-width": DEFAULT_NON_INTERACTIVE_GRID_WIDTH.toString(),
-        "grid-height": DEFAULT_NON_INTERACTIVE_GRID_HEIGHT.toString(),
+        "grid-width": DEFAULT_GRID_WIDTH.toString(),
+        "grid-height": DEFAULT_GRID_HEIGHT.toString(),
         generations: MIN_GENERATIONS.toString(),
       },
       alias: {
@@ -94,7 +94,7 @@ export function getSize(): GridSize {
     const { columns, rows } = Deno.consoleSize();
     return { w: Math.floor(columns / 2), h: rows };
   } catch {
-    return { w: 40, h: 24 };
+    return { w: DEFAULT_GRID_WIDTH, h: DEFAULT_GRID_HEIGHT };
   }
 }
 

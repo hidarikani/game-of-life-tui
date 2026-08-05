@@ -1,8 +1,8 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { handleArguments } from "./terminal.ts";
 import {
-  DEFAULT_NON_INTERACTIVE_GRID_HEIGHT,
-  DEFAULT_NON_INTERACTIVE_GRID_WIDTH,
+  DEFAULT_GRID_HEIGHT,
+  DEFAULT_GRID_WIDTH,
   MIN_GENERATIONS,
   MIN_GRID_SIZE,
   PATTERN_KEYS,
@@ -29,8 +29,8 @@ Deno.test("handleArguments", async (t) => {
       assertEquals(result, {
         interactive: true,
         patternKey: PATTERN_KEYS.PULSAR,
-        gridWidth: DEFAULT_NON_INTERACTIVE_GRID_WIDTH,
-        gridHeight: DEFAULT_NON_INTERACTIVE_GRID_HEIGHT,
+        gridWidth: DEFAULT_GRID_WIDTH,
+        gridHeight: DEFAULT_GRID_HEIGHT,
         generations: MIN_GENERATIONS,
       });
     });

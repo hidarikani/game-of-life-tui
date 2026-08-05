@@ -10,10 +10,10 @@ import {
   MIN_GENERATIONS,
   PATTERN_KEYS,
   SCREEN_CLEAR,
-} from "./constants.ts";
+} from "../constants.ts";
 import type { GridSize } from "@hidarikani/game-of-life-engine";
-import { MIN_GRID_SIZE } from "./constants.ts";
-import { CLIArgs } from "./types/terminal.ts";
+import { MIN_GRID_SIZE } from "../constants.ts";
+import { CLIArgs } from "../types/terminal.ts";
 
 export function handleArguments(): CLIArgs {
   const {
@@ -52,22 +52,22 @@ export function handleArguments(): CLIArgs {
   const gridHeightParsed = Number(gridHeightRaw);
   const generationsParsed = Number(generationsRaw);
 
-  if (!Number.isInteger(gridWidthParsed) && gridWidthParsed >= MIN_GRID_SIZE) {
+  if (!Number.isInteger(gridWidthParsed) || gridWidthParsed < MIN_GRID_SIZE) {
     throw new Error(
       `arg grid-width must be an integer equal or larger than ${MIN_GRID_SIZE}`,
     );
   }
 
   if (
-    !Number.isInteger(gridHeightParsed) && gridHeightParsed >= MIN_GRID_SIZE
+    !Number.isInteger(gridHeightParsed) || gridHeightParsed < MIN_GRID_SIZE
   ) {
     throw new Error(
-      `arg grid-width must be an integer equal or larger than ${MIN_GRID_SIZE}`,
+      `arg grid-height must be an integer equal or larger than ${MIN_GRID_SIZE}`,
     );
   }
 
   if (
-    !Number.isInteger(generationsParsed) && generationsParsed >= MIN_GENERATIONS
+    !Number.isInteger(generationsParsed) || generationsParsed < MIN_GENERATIONS
   ) {
     throw new Error(
       `arg "generations" must be an integer equal or larger than ${MIN_GENERATIONS}`,

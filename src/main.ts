@@ -17,37 +17,37 @@ import {
   readKey,
   write,
 } from "./terminal/terminal.ts";
+import { CLIArgs } from "./types/terminal.ts";
 
-async function doNonInteractive(
-  gridWidth: number,
-  gridHeight: number,
-  patternKey: string,
-  generations: number,
-) {
+async function doNonInteractive(args: CLIArgs) {
   const size: GridSize = {
-    w: gridWidth,
-    h: gridHeight,
+    w: args.gridWidth,
+    h: args.gridHeight,
   };
 
-  await write("\nInitial Seed ===\n\n");
-  await write(initGame(size, patternKey));
+  try {
+    await write("\nInitial Seed ===\n\n");
+    await write(initGame(size, args.patternKey));
 
-  if (generations > 1) {
-    for (let i = 0; i < generations - 1; i++) {
-      await write(`\nGeneration ${i} ===\n\n`);
-      await write(tick());
+    if (args.generations > 1) {
+      for (let i = 1; i < args.generations; i++) {
+        await write(`\nGeneration ${i} ===\n\n`);
+        await write(tick());
+      }
     }
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    Deno.exit(1);
   }
 }
 
 async function doInteractive(patternKey: string) {
+  await enterAltScreen();
   try {
-    await enterAltScreen();
     await clearScreen();
     const size = getSize();
 
     await write(initGame(size, patternKey));
-    await write(tick());
 
     enableRawMode();
 
@@ -71,12 +71,7 @@ async function main() {
   if (args.interactive) {
     await doInteractive(args.patternKey);
   } else {
-    doNonInteractive(
-      args.gridWidth,
-      args.gridHeight,
-      args.patternKey,
-      args.generations,
-    );
+    await doNonInteractive(args);
   }
 }
 

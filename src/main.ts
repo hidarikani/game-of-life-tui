@@ -5,7 +5,7 @@ import {
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
 } from "./constants.ts";
-import { initGame, tick } from "./game.ts";
+import { initGame, tick } from "./game/game.ts";
 import {
   clearScreen,
   disableRawMode,

@@ -13,7 +13,7 @@ import {
 } from "../constants.ts";
 import type { GridSize } from "@hidarikani/game-of-life-engine";
 import { MIN_GRID_SIZE } from "../constants.ts";
-import { CLIArgs } from "../types/terminal.ts";
+import { CLIArgs, RawStdin } from "../types/terminal.ts";
 
 export function handleArguments(): CLIArgs {
   const {
@@ -112,8 +112,6 @@ export async function clearScreen() {
   await write(SCREEN_CLEAR);
   await write(CURSOR_HOME);
 }
-
-type RawStdin = { setRaw?: (mode: boolean) => void };
 
 export function enableRawMode() {
   const stdin = Deno.stdin as unknown as RawStdin;

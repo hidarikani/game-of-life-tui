@@ -5,3 +5,5 @@ export type CLIArgs = {
   gridHeight: number;
   generations: number;
 };
+
+export type RawStdin = { setRaw?: (mode: boolean) => void };

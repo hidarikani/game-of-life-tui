@@ -2,6 +2,7 @@ import { Engine, Grid, PatternLib } from "@hidarikani/game-of-life-engine";
 import type { GridSize, IPatternLib } from "@hidarikani/game-of-life-engine";
 
 let acceptedSize: GridSize | null = null;
+let acceptedPatternKey: string | null = null;
 let engine: Engine | null = null;
 let patternLib: null | IPatternLib = null;
 
@@ -12,17 +13,17 @@ export function initGame(proposedSize: GridSize, patternKey: string): string {
 
   const proposedPattern = patternLib.getPatternByKey(patternKey);
 
-  if (acceptedSize === null) {
-    acceptedSize = proposedSize;
-  } else {
-    if (
-      acceptedSize.w !== proposedSize.w ||
-      acceptedSize.h !== proposedSize.h
-    ) {
-      acceptedSize = proposedSize;
-      engine = null;
-    }
+  const sizeChanged = acceptedSize !== null &&
+    (acceptedSize.w !== proposedSize.w || acceptedSize.h !== proposedSize.h);
+  const patternChanged = acceptedPatternKey !== null &&
+    acceptedPatternKey !== patternKey;
+
+  if (sizeChanged || patternChanged) {
+    engine = null;
   }
+
+  acceptedSize = proposedSize;
+  acceptedPatternKey = patternKey;
 
   const firstGeneration = new Grid({ gridSize: acceptedSize });
 
@@ -44,4 +45,28 @@ export function tick(): string {
 
   engine.evolveGrid();
   return engine.toString();
+}
+
+/**
+ * Exposes the module singletons for tests to assert identity (same vs.
+ * recreated instance) directly, instead of inferring it from rendered output.
+ */
+export function getGameStateForTests(): {
+  acceptedSize: GridSize | null;
+  acceptedPatternKey: string | null;
+  engine: Engine | null;
+  patternLib: IPatternLib | null;
+} {
+  return { acceptedSize, acceptedPatternKey, engine, patternLib };
+}
+
+/**
+ * Clears the module singletons so each test can start from a clean slate,
+ * independent of what earlier tests left behind.
+ */
+export function resetGameStateForTests(): void {
+  acceptedSize = null;
+  acceptedPatternKey = null;
+  engine = null;
+  patternLib = null;
 }

@@ -1,10 +1,11 @@
 {
   "tasks": {
-    "run:watch": "deno run --watch src/main.ts",
-    "run:once": "deno run src/main.ts --once",
-    "run:agent": "deno run src/main.ts --once"
+    "test": "deno test",
+    "test:watch": "deno test --watch"
   },
   "imports": {
-    "@std/assert": "jsr:@std/assert@1"
+    "@hidarikani/game-of-life-engine": "jsr:@hidarikani/game-of-life-engine@0.5.0",
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/cli": "jsr:@std/cli@^1.0.32"
   }
 }

@@ -6,14 +6,16 @@ A [Conway's Game of Life][gol] Text User Interface (TUI).
 
 ## Requirements
 
-Tested on Deno v2.5.
+Tested on Deno v2.9.x.
 
 ## Running the Application
 
 Run the game interactively:
 
 ```bash
-deno task run:watch
+deno run src/main.ts # default arguments
+deno run src/main.ts --interactive --pattern-key=pulsar
+deno run src/main.ts --no-interactive --pattern-key=pulsar --grid-width=17 --grid-height=17 --generations=3
 ```
 
 Interactive Controls
@@ -21,12 +23,16 @@ Interactive Controls
 - **R** or **r**: Refresh the grid with a new random pattern
 - **Q** or **q**: Quit the application
 
-Run once without interactive mode (useful for testing):
+## Testing
+
+Run the test suite once:
 
 ```bash
-deno task run:once
+deno task test
 ```
 
-This will display the grid briefly and exit automatically.
+Run the test suite in watch mode, re-running on file changes:
 
-[gol]: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+```bash
+deno task test:watch
+```

@@ -1,34 +1,53 @@
+import { GridSize } from "@hidarikani/game-of-life-engine";
 import {
   KEY_QUIT_LOWER,
   KEY_QUIT_UPPER,
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
 } from "./constants.ts";
-import { renderGrid } from "./game.ts";
+import { initGame, tick } from "./game/game.ts";
 import {
   clearScreen,
   disableRawMode,
   enableRawMode,
   enterAltScreen,
   getSize,
+  handleArguments,
   leaveAltScreen,
   readKey,
   write,
-} from "./terminal.ts";
+} from "./terminal/terminal.ts";
+import { CLIArgs } from "./types/terminal.ts";
 
-async function main() {
-  const once = Deno.args.includes("--once");
+async function doNonInteractive(args: CLIArgs) {
+  const size: GridSize = {
+    w: args.gridWidth,
+    h: args.gridHeight,
+  };
+
   try {
-    await enterAltScreen();
+    await write("\nInitial Seed ===\n\n");
+    await write(initGame(size, args.patternKey));
+
+    if (args.generations > 1) {
+      for (let i = 1; i < args.generations; i++) {
+        await write(`\nGeneration ${i} ===\n\n`);
+        await write(tick());
+      }
+    }
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    Deno.exit(1);
+  }
+}
+
+async function doInteractive(patternKey: string) {
+  await enterAltScreen();
+  try {
     await clearScreen();
     const size = getSize();
 
-    await write(renderGrid(size));
-
-    if (once) {
-      await new Promise((res) => setTimeout(res, 250));
-      return;
-    }
+    await write(initGame(size, patternKey));
 
     enableRawMode();
 
@@ -38,12 +57,21 @@ async function main() {
       if (ch === KEY_QUIT_LOWER || ch === KEY_QUIT_UPPER) break;
       if (ch === KEY_REFRESH_LOWER || ch === KEY_REFRESH_UPPER) {
         await clearScreen();
-        await write(renderGrid(size));
+        await write(tick());
       }
     }
   } finally {
     disableRawMode();
     await leaveAltScreen();
+  }
+}
+
+async function main() {
+  const args = handleArguments();
+  if (args.interactive) {
+    await doInteractive(args.patternKey);
+  } else {
+    await doNonInteractive(args);
   }
 }
 

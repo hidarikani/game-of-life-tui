@@ -31,7 +31,37 @@ git fetch origin main && git reset --hard origin/main
 git push --force origin agent
 ```
 
+## Testing
+
+Uses Deno's built-in test runner with `@std/assert`. Tests are hierarchical — `Deno.test()` with nested `t.step()`.
+
+After every code change, run tests with:
+
+```bash
+deno task test:agent
+```
+
+To re-run tests automatically on file changes during development:
+
+```bash
+deno task test:watch
+```
+
+Test files live alongside source. Example:
+```
+|- src
+  |- terminal
+     |- terminal.ts
+     |- terminal.test.ts
+```
+
+## Code Style
+
+Comments on symbols (functions, classes, exported bindings) use JSDoc (`/** ... */`), not `//` line comments.
+
 ## Architecture
+
+This TUI is a frontend for the `@hidarikani/game-of-life-engine` package, which implements the actual Game of Life grid/pattern/evolution logic (see `src/game/game.ts`). Its docs live at https://jsr.io/@hidarikani/game-of-life-engine — check there before assuming a type or API needs to be discovered from source.
 
 - **`src/constants.ts`** — all ANSI escape sequences (alternate screen, cursor control, screen clear) and key/cell character literals. Any new terminal control codes or configurable constants belong here.
 - **`src/terminal.ts`** — terminal helpers: `write`, `getSize`, `enterAltScreen`, `leaveAltScreen`, `clearScreen`, `enableRawMode`, `disableRawMode`, `readKey`, and the `Size` type.

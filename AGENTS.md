@@ -1,9 +1,12 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with
-code in this repository.
+See https://agents.md/
 
-## Worktree
+Also see [DEVELOPMENT.md][development] for quality-assurance, testing, and
+publishing commands, and [CONVENTIONS.md][conventions] for project and
+documentation conventions.
+
+## Git workflow
 
 This project uses git worktrees, laid out as follows:
 
@@ -26,60 +29,11 @@ git fetch origin --prune
 git reset --hard origin/main
 git push --force-with-lease
 ```
-
-## Commands
-
-````bash
-# Run once and exit
-deno task run:agent
-
-## Git workflow
-
-This repo uses worktrees. Never use `git -C` or `git checkout` to switch branches — use the `gh` CLI for PR operations and stay in the `agent` worktree.
-
 Merge PRs with squash:
 
 ```bash
 gh pr merge <number> --squash
-````
-
-After merging, reset `agent` to `main` and force push:
-
-```bash
-git fetch origin main && git reset --hard origin/main
-git push --force origin agent
 ```
-
-## Testing
-
-Uses Deno's built-in test runner with `@std/assert`. Tests are hierarchical —
-`Deno.test()` with nested `t.step()`.
-
-After every code change, run tests with:
-
-```bash
-deno task test:agent
-```
-
-To re-run tests automatically on file changes during development:
-
-```bash
-deno task test:watch
-```
-
-Test files live alongside source. Example:
-
-```
-|- src
-  |- terminal
-     |- terminal.ts
-     |- terminal.test.ts
-```
-
-## Code Style
-
-Comments on symbols (functions, classes, exported bindings) use JSDoc
-(`/** ... */`), not `//` line comments.
 
 ## Architecture
 
@@ -104,3 +58,8 @@ type or API needs to be discovered from source.
 The grid width is halved from the terminal column count
 (`Math.floor(columns / 2)`) to compensate for the `COL_SEPARATOR` space between
 each cell, keeping cells square on a standard terminal.
+
+<!-- Internal -->
+
+[development]: ./DEVELOPMENT.md
+[conventions]: ./CONVENTIONS.md

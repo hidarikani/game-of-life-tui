@@ -13,6 +13,17 @@ TypeScript first, [JSDoc][js-doc] comments SHALL NOT explain types. It's
 worth mentioning that packages documented with [JSDoc][js-doc] receive a
 higher score from [JSR][jsr].
 
+## Testing
+
+Test files SHALL live alongside the source they test. Example:
+
+```
+|- src
+  |- terminal
+     |- terminal.ts
+     |- terminal.test.ts
+```
+
 ## Markdown Docs
 
 - GitHub Flavored Markdown SHALL be used. This allows for the use of emojis

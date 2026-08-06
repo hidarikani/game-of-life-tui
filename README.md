@@ -65,16 +65,11 @@ Interactive Controls
 - **R** or **r**: Refresh the grid with a new random pattern
 - **Q** or **q**: Quit the application
 
-## Testing
+## Development
 
-Run the test suite once:
+See [DEVELOPMENT.md][development] for running tests, linting, and other
+quality-assurance and publishing steps.
 
-```bash
-deno task test
-```
+<!-- Internal -->
 
-Run the test suite in watch mode, re-running on file changes:
-
-```bash
-deno task test:watch
-```
+[development]: ./DEVELOPMENT.md

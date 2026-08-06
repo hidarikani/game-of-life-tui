@@ -1,4 +1,7 @@
 {
+  "name": "@cell-auto/game-of-life-tui",
+  "version": "0.1.0",
+  "license": "MIT",
   "exports": "./mod.ts",
   "tasks": {
     "test": "deno test",

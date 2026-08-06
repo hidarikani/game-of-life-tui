@@ -1,16 +1,35 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with
+code in this repository.
 
 ## Worktree
 
-All work must be done in the `agent` branch. This repo uses git worktrees — the `agent` branch is checked out in a `worktrees/agent` subdirectory relative to the repo root.
+This project uses git worktrees, laid out as follows:
 
-Do not modify files in any other worktree (`main`, `dev`).
+- root
+  - `main` - do not touch
+  - worktrees
+    - `dev` - `dev` branch checked out, human-first coding. The human authors
+      commit messages, commits, pushes, and creates PRs. Your job here is
+      assisting with questions and helping edit specific changes.
+    - `agent` - `agent` branch checked out, agent-first coding. The human
+      provides requirements; you create the implementation, QA it, commit,
+      push, and create the PR.
+
+Reuse branches rather than creating a new one per feature. For example, after
+a PR based on `agent` has been merged, reset the branch with:
+
+```bash
+# while on agent branch
+git fetch origin --prune
+git reset --hard origin/main
+git push --force-with-lease
+```
 
 ## Commands
 
-```bash
+````bash
 # Run once and exit
 deno task run:agent
 
@@ -22,7 +41,7 @@ Merge PRs with squash:
 
 ```bash
 gh pr merge <number> --squash
-```
+````
 
 After merging, reset `agent` to `main` and force push:
 
@@ -33,7 +52,8 @@ git push --force origin agent
 
 ## Testing
 
-Uses Deno's built-in test runner with `@std/assert`. Tests are hierarchical — `Deno.test()` with nested `t.step()`.
+Uses Deno's built-in test runner with `@std/assert`. Tests are hierarchical —
+`Deno.test()` with nested `t.step()`.
 
 After every code change, run tests with:
 
@@ -48,6 +68,7 @@ deno task test:watch
 ```
 
 Test files live alongside source. Example:
+
 ```
 |- src
   |- terminal
@@ -57,15 +78,28 @@ Test files live alongside source. Example:
 
 ## Code Style
 
-Comments on symbols (functions, classes, exported bindings) use JSDoc (`/** ... */`), not `//` line comments.
+Comments on symbols (functions, classes, exported bindings) use JSDoc
+(`/** ... */`), not `//` line comments.
 
 ## Architecture
 
-This TUI is a frontend for the `@hidarikani/game-of-life-engine` package, which implements the actual Game of Life grid/pattern/evolution logic (see `src/game/game.ts`). Its docs live at https://jsr.io/@hidarikani/game-of-life-engine — check there before assuming a type or API needs to be discovered from source.
+This TUI is a frontend for the `@hidarikani/game-of-life-engine` package, which
+implements the actual Game of Life grid/pattern/evolution logic (see
+`src/game/game.ts`). Its docs live at
+https://jsr.io/@hidarikani/game-of-life-engine — check there before assuming a
+type or API needs to be discovered from source.
 
-- **`src/constants.ts`** — all ANSI escape sequences (alternate screen, cursor control, screen clear) and key/cell character literals. Any new terminal control codes or configurable constants belong here.
-- **`src/terminal.ts`** — terminal helpers: `write`, `getSize`, `enterAltScreen`, `leaveAltScreen`, `clearScreen`, `enableRawMode`, `disableRawMode`, `readKey`, and the `Size` type.
-- **`src/game.ts`** — game logic. Currently `renderGrid` generates a random grid on every call (Game of Life evolution logic is not yet implemented).
-- **`src/main.ts`** — entry point. Owns the TUI lifecycle: enter/leave alternate screen, raw-mode stdin, and the render/key loop.
+- **`src/constants.ts`** — all ANSI escape sequences (alternate screen, cursor
+  control, screen clear) and key/cell character literals. Any new terminal
+  control codes or configurable constants belong here.
+- **`src/terminal.ts`** — terminal helpers: `write`, `getSize`,
+  `enterAltScreen`, `leaveAltScreen`, `clearScreen`, `enableRawMode`,
+  `disableRawMode`, `readKey`, and the `Size` type.
+- **`src/game.ts`** — game logic. Currently `renderGrid` generates a random grid
+  on every call (Game of Life evolution logic is not yet implemented).
+- **`src/main.ts`** — entry point. Owns the TUI lifecycle: enter/leave alternate
+  screen, raw-mode stdin, and the render/key loop.
 
-The grid width is halved from the terminal column count (`Math.floor(columns / 2)`) to compensate for the `COL_SEPARATOR` space between each cell, keeping cells square on a standard terminal.
+The grid width is halved from the terminal column count
+(`Math.floor(columns / 2)`) to compensate for the `COL_SEPARATOR` space between
+each cell, keeping cells square on a standard terminal.

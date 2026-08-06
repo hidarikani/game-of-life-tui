@@ -13,9 +13,9 @@ Tested on Deno v2.9.x.
 Run the game interactively:
 
 ```bash
-deno run src/main.ts # default arguments
-deno run src/main.ts --interactive --pattern-key=pulsar
-deno run src/main.ts --no-interactive --pattern-key=pulsar --grid-width=17 --grid-height=17 --generations=3
+deno run mod.ts # default arguments
+deno run mod.ts --interactive --pattern-key=pulsar
+deno run mod.ts --no-interactive --pattern-key=pulsar --grid-width=17 --grid-height=17 --generations=3
 ```
 
 Interactive Controls

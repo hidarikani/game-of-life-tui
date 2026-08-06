@@ -97,8 +97,9 @@ type or API needs to be discovered from source.
   `disableRawMode`, `readKey`, and the `Size` type.
 - **`src/game.ts`** — game logic. Currently `renderGrid` generates a random grid
   on every call (Game of Life evolution logic is not yet implemented).
-- **`src/main.ts`** — entry point. Owns the TUI lifecycle: enter/leave alternate
-  screen, raw-mode stdin, and the render/key loop.
+- **`mod.ts`** — entry point (also the package's JSR `exports` target). Owns the
+  TUI lifecycle: enter/leave alternate screen, raw-mode stdin, and the
+  render/key loop.
 
 The grid width is halved from the terminal column count
 (`Math.floor(columns / 2)`) to compensate for the `COL_SEPARATOR` space between

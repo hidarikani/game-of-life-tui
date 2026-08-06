@@ -1,4 +1,5 @@
 {
+  "exports": "./mod.ts",
   "tasks": {
     "test": "deno test",
     "test:watch": "deno test --watch"

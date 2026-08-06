@@ -1,8 +1,30 @@
 # game-of-life-tui
 
-Game of Life Text User Interface (TUI)
+This repo contains a Text User Interface (TUI) for running [Conway's Game of
+Life][cgol]. The game's rules have been extensively documented elsewhere,
+including on [Wikipedia][cgol], so they aren't repeated here.
 
-A [Conway's Game of Life][gol] Text User Interface (TUI).
+This library focuses on text user interface concerns, and relies on
+[game-of-life-engine][engine] for the actual simulation logic.
+
+This library is part of a larger namespace of tools:
+
+- [game-of-life-engine][engine] — contains the actual game logic, grid and
+  pattern management, and simulation algorithm
+- **game-of-life-tui** — this package
+- React component for rendering game state (in planning stage)
+- Next.js website for running interactive simulations in the browser (in
+  planning stage)
+
+> [!NOTE]
+> This package isn't intended to be imported. It doesn't expose any symbols.
+> Instead, it's meant to be run directly by a human user to view simulation
+> results.
+
+> [!WARNING]
+> This library isn't stable yet. The API is expected to change, and features
+> may be added or removed without notice. The first stable release will be
+> `v1.0.0`. Until then, major versions will stay below one: `v0.x.x`.
 
 ## Requirements
 
@@ -16,9 +38,9 @@ Install the package globally from JSR as a named executable, `cgol`:
 deno install -g -n cgol jsr:@cell-auto/game-of-life-tui
 ```
 
-This adds a `cgol` command to Deno's install directory
-(`$HOME/.deno/bin` by default). If `cgol` isn't found after installing, add
-that directory to your `PATH`:
+This adds a `cgol` command to Deno's install directory (`$HOME/.deno/bin` by
+default). If `cgol` isn't found after installing, add that directory to your
+`PATH`:
 
 ```bash
 echo 'export PATH="$HOME/.deno/bin:$PATH"' >> ~/.zshrc # or ~/.bashrc
@@ -37,19 +59,6 @@ To upgrade to the latest published version, reinstall with `-f` (force):
 deno install -g -n cgol -f jsr:@cell-auto/game-of-life-tui
 ```
 
-### Alias instead of installing
-
-If you'd rather not run `deno install`, you can add a shell alias that runs
-the package directly from JSR instead:
-
-```bash
-echo 'alias cgol="deno run jsr:@cell-auto/game-of-life-tui"' >> ~/.zshrc # or ~/.bashrc
-source ~/.zshrc
-```
-
-Open a new terminal and `cgol` will now fetch (and cache) the package on
-first run.
-
 ## Running the Application
 
 Running from a local clone of this repository:
@@ -60,16 +69,23 @@ deno run mod.ts --interactive --pattern-key=pulsar
 deno run mod.ts --no-interactive --pattern-key=pulsar --grid-width=17 --grid-height=17 --generations=3
 ```
 
-Interactive Controls
+### Interactive Controls
 
 - **R** or **r**: Refresh the grid with a new random pattern
 - **Q** or **q**: Quit the application
 
 ## Development
 
-See [DEVELOPMENT.md][development] for running tests, linting, and other
+See [CONVENTIONS.md][conventions] for the project's organisation conventions,
+and [DEVELOPMENT.md][development] for running tests, linting, and other
 quality-assurance and publishing steps.
 
 <!-- Internal -->
 
+[conventions]: ./CONVENTIONS.md
 [development]: ./DEVELOPMENT.md
+
+<!-- External -->
+
+[engine]: https://jsr.io/@hidarikani/game-of-life-engine
+[cgol]: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life

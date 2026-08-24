@@ -1,11 +1,11 @@
-import { GridSize } from "@hidarikani/game-of-life-engine";
+import type { GridSize } from "@hidarikani/game-of-life-engine";
 import {
   KEY_QUIT_LOWER,
   KEY_QUIT_UPPER,
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
-} from "./constants.ts";
-import { initGame, tick } from "./game/game.ts";
+} from "./src/constants.ts";
+import { initGame, tick } from "./src/game/game.ts";
 import {
   clearScreen,
   disableRawMode,
@@ -16,8 +16,8 @@ import {
   leaveAltScreen,
   readKey,
   write,
-} from "./terminal/terminal.ts";
-import { CLIArgs } from "./types/terminal.ts";
+} from "./src/terminal/terminal.ts";
+import type { CLIArgs } from "./src/types/terminal.ts";
 
 async function doNonInteractive(args: CLIArgs) {
   const size: GridSize = {

@@ -4,12 +4,14 @@ Runs on [Deno][deno]. Tested with `deno --version` `2.9.x`.
 
 ## Quality Assurance
 
-Deno native quality assurance tools SHALL be used:
+Deno native quality assurance tools SHALL be executed after making changes:
 
 - [deno fmt][deno-fmt]
 - [deno check][deno-check]
 - [deno lint][deno-lint]
 - [deno test][deno-test]
+
+Automated test suite SHALL be executed before commiting:
 
 ```bash
 # run unit tests in watch mode - human friendly

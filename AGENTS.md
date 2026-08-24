@@ -9,8 +9,8 @@ This repo contains a Text User Interface (TUI) for running
 [Conway's Game of Life][cgol]. See the following resources:
 
 - [README.md][readme] — for app overview and tips on running it
-- [DEVELOPMENT.md][development] — for coding, quality assurance, and
-  publishing tips
+- [DEVELOPMENT.md][development] — for coding, quality assurance, and publishing
+  tips
 - [CONVENTIONS.md][conventions] — for project and documentation conventions
 
 ## Git workflow
@@ -24,8 +24,8 @@ This project uses git worktrees, laid out as follows:
       commit messages, commits, pushes, and creates PRs. Your job here is to
       assist with questions and help edit specific changes.
     - `agent` — `agent` branch checked out, agent-first coding. The human
-      provides requirements; you create the implementation, QA it, commit,
-      push, and create the PR.
+      provides requirements; you create the implementation, QA it, commit, push,
+      and create the PR.
 
 Reuse branches rather than creating a new one per feature. For example, after a
 PR based on `agent` has been merged, reset the branch with:
@@ -36,6 +36,11 @@ git fetch origin --prune
 git reset --hard origin/main
 git push --force-with-lease
 ```
+
+## Quality Assurance
+
+Available automated test SHALL be executed before commiting. QA is discussed on
+more detail in [DEVELOPMENT.md][development].
 
 Merge PRs with squash:
 

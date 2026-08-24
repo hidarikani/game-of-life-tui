@@ -1,8 +1,8 @@
 # game-of-life-tui
 
-This repo contains a Text User Interface (TUI) for running [Conway's Game of
-Life][cgol]. The game's rules have been extensively documented elsewhere,
-including on [Wikipedia][cgol], so they aren't repeated here.
+This repo contains a Text User Interface (TUI) for running
+[Conway's Game of Life][cgol]. The game's rules have been extensively documented
+elsewhere, including on [Wikipedia][cgol], so they aren't repeated here.
 
 This library focuses on text user interface concerns, and relies on
 [game-of-life-engine][engine] for the actual simulation logic.
@@ -22,9 +22,9 @@ This library is part of a larger namespace of tools:
 > results.
 
 > [!WARNING]
-> This library isn't stable yet. The API is expected to change, and features
-> may be added or removed without notice. The first stable release will be
-> `v1.0.0`. Until then, major versions will stay below one: `v0.x.x`.
+> This library isn't stable yet. The API is expected to change, and features may
+> be added or removed without notice. The first stable release will be `v1.0.0`.
+> Until then, major versions will stay below one: `v0.x.x`.
 
 ## Requirements
 
@@ -35,8 +35,13 @@ Tested on Deno v2.9.x.
 Install the package globally from JSR as a named executable, `cgol`:
 
 ```bash
-deno install -g -n cgol jsr:@cell-auto/game-of-life-tui
+deno install -g -n cgol --allow-env --allow-read --allow-write jsr:@cell-auto/game-of-life-tui
 ```
+
+The permission flags are needed by the [Ink][ink] rendering layer: `--allow-env`
+and `--allow-read` for loading React and Ink, `--allow-write` for Ink's
+`node:tty` terminal handling. Omitting them works too — Deno will then prompt
+for each permission on first run.
 
 This adds a `cgol` command to Deno's install directory (`$HOME/.deno/bin` by
 default). If `cgol` isn't found after installing, add that directory to your
@@ -58,15 +63,18 @@ cgol
 Running from a local clone of this repository:
 
 ```bash
-deno run mod.ts # default arguments
-deno run mod.ts --interactive --pattern-key=pulsar
-deno run mod.ts --no-interactive --pattern-key=pulsar --grid-width=17 --grid-height=17 --generations=3
+deno run --allow-env --allow-read --allow-write mod.ts # default arguments
+deno run --allow-env --allow-read --allow-write mod.ts --interactive --pattern-key=pulsar
+deno run --allow-env --allow-read --allow-write mod.ts --no-interactive --pattern-key=pulsar --grid-width=17 --grid-height=17 --generations=3
 ```
 
 ### Interactive Controls
 
-- **R** or **r**: Refresh the grid with a new random pattern
+- **R** or **r**: Advance the simulation one generation
 - **Q** or **q**: Quit the application
+
+The interactive view is rendered with [Ink][ink], a React-based terminal
+renderer.
 
 ## Development
 
@@ -83,3 +91,4 @@ quality-assurance and publishing steps.
 
 [engine]: https://jsr.io/@hidarikani/game-of-life-engine
 [cgol]: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+[ink]: https://github.com/vadimdemedes/ink

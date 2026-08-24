@@ -2,6 +2,26 @@
 
 Runs on [Deno][deno]. Tested with `deno --version` `2.9.x`.
 
+> [!TIP]
+> **Working with local dependency updates during active development**
+>
+> Since Deno 2.9, `deno update`/`deno outdated` skip any package version
+> published in the last 24 hours by default (supply-chain cooldown). As this
+> package depends on [game-of-life-engine][engine], which might be updated often
+> during development, this will block you from picking up fresh
+> [game-of-life-engine][engine] versions.
+>
+> To bypass the cooldown when updating dependencies locally, pass
+> `--minimum-dependency-age=0`:
+>
+> ```bash
+> deno update --minimum-dependency-age=0
+> ```
+>
+> This only affects your local resolution — it won't change `deno.lock` cooldown
+> behavior for other contributors or CI. Don't disable the cooldown globally in
+> `deno.json`; keep it scoped to this one command.
+
 ## Quality Assurance
 
 Deno native quality assurance tools SHALL be executed after making changes:
@@ -22,8 +42,8 @@ deno task test
 
 ### Publishing
 
-Published to [JSR][jsr] at [@game-of-life-tui][package] happens automatically in
-CI via the [publish workflow][publish-workflow] on every push to `main`. See
+Published to [JSR][jsr] at [@game-of-life-tui][tui] happens automatically in CI
+via the [publish workflow][publish-workflow] on every push to `main`. See
 [`deno.json`][deno-json] for all the JSR settings.
 
 Because CI publishes on a version that's already merged to `main`, publish-time
@@ -58,4 +78,5 @@ deno publish
 [deno-fmt]: https://docs.deno.com/runtime/reference/cli/fmt/
 [deno-test]: https://docs.deno.com/runtime/reference/cli/test/
 [jsr]: https://jsr.io
-[package]: https://jsr.io/@cell-auto/game-of-life-tui
+[tui]: https://jsr.io/@cell-auto/game-of-life-tui
+[engine]: https://jsr.io/@hidarikani/game-of-life-engine

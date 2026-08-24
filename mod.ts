@@ -1,4 +1,4 @@
-import { GridSize } from "@hidarikani/game-of-life-engine";
+import type { GridSize } from "@hidarikani/game-of-life-engine";
 import {
   KEY_QUIT_LOWER,
   KEY_QUIT_UPPER,
@@ -17,7 +17,7 @@ import {
   readKey,
   write,
 } from "./src/terminal/terminal.ts";
-import { CLIArgs } from "./src/types/terminal.ts";
+import type { CLIArgs } from "./src/types/terminal.ts";
 
 async function doNonInteractive(args: CLIArgs) {
   const size: GridSize = {

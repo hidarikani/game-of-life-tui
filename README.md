@@ -53,12 +53,6 @@ Open a new terminal and run it:
 cgol
 ```
 
-To upgrade to the latest published version, reinstall with `-f` (force):
-
-```bash
-deno install -g -n cgol -f jsr:@cell-auto/game-of-life-tui
-```
-
 ## Running the Application
 
 Running from a local clone of this repository:

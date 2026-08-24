@@ -4,7 +4,7 @@ Runs on [Deno][deno]. Tested with `deno --version` `2.9.x`.
 
 ## Quality Assurance
 
-Uses deno quality assurance tools:
+Deno native quality assurance tools SHALL be used:
 
 - [deno fmt][deno-fmt]
 - [deno check][deno-check]
@@ -12,8 +12,10 @@ Uses deno quality assurance tools:
 - [deno test][deno-test]
 
 ```bash
-# run unit tests in watch mode
+# run unit tests in watch mode - human friendly
 deno task test:watch
+# run once - agent friendly
+deno task test
 ```
 
 ### Publishing

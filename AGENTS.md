@@ -39,8 +39,8 @@ git push --force-with-lease
 
 ## Quality Assurance
 
-Available automated test SHALL be executed before commiting. QA is discussed on
-more detail in [DEVELOPMENT.md][development].
+Quality assurance checks SHALL be executed **before commiting** as described in
+[DEVELOPMENT.md][development].
 
 Merge PRs with squash:
 

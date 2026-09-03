@@ -71,10 +71,14 @@ deno run --allow-env --allow-read --allow-write mod.ts --no-interactive --patter
 ### Interactive Controls
 
 - **R** or **r**: Advance the simulation one generation
+- **P** or **p**: Open the pattern selection list (**↑**/**↓** to move,
+  **Enter** to restart the simulation with the chosen pattern, **Esc** to go
+  back)
 - **Q** or **q**: Quit the application
 
-The interactive view is rendered with [Ink][ink], a React-based terminal
-renderer.
+A toolbar at the bottom of the screen lists the controls available in the
+current view. The interactive view is rendered with [Ink][ink], a React-based
+terminal renderer.
 
 ## Development
 

@@ -1,5 +1,19 @@
 import { Engine, Grid, PatternLib } from "@hidarikani/game-of-life-engine";
-import type { GridSize, IPatternLib } from "@hidarikani/game-of-life-engine";
+import type {
+  GridSize,
+  IPatternLib,
+  PatternType,
+} from "@hidarikani/game-of-life-engine";
+
+/**
+ * The subset of a pattern's metadata the UI needs to render a selection list.
+ */
+export type PatternInfo = {
+  key: string;
+  name: string;
+  type: PatternType;
+  period: number;
+};
 
 let acceptedSize: GridSize | null = null;
 let acceptedPatternKey: string | null = null;
@@ -44,6 +58,46 @@ export function tick(): string {
   }
 
   engine.evolveGrid();
+  return engine.toString();
+}
+
+/**
+ * Lists every built-in pattern, for the pattern selection view.
+ */
+export function listPatterns(): PatternInfo[] {
+  if (patternLib === null) {
+    patternLib = PatternLib.fromBuiltInData();
+  }
+
+  return patternLib.getPatterns(null).map(({ key, name, type, period }) => ({
+    key,
+    name,
+    type,
+    period,
+  }));
+}
+
+/**
+ * Restarts the simulation with the given pattern: clears the grid and places
+ * the pattern's first generation at the origin (no offset). Returns the
+ * rendered grid. Throws without touching the running simulation when the
+ * pattern does not fit the current grid size.
+ */
+export function selectPattern(patternKey: string): string {
+  if (acceptedSize === null || patternLib === null) {
+    throw new Error("Engine uninitialized. Invoke initGame first.");
+  }
+
+  const pattern = patternLib.getPatternByKey(patternKey);
+
+  const firstGeneration = new Grid({ gridSize: acceptedSize });
+  firstGeneration.writeGrid({
+    inner: pattern.generations[0],
+  });
+
+  engine = new Engine({ firstGeneration });
+  acceptedPatternKey = patternKey;
+
   return engine.toString();
 }
 

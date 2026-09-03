@@ -10,6 +10,8 @@ export const KEY_QUIT_LOWER = "q";
 export const KEY_QUIT_UPPER = "Q";
 export const KEY_REFRESH_LOWER = "r";
 export const KEY_REFRESH_UPPER = "R";
+export const KEY_PATTERNS_LOWER = "p";
+export const KEY_PATTERNS_UPPER = "P";
 
 // Game ===
 export const PATTERN_KEYS = {

@@ -8,7 +8,9 @@ import type { GridSize } from "@hidarikani/game-of-life-engine";
 import {
   getGameStateForTests,
   initGame,
+  listPatterns,
   resetGameStateForTests,
+  selectPattern,
   tick,
 } from "./game.ts";
 
@@ -122,3 +124,68 @@ gameTest("tick evolves the current engine in place", () => {
 
   assertStrictEquals(getGameStateForTests().engine, engine);
 });
+
+gameTest(
+  "listPatterns returns every built-in pattern without a full init",
+  () => {
+    const patterns = listPatterns();
+
+    assertNotStrictEquals(getGameStateForTests().patternLib, null);
+    assertEquals(patterns.length > 0, true);
+    assertEquals(patterns.some((p) => p.key === "pulsar"), true);
+    for (const pattern of patterns) {
+      assertEquals(typeof pattern.key, "string");
+      assertEquals(typeof pattern.name, "string");
+      assertEquals(typeof pattern.period, "number");
+    }
+  },
+);
+
+gameTest("selectPattern throws before initGame has been called", () => {
+  assertThrows(
+    () => selectPattern("blinker"),
+    Error,
+    "Engine uninitialized. Invoke initGame first.",
+  );
+});
+
+gameTest("selectPattern replaces the engine and remembers the pattern", () => {
+  initGame(BASE_SIZE, "blinker");
+  const { engine: firstEngine } = getGameStateForTests();
+
+  const frame = selectPattern("toad");
+  const state = getGameStateForTests();
+
+  assertNotStrictEquals(state.engine, firstEngine);
+  assertEquals(state.acceptedPatternKey, "toad");
+  assertEquals(state.acceptedSize, BASE_SIZE);
+  assertEquals(typeof frame, "string");
+});
+
+gameTest(
+  "selectPattern starts from a cleared grid, not the evolved one",
+  () => {
+    initGame(BASE_SIZE, "blinker");
+    const firstFrame = getGameStateForTests().engine!.toString();
+    tick();
+
+    const frame = selectPattern("blinker");
+
+    assertEquals(frame, firstFrame);
+  },
+);
+
+gameTest(
+  "selectPattern with a pattern too large for the grid throws and leaves the simulation running",
+  () => {
+    initGame(BASE_SIZE, "blinker");
+    const { engine } = getGameStateForTests();
+
+    assertThrows(() => selectPattern("pulsar"));
+
+    const state = getGameStateForTests();
+    assertStrictEquals(state.engine, engine);
+    assertEquals(state.acceptedPatternKey, "blinker");
+    tick();
+  },
+);

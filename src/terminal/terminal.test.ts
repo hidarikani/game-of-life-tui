@@ -50,14 +50,15 @@ Deno.test("handleArguments", async (t) => {
 
   await t.step("pattern-key", async (t) => {
     await t.step("accepts --pattern-key", () => {
-      const result = withArgs(["--pattern-key=glider"], () =>
-        handleArguments());
+      const result = withArgs(
+        ["--pattern-key=glider"],
+        () => handleArguments(),
+      );
       assertEquals(result.patternKey, "glider");
     });
 
     await t.step("accepts camelCase alias --patternKey", () => {
-      const result = withArgs(["--patternKey=glider"], () =>
-        handleArguments());
+      const result = withArgs(["--patternKey=glider"], () => handleArguments());
       assertEquals(result.patternKey, "glider");
     });
   });
@@ -68,14 +69,19 @@ Deno.test("handleArguments", async (t) => {
       assertEquals(result.gridWidth, 10);
     });
 
-    await t.step("accepts a valid value via camelCase alias --gridWidth", () => {
-      const result = withArgs(["--gridWidth=10"], () => handleArguments());
-      assertEquals(result.gridWidth, 10);
-    });
+    await t.step(
+      "accepts a valid value via camelCase alias --gridWidth",
+      () => {
+        const result = withArgs(["--gridWidth=10"], () => handleArguments());
+        assertEquals(result.gridWidth, 10);
+      },
+    );
 
     await t.step("accepts the minimum allowed value", () => {
-      const result = withArgs([`--grid-width=${MIN_GRID_SIZE}`], () =>
-        handleArguments());
+      const result = withArgs(
+        [`--grid-width=${MIN_GRID_SIZE}`],
+        () => handleArguments(),
+      );
       assertEquals(result.gridWidth, MIN_GRID_SIZE);
     });
 
@@ -116,10 +122,13 @@ Deno.test("handleArguments", async (t) => {
       assertEquals(result.gridHeight, 10);
     });
 
-    await t.step("accepts a valid value via camelCase alias --gridHeight", () => {
-      const result = withArgs(["--gridHeight=10"], () => handleArguments());
-      assertEquals(result.gridHeight, 10);
-    });
+    await t.step(
+      "accepts a valid value via camelCase alias --gridHeight",
+      () => {
+        const result = withArgs(["--gridHeight=10"], () => handleArguments());
+        assertEquals(result.gridHeight, 10);
+      },
+    );
 
     await t.step("throws when below the minimum", () => {
       withArgs([`--grid-height=${MIN_GRID_SIZE - 1}`], () => {
@@ -149,8 +158,10 @@ Deno.test("handleArguments", async (t) => {
     });
 
     await t.step("accepts the minimum allowed value", () => {
-      const result = withArgs([`--generations=${MIN_GENERATIONS}`], () =>
-        handleArguments());
+      const result = withArgs(
+        [`--generations=${MIN_GENERATIONS}`],
+        () => handleArguments(),
+      );
       assertEquals(result.generations, MIN_GENERATIONS);
     });
 

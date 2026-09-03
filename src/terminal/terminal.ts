@@ -3,17 +3,15 @@ import {
   ALTERNATE_SCREEN_ENTER,
   ALTERNATE_SCREEN_EXIT,
   CURSOR_HIDE,
-  CURSOR_HOME,
   CURSOR_SHOW,
   DEFAULT_GRID_HEIGHT as DEFAULT_GRID_HEIGHT,
   DEFAULT_GRID_WIDTH as DEFAULT_GRID_WIDTH,
   MIN_GENERATIONS,
   PATTERN_KEYS,
-  SCREEN_CLEAR,
 } from "../constants.ts";
 import type { GridSize } from "@hidarikani/game-of-life-engine";
 import { MIN_GRID_SIZE } from "../constants.ts";
-import { CLIArgs, RawStdin } from "../types/terminal.ts";
+import type { CLIArgs } from "../types/terminal.ts";
 
 export function handleArguments(): CLIArgs {
   const {
@@ -106,35 +104,4 @@ export async function enterAltScreen() {
 export async function leaveAltScreen() {
   await write(CURSOR_SHOW);
   await write(ALTERNATE_SCREEN_EXIT);
-}
-
-export async function clearScreen() {
-  await write(SCREEN_CLEAR);
-  await write(CURSOR_HOME);
-}
-
-export function enableRawMode() {
-  const stdin = Deno.stdin as unknown as RawStdin;
-  if (typeof stdin.setRaw === "function") {
-    try {
-      stdin.setRaw(true);
-    } catch { /* no TTY */ }
-  }
-}
-
-export function disableRawMode() {
-  const stdin = Deno.stdin as unknown as RawStdin;
-  if (typeof stdin.setRaw === "function") {
-    try {
-      stdin.setRaw(false);
-    } catch { /* no TTY */ }
-  }
-}
-
-const buf = new Uint8Array(1);
-
-export async function readKey(): Promise<string | null> {
-  const n = await Deno.stdin.read(buf);
-  if (n === null) return null;
-  return String.fromCharCode(buf[0]);
 }

@@ -22,6 +22,56 @@ Runs on [Deno][deno]. Tested with `deno --version` `2.9.x`.
 > behavior for other contributors or CI. Don't disable the cooldown globally in
 > `deno.json`; keep it scoped to this one command.
 
+## Interactive Rendering
+
+Interactive mode is rendered with [Ink][ink], a React renderer for terminals,
+pulled in through `npm:` specifiers — [`deno.json`][deno-json] pins both `ink`
+and `react`. Non-interactive mode is unaffected: it still writes rendered
+generations straight to stdout.
+
+Because React ships no bundled types, [`deno.json`][deno-json] sets
+`jsxImportSourceTypes` to `@types/react` alongside the usual `jsx` and
+`jsxImportSource` compiler options. Ink also reaches for `node:tty`, so running
+the app requires `--allow-env`, `--allow-read` and `--allow-write`; the
+[README][readme] documents those flags for end users.
+
+### stdin compatibility layer
+
+Ink reads the keyboard through Node's `readable` event and `stream.read()`.
+Under Deno's `process.stdin` compatibility layer that pairing never yields data
+— the event fires, but every read returns `null` — so `useInput` would never see
+a keystroke. [`src/ui/stdin-bridge.ts`][stdin-bridge] closes the gap: it puts
+`Deno.stdin` in raw mode, reads it directly, and pumps the bytes into a
+`PassThrough` stream that presents itself to Ink as a TTY. That stream is what
+gets handed to Ink's `render(..., { stdin })`.
+
+> [!WARNING]
+> Don't "simplify" the bridge away by passing `process.stdin` to `render()`. It
+> type checks, renders correctly, and even reports
+> `isRawModeSupported === true`, but no key ever reaches the app. Confirmed
+> against Ink 5 and 6 on Deno 2.9.
+
+Two further consequences of running Ink on Deno:
+
+- The process does not exit on its own once the Ink app unmounts, because Ink's
+  stdin handling keeps the event loop alive. [`mod.ts`][mod] therefore calls
+  `process.exit()` explicitly after `waitUntilExit()`.
+- Keys can arrive batched in a single `useInput` call — typed during startup, or
+  pasted, in which case Enter appears as a literal newline inside the string
+  rather than as `key.return`. [`src/ui/App.tsx`][app] therefore walks each
+  chunk character by character, and mirrors its state in a ref, since Ink
+  dispatches events back to back before React commits the previous update.
+
+Interactive behavior can't be covered by [deno test][deno-test], since it needs
+a real TTY. Changes to the rendering or input path SHOULD be exercised manually,
+or driven through a pseudo-terminal with a tool such as `expect`.
+
+> [!TIP]
+> When driving the app with `expect`, keep draining its output between
+> keystrokes (for example `expect -timeout 2 "ZZZ_NEVER_MATCHES"`). A bare
+> `sleep` leaves the pty buffer unread, which blocks the app's own writes and
+> makes keystrokes look like they were ignored.
+
 ## Quality Assurance
 
 Deno native quality assurance tools SHALL be executed after making changes:
@@ -69,6 +119,10 @@ deno publish
 
 [publish-workflow]: .github/workflows/publish.yml
 [deno-json]: deno.json
+[readme]: README.md
+[mod]: mod.ts
+[app]: src/ui/App.tsx
+[stdin-bridge]: src/ui/stdin-bridge.ts
 
 <!-- External -->
 
@@ -80,3 +134,4 @@ deno publish
 [jsr]: https://jsr.io
 [tui]: https://jsr.io/@cell-auto/game-of-life-tui
 [engine]: https://jsr.io/@hidarikani/game-of-life-engine
+[ink]: https://github.com/vadimdemedes/ink

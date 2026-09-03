@@ -9,6 +9,8 @@ import {
   getGameStateForTests,
   initGame,
   listPatterns,
+  renderPatternPreview,
+  renderPlacement,
   resetGameStateForTests,
   selectPattern,
   tick,
@@ -186,6 +188,93 @@ gameTest(
     const state = getGameStateForTests();
     assertStrictEquals(state.engine, engine);
     assertEquals(state.acceptedPatternKey, "blinker");
+    tick();
+  },
+);
+
+gameTest("listPatterns reports each pattern's own size", () => {
+  const pulsar = listPatterns().find((p) => p.key === "pulsar");
+
+  assertEquals(pulsar?.size, { w: 17, h: 17 });
+});
+
+gameTest("renderPatternPreview renders at the pattern's natural size", () => {
+  const preview = renderPatternPreview("blinker");
+  const rows = preview.split("\n");
+
+  assertEquals(rows.length, 5);
+  assertEquals(preview.includes("#"), true);
+});
+
+gameTest("renderPatternPreview needs no running simulation", () => {
+  assertEquals(getGameStateForTests().engine, null);
+
+  const preview = renderPatternPreview("toad");
+
+  assertEquals(preview.split("\n").length, 6);
+  assertEquals(getGameStateForTests().engine, null);
+});
+
+gameTest("renderPlacement draws on a full-size grid", () => {
+  initGame(BASE_SIZE, "blinker");
+
+  const placement = renderPlacement("blinker", { x: 0, y: 0 });
+
+  assertEquals(placement.split("\n").length, BASE_SIZE.h);
+});
+
+gameTest("renderPlacement shifts the pattern by the offset", () => {
+  initGame(BASE_SIZE, "blinker");
+
+  const atOrigin = renderPlacement("blinker", { x: 0, y: 0 });
+  const shifted = renderPlacement("blinker", { x: 1, y: 0 });
+
+  assertNotStrictEquals(atOrigin, shifted);
+  assertEquals(atOrigin === shifted, false);
+});
+
+gameTest("renderPlacement leaves the running simulation untouched", () => {
+  initGame(BASE_SIZE, "blinker");
+  const { engine } = getGameStateForTests();
+  const before = engine!.toString();
+
+  renderPlacement("blinker", { x: 1, y: 1 });
+
+  assertStrictEquals(getGameStateForTests().engine, engine);
+  assertEquals(engine!.toString(), before);
+});
+
+gameTest("renderPlacement throws when the pattern would overflow", () => {
+  initGame(BASE_SIZE, "blinker");
+
+  assertThrows(() => renderPlacement("blinker", { x: 99, y: 0 }));
+});
+
+gameTest("selectPattern places the pattern at the given offset", () => {
+  initGame(BASE_SIZE, "blinker");
+
+  const frame = selectPattern("blinker", { x: 1, y: 1 });
+
+  assertEquals(frame, renderPlacement("blinker", { x: 1, y: 1 }));
+});
+
+gameTest("selectPattern defaults to the origin", () => {
+  initGame(BASE_SIZE, "blinker");
+
+  const frame = selectPattern("blinker");
+
+  assertEquals(frame, renderPlacement("blinker", { x: 0, y: 0 }));
+});
+
+gameTest(
+  "selectPattern with an overflowing offset throws and leaves the simulation running",
+  () => {
+    initGame(BASE_SIZE, "blinker");
+    const { engine } = getGameStateForTests();
+
+    assertThrows(() => selectPattern("blinker", { x: 99, y: 99 }));
+
+    assertStrictEquals(getGameStateForTests().engine, engine);
     tick();
   },
 );

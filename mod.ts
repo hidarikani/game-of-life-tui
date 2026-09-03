@@ -3,6 +3,8 @@ import type { GridSize } from "@hidarikani/game-of-life-engine";
 import {
   initGame,
   listPatterns,
+  renderPatternPreview,
+  renderPlacement,
   selectPattern,
   tick,
 } from "./src/game/game.ts";
@@ -58,8 +60,11 @@ async function doInteractive(patternKey: string) {
         initialFrame,
         initialPatternKey: patternKey,
         appHeight,
+        gridSize: size,
         patterns: listPatterns(),
         onTick: tick,
+        onRenderPreview: renderPatternPreview,
+        onRenderPlacement: renderPlacement,
         onSelectPattern: selectPattern,
       },
       bridge.stdin,

@@ -71,10 +71,21 @@ deno run --allow-env --allow-read --allow-write mod.ts --no-interactive --patter
 ### Interactive Controls
 
 - **R** or **r**: Advance the simulation one generation
-- **P** or **p**: Open the pattern selection list (**↑**/**↓** to move,
-  **Enter** to restart the simulation with the chosen pattern, **Esc** to go
-  back)
+- **P** or **p**: Start the pattern wizard (see below)
 - **Q** or **q**: Quit the application
+
+#### Pattern Wizard
+
+Choosing a pattern takes two steps:
+
+1. **Selection** — pattern names are listed on the left, with a preview of the
+   highlighted pattern on the right. **↑**/**↓** moves, **Enter** continues to
+   placement, **Esc** returns to the simulation.
+2. **Placement** — the chosen pattern is drawn on a full-screen grid, starting
+   at the top-left corner. **↑**/**↓**/**←**/**→** move it around (the toolbar
+   shows the current offset, and the pattern stops at the grid edges), **Enter**
+   restarts the simulation with the pattern at that offset, and **Esc** goes
+   back to the list.
 
 A toolbar at the bottom of the screen lists the controls available in the
 current view. The interactive view is rendered with [Ink][ink], a React-based

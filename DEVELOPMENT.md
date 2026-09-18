@@ -133,5 +133,5 @@ deno publish
 [deno-test]: https://docs.deno.com/runtime/reference/cli/test/
 [jsr]: https://jsr.io
 [tui]: https://jsr.io/@cell-auto/game-of-life-tui
-[engine]: https://jsr.io/@hidarikani/game-of-life-engine
+[engine]: https://jsr.io/@cell-auto/game-of-life-engine
 [ink]: https://github.com/vadimdemedes/ink

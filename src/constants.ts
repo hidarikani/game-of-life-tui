@@ -1,3 +1,5 @@
+import type { Point } from "@cell-auto/game-of-life-engine";
+
 // Terminal control sequences ===
 export const ESC = "\x1b["; // ANSI escape sequence prefix
 export const ALTERNATE_SCREEN_ENTER = `${ESC}?1049h`;
@@ -22,3 +24,4 @@ export const MIN_GRID_SIZE = 3 as const;
 export const DEFAULT_GRID_WIDTH = 100;
 export const DEFAULT_GRID_HEIGHT = 100;
 export const MIN_GENERATIONS = 1 as const;
+export const ORIGIN: Point = { x: 0, y: 0 };

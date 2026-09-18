@@ -1,21 +1,20 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@hidarikani/game-of-life-engine@0.5.0": "0.5.0",
+    "jsr:@cell-auto/game-of-life-engine@0.13.0": "0.13.0",
     "jsr:@std/assert@1": "1.0.19",
-    "jsr:@std/cli@*": "1.0.32",
     "jsr:@std/cli@^1.0.32": "1.0.32",
     "jsr:@std/fmt@^1.0.10": "1.0.10",
-    "jsr:@std/internal@^1.0.12": "1.0.12",
+    "jsr:@std/internal@^1.0.12": "1.0.14",
     "jsr:@std/internal@^1.0.14": "1.0.14",
-    "jsr:@std/yaml@1": "1.1.2",
+    "jsr:@std/yaml@1": "1.2.0",
     "npm:@types/react@19": "19.2.18",
     "npm:ink@^6.4.0": "6.8.0_@types+react@19.2.18_react@19.2.8",
     "npm:react@19": "19.2.8"
   },
   "jsr": {
-    "@hidarikani/game-of-life-engine@0.5.0": {
-      "integrity": "be0f39df65aa46d1410c58449cdcbb70f0ea86c874cc7b83e9d59f7627f22209",
+    "@cell-auto/game-of-life-engine@0.13.0": {
+      "integrity": "d80c801e05e4d5b8a6bc7df6e2b8f42779e8bfe8d6ce5c83568640df720231c2",
       "dependencies": [
         "jsr:@std/yaml"
       ]
@@ -36,14 +35,11 @@
     "@std/fmt@1.0.10": {
       "integrity": "90dfba288802ac6de82fb31d0917eb9e4450b9925b954d5e51fc29ac07419db5"
     },
-    "@std/internal@1.0.12": {
-      "integrity": "972a634fd5bc34b242024402972cd5143eac68d8dffaca5eaa4dba30ce17b027"
-    },
     "@std/internal@1.0.14": {
       "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
     },
-    "@std/yaml@1.1.2": {
-      "integrity": "de612653c036749ba2044165e316f52412b0f0698afffb7ee80b5331d6d2abae"
+    "@std/yaml@1.2.0": {
+      "integrity": "20beb41e4983ba3437dbefac62b14061ab058e8a187596f19d28ff9035f6e6cf"
     }
   },
   "npm": {
@@ -273,7 +269,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@hidarikani/game-of-life-engine@0.5.0",
+      "jsr:@cell-auto/game-of-life-engine@0.13.0",
       "jsr:@std/assert@1",
       "jsr:@std/cli@^1.0.32",
       "npm:@types/react@19",

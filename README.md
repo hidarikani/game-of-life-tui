@@ -104,6 +104,6 @@ quality-assurance and publishing steps.
 
 <!-- External -->
 
-[engine]: https://jsr.io/@hidarikani/game-of-life-engine
+[engine]: https://jsr.io/@cell-auto/game-of-life-engine
 [cgol]: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 [ink]: https://github.com/vadimdemedes/ink

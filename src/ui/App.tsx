@@ -1,8 +1,7 @@
 import { useRef, useState } from "react";
 import { Box, type Instance, render, Text, useApp, useInput } from "ink";
 import type { PassThrough } from "node:stream";
-import type { GridSize, Point } from "@cell-auto/game-of-life-engine";
-import type { PatternInfo } from "../game/game.ts";
+import type { GridSize, Pattern, Point } from "@cell-auto/game-of-life-engine";
 import {
   KEY_PATTERNS_LOWER,
   KEY_PATTERNS_UPPER,
@@ -11,6 +10,7 @@ import {
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
 } from "../constants.ts";
+import { genMsgPatternNotFound } from "../constants/messages.ts";
 
 /**
  * Props for the interactive Game of Life view.
@@ -25,7 +25,7 @@ export type AppProps = {
   /** Size of the simulation grid, used to constrain placement offsets. */
   gridSize: GridSize;
   /** Every pattern available in the selection view. */
-  patterns: PatternInfo[];
+  patterns: Pattern[];
   /** Advances the simulation one generation and returns the rendered grid. */
   onTick: () => string;
   /** Renders a pattern on its own, at its natural size, for the preview. */
@@ -169,12 +169,18 @@ export function App(
 
   const movePlacement = (s: UiState, dx: number, dy: number): UiState => {
     const pattern = patterns.find((p) => p.key === s.placingKey);
+
+    if (pattern === null || pattern === undefined) {
+      throw new Error(genMsgPatternNotFound(s.placingKey ?? ""));
+    }
+
+    const size = pattern.generations[0].gridSize;
     if (!pattern) return s;
     // The engine rejects a pattern that would extend past the grid, and
     // silently accepts negative offsets, so clamp to the valid range here.
     const offset = {
-      x: clamp(s.offset.x + dx, 0, gridSize.w - pattern.size.w),
-      y: clamp(s.offset.y + dy, 0, gridSize.h - pattern.size.h),
+      x: clamp(s.offset.x + dx, 0, gridSize.w - size.w),
+      y: clamp(s.offset.y + dy, 0, gridSize.h - size.h),
     };
     if (offset.x === s.offset.x && offset.y === s.offset.y) return s;
     try {
@@ -278,7 +284,7 @@ export function App(
  */
 function PatternPicker(
   { patterns, selected, scrollOffset, contentHeight, onRenderPreview }: {
-    patterns: PatternInfo[];
+    patterns: Pattern[];
     selected: number;
     scrollOffset: number;
     contentHeight: number;
@@ -326,8 +332,9 @@ function PatternPicker(
           <>
             <Text bold wrap="truncate">{current.name}</Text>
             <Text dimColor wrap="truncate">
-              {current.type} · period {current.period} · {current.size.w}×
-              {current.size.h}
+              {current.type} · period {current.period} ·{" "}
+              {current.generations[0].gridSize.w}×
+              {current.generations[0].gridSize.h}
             </Text>
             {previewError === null
               ? visibleRows.map((row, i) => (
@@ -341,7 +348,7 @@ function PatternPicker(
   );
 }
 
-function hintsFor(ui: UiState, patterns: PatternInfo[]): string {
+function hintsFor(ui: UiState, patterns: Pattern[]): string {
   if (ui.view === "game") return GAME_HINTS;
   if (ui.view === "placement") {
     return `${PLACEMENT_HINTS} · (${ui.offset.x}, ${ui.offset.y})`;

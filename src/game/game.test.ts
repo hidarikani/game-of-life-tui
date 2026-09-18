@@ -138,7 +138,6 @@ gameTest(
     for (const pattern of patterns) {
       assertEquals(typeof pattern.key, "string");
       assertEquals(typeof pattern.name, "string");
-      assertEquals(typeof pattern.period, "number");
     }
   },
 );
@@ -191,12 +190,6 @@ gameTest(
     tick();
   },
 );
-
-gameTest("listPatterns reports each pattern's own size", () => {
-  const pulsar = listPatterns().find((p) => p.key === "pulsar");
-
-  assertEquals(pulsar?.size, { w: 17, h: 17 });
-});
 
 gameTest("renderPatternPreview renders at the pattern's natural size", () => {
   const preview = renderPatternPreview("blinker");

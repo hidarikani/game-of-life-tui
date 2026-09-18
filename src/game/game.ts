@@ -1,24 +1,13 @@
-import { Engine, Grid, PatternLib } from "@cell-auto/game-of-life-engine";
 import type {
   GridSize,
   IPatternLib,
-  PatternType,
+  Pattern,
   Point,
 } from "@cell-auto/game-of-life-engine";
 
-/**
- * The subset of a pattern's metadata the UI needs to render a selection list
- * and constrain placement.
- */
-export type PatternInfo = {
-  key: string;
-  name: string;
-  type: PatternType;
-  period: number;
-  size: GridSize;
-};
-
-const ORIGIN: Point = { x: 0, y: 0 };
+import { Engine, Grid, PatternLib } from "@cell-auto/game-of-life-engine";
+import { ORIGIN } from "../constants.ts";
+import { genMsgPatternNotFound } from "../constants/messages.ts";
 
 let acceptedSize: GridSize | null = null;
 let acceptedPatternKey: string | null = null;
@@ -31,6 +20,10 @@ export function initGame(proposedSize: GridSize, patternKey: string): string {
   }
 
   const proposedPattern = patternLib.getPatternByKey(patternKey);
+
+  if (proposedPattern === null) {
+    throw new Error(genMsgPatternNotFound(patternKey));
+  }
 
   const sizeChanged = acceptedSize !== null &&
     (acceptedSize.w !== proposedSize.w || acceptedSize.h !== proposedSize.h);
@@ -69,20 +62,12 @@ export function tick(): string {
 /**
  * Lists every built-in pattern, for the pattern selection view.
  */
-export function listPatterns(): PatternInfo[] {
+export function listPatterns(): Pattern[] {
   if (patternLib === null) {
     patternLib = PatternLib.fromBuiltInData();
   }
 
-  return patternLib.getPatterns(null).map((
-    { key, name, type, period, generations },
-  ) => ({
-    key,
-    name,
-    type,
-    period,
-    size: generations[0].gridSize,
-  }));
+  return patternLib.getPatterns(null);
 }
 
 /**
@@ -94,7 +79,13 @@ export function renderPatternPreview(patternKey: string): string {
     patternLib = PatternLib.fromBuiltInData();
   }
 
-  const inner = patternLib.getPatternByKey(patternKey).generations[0];
+  const pattern = patternLib.getPatternByKey(patternKey);
+
+  if (pattern === null) {
+    throw new Error(genMsgPatternNotFound(patternKey));
+  }
+
+  const inner = pattern.generations[0];
   const preview = new Grid({ gridSize: inner.gridSize });
   preview.writeGrid({ inner });
 
@@ -111,6 +102,10 @@ function buildPatternGrid(patternKey: string, offset: Point): Grid {
   }
 
   const pattern = patternLib.getPatternByKey(patternKey);
+
+  if (pattern === null) {
+    throw new Error(genMsgPatternNotFound(patternKey));
+  }
 
   const grid = new Grid({ gridSize: acceptedSize });
   grid.writeGrid({ inner: pattern.generations[0], offset });

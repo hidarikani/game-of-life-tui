@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Box, type Instance, render, Text, useApp, useInput } from "ink";
 import type { PassThrough } from "node:stream";
-import type { GridSize, Point } from "@hidarikani/game-of-life-engine";
+import type { GridSize, Point } from "@cell-auto/game-of-life-engine";
 import type { PatternInfo } from "../game/game.ts";
 import {
   KEY_PATTERNS_LOWER,

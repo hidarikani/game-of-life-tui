@@ -9,7 +9,7 @@ import {
   MIN_GENERATIONS,
   PATTERN_KEYS,
 } from "../constants.ts";
-import type { GridSize } from "@hidarikani/game-of-life-engine";
+import type { GridSize } from "@cell-auto/game-of-life-engine";
 import { MIN_GRID_SIZE } from "../constants.ts";
 import type { CLIArgs } from "../types/terminal.ts";
 

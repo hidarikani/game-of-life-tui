@@ -4,7 +4,7 @@ import {
   assertStrictEquals,
   assertThrows,
 } from "@std/assert";
-import type { GridSize } from "@hidarikani/game-of-life-engine";
+import type { GridSize } from "@cell-auto/game-of-life-engine";
 import {
   getGameStateForTests,
   initGame,

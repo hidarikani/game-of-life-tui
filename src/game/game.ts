@@ -1,10 +1,10 @@
-import { Engine, Grid, PatternLib } from "@hidarikani/game-of-life-engine";
+import { Engine, Grid, PatternLib } from "@cell-auto/game-of-life-engine";
 import type {
   GridSize,
   IPatternLib,
   PatternType,
   Point,
-} from "@hidarikani/game-of-life-engine";
+} from "@cell-auto/game-of-life-engine";
 
 /**
  * The subset of a pattern's metadata the UI needs to render a selection list

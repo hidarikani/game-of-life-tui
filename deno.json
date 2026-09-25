@@ -1,6 +1,6 @@
 {
   "name": "@cell-auto/game-of-life-tui",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "license": "MIT",
   "exports": "./mod.ts",
   "compilerOptions": {
@@ -9,7 +9,7 @@
     "jsxImportSourceTypes": "@types/react"
   },
   "tasks": {
-    "test": "deno test",
+    "test": "deno test --allow-env",
     "test:watch": "deno test --watch"
   },
   "imports": {

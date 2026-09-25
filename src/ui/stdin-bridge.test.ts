@@ -1,4 +1,5 @@
 import { assertEquals } from "@std/assert";
+import { describe, it } from "@std/testing/bdd";
 import { createStdinBridge } from "./stdin-bridge.ts";
 
 function sourceFromController(): {
@@ -26,8 +27,8 @@ function nextChunk(bridge: { stdin: NodeJS.ReadableStream }): Promise<string> {
   });
 }
 
-Deno.test("stdin bridge", async (t) => {
-  await t.step("presents itself as a raw-mode-capable TTY", () => {
+describe("stdin bridge", () => {
+  it("presents itself as a raw-mode-capable TTY", () => {
     const { source } = sourceFromController();
     const bridge = createStdinBridge(source);
     const stdin = bridge.stdin as unknown as {
@@ -39,7 +40,7 @@ Deno.test("stdin bridge", async (t) => {
     bridge.stop();
   });
 
-  await t.step("forwards source bytes to the bridged stream", async () => {
+  it("forwards source bytes to the bridged stream", async () => {
     const { source, push } = sourceFromController();
     const bridge = createStdinBridge(source);
     const received = nextChunk(bridge);
@@ -48,7 +49,7 @@ Deno.test("stdin bridge", async (t) => {
     bridge.stop();
   });
 
-  await t.step("ends the bridged stream when the source closes", async () => {
+  it("ends the bridged stream when the source closes", async () => {
     const { source, close } = sourceFromController();
     const bridge = createStdinBridge(source);
     const ended = new Promise<void>((resolve) => {
@@ -60,7 +61,7 @@ Deno.test("stdin bridge", async (t) => {
     bridge.stop();
   });
 
-  await t.step("stop cancels a pending source read", async () => {
+  it("stop cancels a pending source read", async () => {
     const { source } = sourceFromController();
     const bridge = createStdinBridge(source);
     const ended = new Promise<void>((resolve) => {

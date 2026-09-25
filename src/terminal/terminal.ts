@@ -1,4 +1,9 @@
+import type { GridSize } from "@cell-auto/game-of-life-engine";
+import type { CLIArgs } from "../types/terminal.ts";
+
 import { parseArgs } from "@std/cli/parse-args";
+import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
+
 import {
   ALTERNATE_SCREEN_ENTER,
   ALTERNATE_SCREEN_EXIT,
@@ -9,9 +14,7 @@ import {
   MIN_GENERATIONS,
   PATTERN_KEYS,
 } from "../constants.ts";
-import type { GridSize } from "@cell-auto/game-of-life-engine";
-import { MIN_GRID_SIZE } from "../constants.ts";
-import type { CLIArgs } from "../types/terminal.ts";
+
 import {
   initGame,
   listPatterns,

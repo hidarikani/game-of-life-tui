@@ -1,5 +1,5 @@
 import process from "node:process";
-import type { GridSize } from "@hidarikani/game-of-life-engine";
+import type { GridSize } from "@cell-auto/game-of-life-engine";
 import {
   initGame,
   listPatterns,

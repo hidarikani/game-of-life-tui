@@ -15,6 +15,12 @@ export const KEY_REFRESH_UPPER = "R";
 export const KEY_PATTERNS_LOWER = "p";
 export const KEY_PATTERNS_UPPER = "P";
 
+export const CLI_ARGS = {
+  INTERACTIVE: "interactive",
+  GRID_WIDTH: "grid-width",
+  GRID_HEIGHT: "grid-height",
+};
+
 // Game ===
 export const PATTERN_KEYS = {
   PULSAR: "pulsar",

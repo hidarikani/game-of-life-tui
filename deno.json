@@ -9,7 +9,7 @@
     "jsxImportSourceTypes": "@types/react"
   },
   "tasks": {
-    "test": "deno test",
+    "test": "deno test --allow-env",
     "test:watch": "deno test --watch"
   },
   "imports": {

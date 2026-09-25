@@ -116,7 +116,7 @@ export async function leaveAltScreen() {
   await write(ALTERNATE_SCREEN_EXIT);
 }
 
-export async function doNonInteractive(args: CLIArgs) {
+export async function enterNonInteractiveMode(args: CLIArgs) {
   const size: GridSize = {
     w: args.gridWidth,
     h: args.gridHeight,
@@ -138,7 +138,7 @@ export async function doNonInteractive(args: CLIArgs) {
   }
 }
 
-export async function doInteractive(patternKey: string) {
+export async function enterInteractiveMode(patternKey: string) {
   const size = getSize();
   // Ink terminates every frame with a newline, so a frame as tall as the
   // terminal would scroll the alternate screen by one row on each render.

@@ -29,8 +29,7 @@ const gridSizePipe = v.pipe(
   v.string(),
   v.trim(),
   v.nonEmpty(),
-  v.transform(Number),
-  v.number(),
+  v.toNumber(),
   v.integer(),
   v.minValue(MIN_GRID_SIZE),
 );
@@ -40,8 +39,7 @@ const generationsPipe = v.optional(
     v.string(),
     v.trim(),
     v.nonEmpty(),
-    v.transform(Number),
-    v.number(),
+    v.toNumber(),
     v.integer(),
     v.minValue(MIN_GENERATIONS),
   ),
@@ -49,14 +47,14 @@ const generationsPipe = v.optional(
 );
 
 export const argSchema = v.variant("interactive", [
-  v.object({
+  v.strictObject({
     interactive: v.literal(true),
     patternKey: patternKeyPipe,
-    gridWidth: v.undefined(GRID_SIZE_CONFLICTS_WITH_INTERACTIVE),
-    gridHeight: v.undefined(GRID_SIZE_CONFLICTS_WITH_INTERACTIVE),
+    gridWidth: v.optional(v.never(GRID_SIZE_CONFLICTS_WITH_INTERACTIVE)),
+    gridHeight: v.optional(v.never(GRID_SIZE_CONFLICTS_WITH_INTERACTIVE)),
     generations: generationsPipe,
   }),
-  v.object({
+  v.strictObject({
     interactive: v.literal(false),
     patternKey: patternKeyPipe,
     gridWidth: gridSizePipe,

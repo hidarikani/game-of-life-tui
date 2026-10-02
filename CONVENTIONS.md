@@ -40,6 +40,18 @@ Test files SHALL live alongside the source they test. Example:
      |- terminal.test.ts
 ```
 
+- Tests SHALL be written in the BDD style, using `describe` to group cases and
+  `it` to declare them, as described in the [Deno BDD tutorial][bdd-tutorial]
+  and provided by [`@std/testing/bdd`][std-bdd].
+- The outermost `describe` SHALL name the unit under test (e.g. `Grid`, `seed`),
+  with nested `describe` blocks naming the method or behaviour being exercised.
+  This keeps the `deno test` output readable as a specification.
+- Assertions SHALL come from [`@std/assert`][std-assert].
+- Fixtures shared by several cases SHOULD be created in a `beforeEach` hook
+  rather than repeated inline. `beforeAll` SHALL be reserved for fixtures that
+  are either read-only or deliberately mutated in sequence by successive cases;
+  where a group relies on that sequencing, it MUST say so in a comment.
+
 ## Markdown Docs
 
 - GitHub Flavored Markdown SHALL be used. This allows for the use of emojis and

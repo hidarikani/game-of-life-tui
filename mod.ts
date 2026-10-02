@@ -1,16 +1,40 @@
+import type { ValidArgs } from "./src/types/terminal.ts";
+
+import * as v from "@valibot/valibot";
+
 import {
   enterInteractiveMode,
   enterNonInteractiveMode,
   handleArguments,
 } from "./src/terminal/terminal.ts";
+import { INVALID_ARGUMENTS } from "./src/constants/messages.ts";
+import { CLI_ARGS, LONG_ARG_PREFIX } from "./src/constants.ts";
 
 async function main() {
-  const args = handleArguments();
+  let args: ValidArgs;
+
+  try {
+    args = handleArguments();
+  } catch (e) {
+    if (v.isValiError(e)) {
+      console.error(INVALID_ARGUMENTS);
+      e.issues.forEach((issue) => {
+        if (issue.path === null) {
+          console.error(issue.message);
+        } else {
+          console.error(`${LONG_ARG_PREFIX}${v.getDotPath(issue)}: ${issue.message}`);
+        }
+      });
+      Deno.exit(1);
+    }
+    throw e;
+  }
+
   if (args.interactive) {
     try {
-      await enterInteractiveMode(args.patternKey);
-    } catch (error) {
-      console.error(error instanceof Error ? error.message : error);
+      await enterInteractiveMode(args[CLI_ARGS.PATTERN_KEY]);
+    } catch (e) {
+      console.error(e instanceof Error ? e.message : e);
       Deno.exit(1);
     }
   } else {

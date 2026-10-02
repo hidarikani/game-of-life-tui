@@ -1,18 +1,18 @@
 import type { GridSize } from "@cell-auto/game-of-life-engine";
-import type { CLIArgs } from "../types/terminal.ts";
+import type { NonInteractiveArgs, ValidArgs } from "../types/terminal.ts";
+import { ArgSchema } from "../types/terminal.ts";
 
 import { parseArgs } from "@std/cli/parse-args";
-import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
+import * as v from "@valibot/valibot";
 
 import {
   ALTERNATE_SCREEN_ENTER,
   ALTERNATE_SCREEN_EXIT,
+  CLI_ARGS,
   CURSOR_HIDE,
   CURSOR_SHOW,
   DEFAULT_GRID_HEIGHT as DEFAULT_GRID_HEIGHT,
   DEFAULT_GRID_WIDTH as DEFAULT_GRID_WIDTH,
-  MIN_GENERATIONS,
-  PATTERN_KEYS,
 } from "../constants.ts";
 
 import {
@@ -26,72 +26,28 @@ import {
 import { renderApp } from "../ui/App.tsx";
 import { createStdinBridge } from "../ui/stdin-bridge.ts";
 
-export function handleArguments(): CLIArgs {
-  const {
-    interactive,
-    gridWidth: gridWidthRaw,
-    gridHeight: gridHeightRaw,
-    patternKey,
-    generations: generationsRaw,
-  } = parseArgs(
+export function handleArguments(): ValidArgs {
+  /*
+   * parseArgs coerces numeric-looking args to numbers unless they're listed in
+   * options.string or options.boolean. All args are deliberately listed in
+   * options.string so valibot handles conversion (with more control), and
+   * options.default is omitted because valibot handles defaults too.
+   */
+  const args = parseArgs(
     Deno.args,
     {
-      boolean: ["interactive"],
       string: [
-        "pattern-key",
-        "grid-width",
-        "grid-height",
-        "generations",
+        CLI_ARGS.INTERACTIVE,
+        CLI_ARGS.PATTERN_KEY,
+        CLI_ARGS.GRID_WIDTH,
+        CLI_ARGS.GRID_HEIGHT,
+        CLI_ARGS.GENERATIONS,
       ],
-      default: {
-        interactive: true,
-        "pattern-key": PATTERN_KEYS.PULSAR,
-        "grid-width": DEFAULT_GRID_WIDTH.toString(),
-        "grid-height": DEFAULT_GRID_HEIGHT.toString(),
-        generations: MIN_GENERATIONS.toString(),
-      },
-      alias: {
-        "pattern-key": "patternKey",
-        "grid-width": "gridWidth",
-        "grid-height": "gridHeight",
-      },
-      negatable: ["interactive"],
     },
   );
 
-  const gridWidthParsed = Number(gridWidthRaw);
-  const gridHeightParsed = Number(gridHeightRaw);
-  const generationsParsed = Number(generationsRaw);
-
-  if (!Number.isInteger(gridWidthParsed) || gridWidthParsed < MIN_GRID_SIZE) {
-    throw new Error(
-      `arg grid-width must be an integer equal or larger than ${MIN_GRID_SIZE}`,
-    );
-  }
-
-  if (
-    !Number.isInteger(gridHeightParsed) || gridHeightParsed < MIN_GRID_SIZE
-  ) {
-    throw new Error(
-      `arg grid-height must be an integer equal or larger than ${MIN_GRID_SIZE}`,
-    );
-  }
-
-  if (
-    !Number.isInteger(generationsParsed) || generationsParsed < MIN_GENERATIONS
-  ) {
-    throw new Error(
-      `arg "generations" must be an integer equal or larger than ${MIN_GENERATIONS}`,
-    );
-  }
-
-  return {
-    interactive,
-    gridWidth: gridWidthParsed,
-    gridHeight: gridHeightParsed,
-    patternKey,
-    generations: generationsParsed,
-  };
+  const { _, ...onlyKnown } = args;
+  return v.parse(ArgSchema, onlyKnown);
 }
 
 const encoder = new TextEncoder();
@@ -119,15 +75,15 @@ export async function leaveAltScreen() {
   await write(ALTERNATE_SCREEN_EXIT);
 }
 
-export async function enterNonInteractiveMode(args: CLIArgs) {
+export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
   const size: GridSize = {
-    w: args.gridWidth,
-    h: args.gridHeight,
+    w: args[CLI_ARGS.GRID_WIDTH],
+    h: args[CLI_ARGS.GRID_HEIGHT],
   };
 
   try {
     await write("\nInitial Seed ===\n\n");
-    await write(initGame(size, args.patternKey));
+    await write(initGame(size, args[CLI_ARGS.PATTERN_KEY]));
 
     if (args.generations > 1) {
       for (let i = 1; i < args.generations; i++) {

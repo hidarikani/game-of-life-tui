@@ -2,21 +2,19 @@ import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 import * as v from "@valibot/valibot";
 
 import { getPatternLib } from "../pattern/pattern.ts";
-import {
-  genMsgPatternNotFound,
-  GRID_SIZE_CONFLICTS_WITH_INTERACTIVE,
-} from "../constants/messages.ts";
-import { MIN_GENERATIONS, PATTERN_KEYS } from "../constants.ts";
+import { genMsgPatternNotFound } from "../constants/messages.ts";
+import { CLI_ARGS, MIN_GENERATIONS, PATTERN_KEYS } from "../constants.ts";
 
 function validatePatternKey(key: string): boolean {
   const pattern = getPatternLib().getPatternByKey(key);
   return pattern !== null;
 }
 
-const patternKeyPipe = v.optional(
+const NonEmptyString = v.pipe(v.string(), v.trim(), v.nonEmpty());
+
+const PatternKeyPipe = v.optional(
   v.pipe(
-    v.string(),
-    v.nonEmpty(),
+    NonEmptyString,
     v.check(
       validatePatternKey,
       (issue) => genMsgPatternNotFound(issue.input),
@@ -25,20 +23,16 @@ const patternKeyPipe = v.optional(
   PATTERN_KEYS.PULSAR,
 );
 
-const gridSizePipe = v.pipe(
-  v.string(),
-  v.trim(),
-  v.nonEmpty(),
+const GridSizePipe = v.pipe(
+  NonEmptyString,
   v.toNumber(),
   v.integer(),
   v.minValue(MIN_GRID_SIZE),
 );
 
-const generationsPipe = v.optional(
+const GenerationsPipe = v.optional(
   v.pipe(
-    v.string(),
-    v.trim(),
-    v.nonEmpty(),
+    NonEmptyString,
     v.toNumber(),
     v.integer(),
     v.minValue(MIN_GENERATIONS),
@@ -46,32 +40,23 @@ const generationsPipe = v.optional(
   MIN_GENERATIONS.toString(),
 );
 
-export const argSchema = v.variant("interactive", [
+export const ArgSchema = v.variant("interactive", [
   v.strictObject({
-    interactive: v.literal(true),
-    patternKey: patternKeyPipe,
-    gridWidth: v.optional(v.never(GRID_SIZE_CONFLICTS_WITH_INTERACTIVE)),
-    gridHeight: v.optional(v.never(GRID_SIZE_CONFLICTS_WITH_INTERACTIVE)),
-    generations: generationsPipe,
+    [CLI_ARGS.INTERACTIVE]: v.pipe(v.literal("true"), v.transform(() => true as const)),
+    [CLI_ARGS.PATTERN_KEY]: PatternKeyPipe,
   }),
   v.strictObject({
-    interactive: v.literal(false),
-    patternKey: patternKeyPipe,
-    gridWidth: gridSizePipe,
-    gridHeight: gridSizePipe,
-    generations: generationsPipe,
+    [CLI_ARGS.INTERACTIVE]: v.pipe(v.literal("false"), v.transform(() => false as const)),
+    [CLI_ARGS.PATTERN_KEY]: PatternKeyPipe,
+    [CLI_ARGS.GRID_WIDTH]: GridSizePipe,
+    [CLI_ARGS.GRID_HEIGHT]: GridSizePipe,
+    [CLI_ARGS.GENERATIONS]: GenerationsPipe,
   }),
 ]);
 
-export type argsIn = v.InferInput<typeof argSchema>;
-export type ArgsOut = v.InferOutput<typeof argSchema>;
+export type ValidArgs = v.InferOutput<typeof ArgSchema>;
 
-export type CLIArgs = {
-  interactive: boolean;
-  patternKey: string;
-  gridWidth: number;
-  gridHeight: number;
-  generations: number;
-};
+export type InteractiveArgs = Extract<ValidArgs, { interactive: true }>;
+export type NonInteractiveArgs = Extract<ValidArgs, { interactive: false }>;
 
 export type RawStdin = { setRaw?: (mode: boolean) => void };

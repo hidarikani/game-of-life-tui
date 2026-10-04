@@ -62,102 +62,107 @@ describe("argSchema", () => {
   });
 
   describe("non-interactive variant", () => {
-    it(`accepts valid ${LONG_ARG_PREFIX}${CLI_ARGS.GRID_WIDTH} and ${LONG_ARG_PREFIX}${CLI_ARGS.GRID_HEIGHT}`, () => {
-      const result = v.parse(ArgSchema, {
-        [CLI_ARGS.INTERACTIVE]: "false",
-        [CLI_ARGS.GRID_WIDTH]: "10",
-        [CLI_ARGS.GRID_HEIGHT]: "20",
+    describe("grid size", () => {
+      it(`accepts the minimum values`, () => {
+        const result = v.parse(ArgSchema, {
+          [CLI_ARGS.INTERACTIVE]: "false",
+          [CLI_ARGS.GRID_WIDTH]: `${MIN_GRID_SIZE}`,
+          [CLI_ARGS.GRID_HEIGHT]: `${MIN_GRID_SIZE}`,
+        }) as NonInteractiveArgs;
+        assertEquals(result[CLI_ARGS.GRID_WIDTH], MIN_GRID_SIZE);
+        assertEquals(result[CLI_ARGS.GRID_HEIGHT], MIN_GRID_SIZE);
       });
-      assertEquals(result, {
-        [CLI_ARGS.INTERACTIVE]: false,
-        [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
-        [CLI_ARGS.GRID_WIDTH]: 10,
-        [CLI_ARGS.GRID_HEIGHT]: 20,
-        [CLI_ARGS.GENERATIONS]: MIN_GENERATIONS,
+
+      it(`accepts valid values`, () => {
+        const result = v.parse(ArgSchema, {
+          [CLI_ARGS.INTERACTIVE]: "false",
+          [CLI_ARGS.GRID_WIDTH]: "10",
+          [CLI_ARGS.GRID_HEIGHT]: "20",
+        });
+        assertEquals(result, {
+          [CLI_ARGS.INTERACTIVE]: false,
+          [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
+          [CLI_ARGS.GRID_WIDTH]: 10,
+          [CLI_ARGS.GRID_HEIGHT]: 20,
+          [CLI_ARGS.GENERATIONS]: MIN_GENERATIONS,
+        });
+      });
+
+      it("trims surrounding whitespace before coercing to a number", () => {
+        const result = v.parse(ArgSchema, {
+          [CLI_ARGS.INTERACTIVE]: "false",
+          [CLI_ARGS.GRID_WIDTH]: ` ${MIN_GRID_SIZE} `,
+          [CLI_ARGS.GRID_HEIGHT]: ` ${MIN_GRID_SIZE} `,
+        }) as NonInteractiveArgs;
+        assertEquals(result[CLI_ARGS.GRID_WIDTH], MIN_GRID_SIZE);
+        assertEquals(result[CLI_ARGS.GRID_HEIGHT], MIN_GRID_SIZE);
+      });
+
+      describe(`${LONG_ARG_PREFIX}${CLI_ARGS.GRID_WIDTH}`, () => {
+        it(`rejects missing`, () => {
+          const result = v.safeParse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "false",
+            [CLI_ARGS.GRID_HEIGHT]: "10",
+          });
+          assertEquals(result.success, false);
+        });
+
+        it("rejects below the minimum", () => {
+          const result = v.safeParse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "false",
+            [CLI_ARGS.GRID_WIDTH]: `${MIN_GRID_SIZE - 1}`,
+            [CLI_ARGS.GRID_HEIGHT]: "10",
+          });
+          assertEquals(result.success, false);
+        });
+
+        it("rejects non-integer", () => {
+          const result = v.safeParse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "false",
+            [CLI_ARGS.GRID_WIDTH]: "10.5",
+            [CLI_ARGS.GRID_HEIGHT]: "10",
+          });
+          assertEquals(result.success, false);
+        });
+      });
+
+      describe(`${LONG_ARG_PREFIX}${CLI_ARGS.GRID_HEIGHT}`, () => {
+        it("rejects a missing", () => {
+          const result = v.safeParse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "false",
+            [CLI_ARGS.GRID_WIDTH]: "10",
+          });
+          assertEquals(result.success, false);
+        });
+        it("rejects below the minimum", () => {
+          const result = v.safeParse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "false",
+            [CLI_ARGS.GRID_WIDTH]: "10",
+            [CLI_ARGS.GRID_HEIGHT]: `${MIN_GRID_SIZE - 1}`,
+          });
+          assertEquals(result.success, false);
+        });
+
+        it("rejects a non-numeric", () => {
+          const result = v.safeParse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "false",
+            [CLI_ARGS.GRID_WIDTH]: "10",
+            [CLI_ARGS.GRID_HEIGHT]: "abc",
+          });
+          assertEquals(result.success, false);
+        });
       });
     });
 
-    // it("trims surrounding whitespace before coercing to a number", () => {
-    //   const result = v.parse(ArgSchema, {
-    //     [CLI_ARGS.INTERACTIVE]: "false",
-    //     [CLI_ARGS.GRID_WIDTH]: ` ${MIN_GRID_SIZE} `,
-    //     [CLI_ARGS.GRID_HEIGHT]: ` ${MIN_GRID_SIZE} `,
-    //   }) as NonInteractiveArgs;
-    //   assertEquals(result[CLI_ARGS.GRID_WIDTH], MIN_GRID_SIZE);
-    //   assertEquals(result[CLI_ARGS.GRID_HEIGHT], MIN_GRID_SIZE);
-    // });
-
-    // it("accepts the minimum allowed [CLI_ARGS.GRID_WIDTH] and [CLI_ARGS.GRID_HEIGHT]", () => {
-    //   const result = v.parse(ArgSchema, {
-    //     [CLI_ARGS.INTERACTIVE]: "false",
-    //     [CLI_ARGS.GRID_WIDTH]: `${MIN_GRID_SIZE}`,
-    //     [CLI_ARGS.GRID_HEIGHT]: `${MIN_GRID_SIZE}`,
-    //   }) as NonInteractiveArgs;
-    //   assertEquals(result[CLI_ARGS.GRID_WIDTH], MIN_GRID_SIZE);
-    //   assertEquals(result[CLI_ARGS.GRID_HEIGHT], MIN_GRID_SIZE);
-    // });
-
-    // it("rejects a missing [CLI_ARGS.GRID_WIDTH]", () => {
-    //   const result = v.safeParse(ArgSchema, {
-    //     [CLI_ARGS.INTERACTIVE]: "false",
-    //     [CLI_ARGS.GRID_HEIGHT]: "10",
-    //   });
-    //   assertEquals(result.success, false);
-    // });
-
-    // it("rejects a missing [CLI_ARGS.GRID_HEIGHT]", () => {
-    //   const result = v.safeParse(ArgSchema, {
-    //     [CLI_ARGS.INTERACTIVE]: "false",
-    //     [CLI_ARGS.GRID_WIDTH]: "10",
-    //   });
-    //   assertEquals(result.success, false);
-    // });
-
-    // it("rejects a [CLI_ARGS.GRID_WIDTH] below the minimum", () => {
-    //   const result = v.safeParse(ArgSchema, {
-    //     [CLI_ARGS.INTERACTIVE]: "false",
-    //     [CLI_ARGS.GRID_WIDTH]: `${MIN_GRID_SIZE - 1}`,
-    //     [CLI_ARGS.GRID_HEIGHT]: "10",
-    //   });
-    //   assertEquals(result.success, false);
-    // });
-
-    // it("rejects a [CLI_ARGS.GRID_HEIGHT] below the minimum", () => {
-    //   const result = v.safeParse(ArgSchema, {
-    //     [CLI_ARGS.INTERACTIVE]: "false",
-    //     [CLI_ARGS.GRID_WIDTH]: "10",
-    //     [CLI_ARGS.GRID_HEIGHT]: `${MIN_GRID_SIZE - 1}`,
-    //   });
-    //   assertEquals(result.success, false);
-    // });
-
-    // it("rejects a non-integer [CLI_ARGS.GRID_WIDTH]", () => {
-    //   const result = v.safeParse(ArgSchema, {
-    //     [CLI_ARGS.INTERACTIVE]: "false",
-    //     [CLI_ARGS.GRID_WIDTH]: "10.5",
-    //     [CLI_ARGS.GRID_HEIGHT]: "10",
-    //   });
-    //   assertEquals(result.success, false);
-    // });
-
-    // it("rejects a non-numeric [CLI_ARGS.GRID_HEIGHT]", () => {
-    //   const result = v.safeParse(ArgSchema, {
-    //     [CLI_ARGS.INTERACTIVE]: "false",
-    //     [CLI_ARGS.GRID_WIDTH]: "10",
-    //     [CLI_ARGS.GRID_HEIGHT]: "abc",
-    //   });
-    //   assertEquals(result.success, false);
-    // });
-
-    // it("rejects an unknown patternKey", () => {
-    //   const result = v.safeParse(ArgSchema, {
-    //     [CLI_ARGS.INTERACTIVE]: "false",
-    //     [CLI_ARGS.GRID_WIDTH]: "10",
-    //     [CLI_ARGS.GRID_HEIGHT]: "10",
-    //     patternKey: "no-such",
-    //   });
-    //   assertEquals(result.success, false);
-    // });
+    it("rejects an unknown patternKey", () => {
+      const result = v.safeParse(ArgSchema, {
+        [CLI_ARGS.INTERACTIVE]: "false",
+        [CLI_ARGS.GRID_WIDTH]: "10",
+        [CLI_ARGS.GRID_HEIGHT]: "10",
+        patternKey: "no-such",
+      });
+      assertEquals(result.success, false);
+    });
   });
 
   // describe("interactive discriminator", () => {

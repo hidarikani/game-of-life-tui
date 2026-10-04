@@ -25,7 +25,7 @@ describe("argSchema", () => {
         assertEquals(result[CLI_ARGS.PATTERN_KEY], PATTERN_KEYS.PULSAR);
       });
 
-      it("rejects an unknown patternKey", () => {
+      it(`rejects an unknown ${CLI_ARGS.PATTERN_KEY}`, () => {
         assertThrows(
           () =>
             v.parse(ArgSchema, {
@@ -38,7 +38,7 @@ describe("argSchema", () => {
       });
     });
 
-    it("rejects grid-width", () => {
+    it(`rejects ${CLI_ARGS.GRID_WIDTH}`, () => {
       const result = v.safeParse(ArgSchema, {
         [CLI_ARGS.INTERACTIVE]: "true",
         [CLI_ARGS.GRID_WIDTH]: MIN_GRID_SIZE + 1,
@@ -46,7 +46,7 @@ describe("argSchema", () => {
       assertEquals(result.success, false);
     });
 
-    it("rejects grid-height", () => {
+    it(`rejects ${CLI_ARGS.GRID_HEIGHT}`, () => {
       const result = v.safeParse(ArgSchema, {
         [CLI_ARGS.INTERACTIVE]: "true",
         [CLI_ARGS.GRID_HEIGHT]: MIN_GRID_SIZE + 1,
@@ -54,7 +54,7 @@ describe("argSchema", () => {
       assertEquals(result.success, false);
     });
 
-    it("rejects generations", () => {
+    it(`rejects ${CLI_ARGS.GENERATIONS}`, () => {
       const result = v.safeParse(ArgSchema, {
         [CLI_ARGS.INTERACTIVE]: "true",
         [CLI_ARGS.GENERATIONS]: MIN_GENERATIONS + 1,
@@ -167,12 +167,12 @@ describe("argSchema", () => {
         assertEquals(result[CLI_ARGS.PATTERN_KEY], PATTERN_KEYS.PULSAR);
       });
 
-      it("rejects an unknown patternKey", () => {
+      it(`rejects an unknown ${CLI_ARGS.PATTERN_KEY}`, () => {
         const result = v.safeParse(ArgSchema, {
           [CLI_ARGS.INTERACTIVE]: "false",
           [CLI_ARGS.GRID_WIDTH]: "10",
           [CLI_ARGS.GRID_HEIGHT]: "10",
-          patternKey: "no-such",
+          [CLI_ARGS.PATTERN_KEY]: "no-such",
         });
         assertEquals(result.success, false);
       });
@@ -180,14 +180,14 @@ describe("argSchema", () => {
   });
 
   describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} discriminator`, () => {
-    it("rejects a missing interactive key", () => {
+    it(`rejects a missing ${CLI_ARGS.INTERACTIVE} key`, () => {
       const result = v.safeParse(ArgSchema, {
         [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
       });
       assertEquals(result.success, false);
     });
 
-    it("rejects an unknown interactive value", () => {
+    it(`rejects an unknown ${CLI_ARGS.INTERACTIVE} value`, () => {
       const result = v.safeParse(ArgSchema, { [CLI_ARGS.INTERACTIVE]: "buz" });
       assertEquals(result.success, false);
     });

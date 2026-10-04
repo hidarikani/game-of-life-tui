@@ -16,24 +16,26 @@ import {
 
 describe("argSchema", () => {
   describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} is "true"`, () => {
-    it(`accepts an explicit ${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN_KEY}`, () => {
-      const result = v.parse(ArgSchema, {
-        [CLI_ARGS.INTERACTIVE]: "true",
-        [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
+    describe(`${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN_KEY}`, () => {
+      it(`accepts an explicit ${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN_KEY}`, () => {
+        const result = v.parse(ArgSchema, {
+          [CLI_ARGS.INTERACTIVE]: "true",
+          [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
+        });
+        assertEquals(result[CLI_ARGS.PATTERN_KEY], PATTERN_KEYS.PULSAR);
       });
-      assertEquals(result[CLI_ARGS.PATTERN_KEY], PATTERN_KEYS.PULSAR);
-    });
 
-    it("rejects an unknown patternKey", () => {
-      assertThrows(
-        () =>
-          v.parse(ArgSchema, {
-            [CLI_ARGS.INTERACTIVE]: "true",
-            [CLI_ARGS.PATTERN_KEY]: "no-such",
-          }),
-        v.ValiError,
-        genMsgPatternNotFound("no-such"),
-      );
+      it("rejects an unknown patternKey", () => {
+        assertThrows(
+          () =>
+            v.parse(ArgSchema, {
+              [CLI_ARGS.INTERACTIVE]: "true",
+              [CLI_ARGS.PATTERN_KEY]: "no-such",
+            }),
+          v.ValiError,
+          genMsgPatternNotFound("no-such"),
+        );
+      });
     });
 
     it("rejects grid-width", () => {
@@ -61,7 +63,7 @@ describe("argSchema", () => {
     });
   });
 
-  describe("non-interactive variant", () => {
+  describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} is "false"`, () => {
     describe("grid size", () => {
       it(`accepts the minimum values`, () => {
         const result = v.parse(ArgSchema, {
@@ -154,49 +156,60 @@ describe("argSchema", () => {
       });
     });
 
-    it("rejects an unknown patternKey", () => {
-      const result = v.safeParse(ArgSchema, {
-        [CLI_ARGS.INTERACTIVE]: "false",
-        [CLI_ARGS.GRID_WIDTH]: "10",
-        [CLI_ARGS.GRID_HEIGHT]: "10",
-        patternKey: "no-such",
+    describe(`${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN_KEY}`, () => {
+      it(`accepts an explicit ${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN_KEY}`, () => {
+        const result = v.parse(ArgSchema, {
+          [CLI_ARGS.INTERACTIVE]: "false",
+          [CLI_ARGS.GRID_WIDTH]: "10",
+          [CLI_ARGS.GRID_HEIGHT]: "10",
+          [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
+        });
+        assertEquals(result[CLI_ARGS.PATTERN_KEY], PATTERN_KEYS.PULSAR);
       });
+
+      it("rejects an unknown patternKey", () => {
+        const result = v.safeParse(ArgSchema, {
+          [CLI_ARGS.INTERACTIVE]: "false",
+          [CLI_ARGS.GRID_WIDTH]: "10",
+          [CLI_ARGS.GRID_HEIGHT]: "10",
+          patternKey: "no-such",
+        });
+        assertEquals(result.success, false);
+      });
+    });
+  });
+
+  describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} discriminator`, () => {
+    it("rejects a missing interactive key", () => {
+      const result = v.safeParse(ArgSchema, {
+        [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
+      });
+      assertEquals(result.success, false);
+    });
+
+    it("rejects an unknown interactive value", () => {
+      const result = v.safeParse(ArgSchema, { [CLI_ARGS.INTERACTIVE]: "buz" });
       assertEquals(result.success, false);
     });
   });
 
-  // describe("interactive discriminator", () => {
-  //   it("rejects a missing interactive key", () => {
-  //     const result = v.safeParse(ArgSchema, {
-  //       [CLI_ARGS.GRID_WIDTH]: "10",
-  //       [CLI_ARGS.GRID_HEIGHT]: "10",
-  //     });
-  //     assertEquals(result.success, false);
-  //   });
+  describe("unknown keys", () => {
+    it("rejects keys not defined on the interactive variant", () => {
+      const result = v.safeParse(ArgSchema, {
+        [CLI_ARGS.INTERACTIVE]: "true",
+        extra: "nope",
+      });
+      assertEquals(result.success, false);
+    });
 
-  //   it("rejects an unknown interactive value", () => {
-  //     const result = v.safeParse(ArgSchema, { [CLI_ARGS.INTERACTIVE]: "buz" });
-  //     assertEquals(result.success, false);
-  //   });
-  // });
-
-  // describe("unknown keys", () => {
-  //   it("rejects keys not defined on the interactive variant", () => {
-  //     const result = v.safeParse(ArgSchema, {
-  //       [CLI_ARGS.INTERACTIVE]: "true",
-  //       extra: "nope",
-  //     });
-  //     assertEquals(result.success, false);
-  //   });
-
-  //   it("rejects keys not defined on the non-interactive variant", () => {
-  //     const result = v.safeParse(ArgSchema, {
-  //       [CLI_ARGS.INTERACTIVE]: "false",
-  //       [CLI_ARGS.GRID_WIDTH]: "10",
-  //       [CLI_ARGS.GRID_HEIGHT]: "10",
-  //       extra: "nope",
-  //     });
-  //     assertEquals(result.success, false);
-  //   });
-  // });
+    it("rejects keys not defined on the non-interactive variant", () => {
+      const result = v.safeParse(ArgSchema, {
+        [CLI_ARGS.INTERACTIVE]: "false",
+        [CLI_ARGS.GRID_WIDTH]: "10",
+        [CLI_ARGS.GRID_HEIGHT]: "10",
+        extra: "nope",
+      });
+      assertEquals(result.success, false);
+    });
+  });
 });

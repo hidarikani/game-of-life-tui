@@ -39,27 +39,39 @@ describe("argSchema", () => {
     });
 
     it(`rejects ${CLI_ARGS.GRID_WIDTH}`, () => {
-      const result = v.safeParse(ArgSchema, {
-        [CLI_ARGS.INTERACTIVE]: "true",
-        [CLI_ARGS.GRID_WIDTH]: MIN_GRID_SIZE + 1,
-      });
-      assertEquals(result.success, false);
+      assertThrows(
+        () =>
+          v.parse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "true",
+            [CLI_ARGS.GRID_WIDTH]: MIN_GRID_SIZE + 1,
+          }),
+        v.ValiError,
+        `Invalid key: Expected never but received "${CLI_ARGS.GRID_WIDTH}"`,
+      );
     });
 
     it(`rejects ${CLI_ARGS.GRID_HEIGHT}`, () => {
-      const result = v.safeParse(ArgSchema, {
-        [CLI_ARGS.INTERACTIVE]: "true",
-        [CLI_ARGS.GRID_HEIGHT]: MIN_GRID_SIZE + 1,
-      });
-      assertEquals(result.success, false);
+      assertThrows(
+        () =>
+          v.parse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "true",
+            [CLI_ARGS.GRID_HEIGHT]: MIN_GRID_SIZE + 1,
+          }),
+        v.ValiError,
+        `Invalid key: Expected never but received "${CLI_ARGS.GRID_HEIGHT}"`,
+      );
     });
 
     it(`rejects ${CLI_ARGS.GENERATIONS}`, () => {
-      const result = v.safeParse(ArgSchema, {
-        [CLI_ARGS.INTERACTIVE]: "true",
-        [CLI_ARGS.GENERATIONS]: MIN_GENERATIONS + 1,
-      });
-      assertEquals(result.success, false);
+      assertThrows(
+        () =>
+          v.parse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "true",
+            [CLI_ARGS.GENERATIONS]: MIN_GENERATIONS + 1,
+          }),
+        v.ValiError,
+        `Invalid key: Expected never but received "${CLI_ARGS.GENERATIONS}"`,
+      );
     });
   });
 
@@ -102,56 +114,80 @@ describe("argSchema", () => {
 
       describe(`${LONG_ARG_PREFIX}${CLI_ARGS.GRID_WIDTH}`, () => {
         it(`rejects missing`, () => {
-          const result = v.safeParse(ArgSchema, {
-            [CLI_ARGS.INTERACTIVE]: "false",
-            [CLI_ARGS.GRID_HEIGHT]: "10",
-          });
-          assertEquals(result.success, false);
+          assertThrows(
+            () =>
+              v.parse(ArgSchema, {
+                [CLI_ARGS.INTERACTIVE]: "false",
+                [CLI_ARGS.GRID_HEIGHT]: "10",
+              }),
+            v.ValiError,
+            `Invalid key: Expected "${CLI_ARGS.GRID_WIDTH}" but received undefined`,
+          );
         });
 
         it("rejects below the minimum", () => {
-          const result = v.safeParse(ArgSchema, {
-            [CLI_ARGS.INTERACTIVE]: "false",
-            [CLI_ARGS.GRID_WIDTH]: `${MIN_GRID_SIZE - 1}`,
-            [CLI_ARGS.GRID_HEIGHT]: "10",
-          });
-          assertEquals(result.success, false);
+          assertThrows(
+            () =>
+              v.parse(ArgSchema, {
+                [CLI_ARGS.INTERACTIVE]: "false",
+                [CLI_ARGS.GRID_WIDTH]: `${MIN_GRID_SIZE - 1}`,
+                [CLI_ARGS.GRID_HEIGHT]: "10",
+              }),
+            v.ValiError,
+            `Invalid value: Expected >=${MIN_GRID_SIZE} but received ${MIN_GRID_SIZE - 1}`,
+          );
         });
 
         it("rejects non-integer", () => {
-          const result = v.safeParse(ArgSchema, {
-            [CLI_ARGS.INTERACTIVE]: "false",
-            [CLI_ARGS.GRID_WIDTH]: "10.5",
-            [CLI_ARGS.GRID_HEIGHT]: "10",
-          });
-          assertEquals(result.success, false);
+          assertThrows(
+            () =>
+              v.parse(ArgSchema, {
+                [CLI_ARGS.INTERACTIVE]: "false",
+                [CLI_ARGS.GRID_WIDTH]: "10.5",
+                [CLI_ARGS.GRID_HEIGHT]: "10",
+              }),
+            v.ValiError,
+            "Invalid integer: Received 10.5",
+          );
         });
       });
 
       describe(`${LONG_ARG_PREFIX}${CLI_ARGS.GRID_HEIGHT}`, () => {
         it("rejects a missing", () => {
-          const result = v.safeParse(ArgSchema, {
-            [CLI_ARGS.INTERACTIVE]: "false",
-            [CLI_ARGS.GRID_WIDTH]: "10",
-          });
-          assertEquals(result.success, false);
+          assertThrows(
+            () =>
+              v.parse(ArgSchema, {
+                [CLI_ARGS.INTERACTIVE]: "false",
+                [CLI_ARGS.GRID_WIDTH]: "10",
+              }),
+            v.ValiError,
+            `Invalid key: Expected "${CLI_ARGS.GRID_HEIGHT}" but received undefined`,
+          );
         });
         it("rejects below the minimum", () => {
-          const result = v.safeParse(ArgSchema, {
-            [CLI_ARGS.INTERACTIVE]: "false",
-            [CLI_ARGS.GRID_WIDTH]: "10",
-            [CLI_ARGS.GRID_HEIGHT]: `${MIN_GRID_SIZE - 1}`,
-          });
-          assertEquals(result.success, false);
+          assertThrows(
+            () =>
+              v.parse(ArgSchema, {
+                [CLI_ARGS.INTERACTIVE]: "false",
+                [CLI_ARGS.GRID_WIDTH]: "10",
+                [CLI_ARGS.GRID_HEIGHT]: `${MIN_GRID_SIZE - 1}`,
+              }),
+            v.ValiError,
+            `Invalid value: Expected >=${MIN_GRID_SIZE} but received ${MIN_GRID_SIZE - 1}`,
+          );
         });
 
         it("rejects a non-numeric", () => {
-          const result = v.safeParse(ArgSchema, {
-            [CLI_ARGS.INTERACTIVE]: "false",
-            [CLI_ARGS.GRID_WIDTH]: "10",
-            [CLI_ARGS.GRID_HEIGHT]: "abc",
-          });
-          assertEquals(result.success, false);
+          assertThrows(
+            () =>
+              v.parse(ArgSchema, {
+                [CLI_ARGS.INTERACTIVE]: "false",
+                [CLI_ARGS.GRID_WIDTH]: "10",
+                [CLI_ARGS.GRID_HEIGHT]: "abc",
+              }),
+            v.ValiError,
+            "Invalid number: Received NaN",
+          );
         });
       });
     });
@@ -168,48 +204,67 @@ describe("argSchema", () => {
       });
 
       it(`rejects an unknown ${CLI_ARGS.PATTERN_KEY}`, () => {
-        const result = v.safeParse(ArgSchema, {
-          [CLI_ARGS.INTERACTIVE]: "false",
-          [CLI_ARGS.GRID_WIDTH]: "10",
-          [CLI_ARGS.GRID_HEIGHT]: "10",
-          [CLI_ARGS.PATTERN_KEY]: "no-such",
-        });
-        assertEquals(result.success, false);
+        assertThrows(
+          () =>
+            v.parse(ArgSchema, {
+              [CLI_ARGS.INTERACTIVE]: "false",
+              [CLI_ARGS.GRID_WIDTH]: "10",
+              [CLI_ARGS.GRID_HEIGHT]: "10",
+              [CLI_ARGS.PATTERN_KEY]: "no-such",
+            }),
+          v.ValiError,
+          genMsgPatternNotFound("no-such"),
+        );
       });
     });
   });
 
   describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} discriminator`, () => {
     it(`rejects a missing ${CLI_ARGS.INTERACTIVE} key`, () => {
-      const result = v.safeParse(ArgSchema, {
-        [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
-      });
-      assertEquals(result.success, false);
+      assertThrows(
+        () =>
+          v.parse(ArgSchema, {
+            [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
+          }),
+        v.ValiError,
+        `Invalid type: Expected ("true" | "false") but received undefined`,
+      );
     });
 
     it(`rejects an unknown ${CLI_ARGS.INTERACTIVE} value`, () => {
-      const result = v.safeParse(ArgSchema, { [CLI_ARGS.INTERACTIVE]: "buz" });
-      assertEquals(result.success, false);
+      assertThrows(
+        () => v.parse(ArgSchema, { [CLI_ARGS.INTERACTIVE]: "buz" }),
+        v.ValiError,
+        `Invalid type: Expected ("true" | "false") but received "buz"`,
+      );
     });
   });
 
   describe("unknown keys", () => {
     it("rejects keys not defined on the interactive variant", () => {
-      const result = v.safeParse(ArgSchema, {
-        [CLI_ARGS.INTERACTIVE]: "true",
-        extra: "nope",
-      });
-      assertEquals(result.success, false);
+      assertThrows(
+        () =>
+          v.parse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "true",
+            extra: "nope",
+          }),
+        v.ValiError,
+        'Invalid key: Expected never but received "extra"',
+      );
     });
 
     it("rejects keys not defined on the non-interactive variant", () => {
-      const result = v.safeParse(ArgSchema, {
-        [CLI_ARGS.INTERACTIVE]: "false",
-        [CLI_ARGS.GRID_WIDTH]: "10",
-        [CLI_ARGS.GRID_HEIGHT]: "10",
-        extra: "nope",
-      });
-      assertEquals(result.success, false);
+      assertThrows(
+        () =>
+          v.parse(ArgSchema, {
+            [CLI_ARGS.INTERACTIVE]: "false",
+            [CLI_ARGS.GRID_WIDTH]: "10",
+            [CLI_ARGS.GRID_HEIGHT]: "10",
+            extra: "nope",
+          }),
+        v.ValiError,
+        'Invalid key: Expected never but received "extra"',
+      );
     });
   });
 });

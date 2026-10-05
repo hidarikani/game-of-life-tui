@@ -63,9 +63,8 @@ cgol
 Running from a local clone of this repository:
 
 ```bash
-deno run --allow-env --allow-read --allow-write mod.ts # default arguments
-deno run --allow-env --allow-read --allow-write mod.ts --interactive --pattern-key=pulsar
-deno run --allow-env --allow-read --allow-write mod.ts --no-interactive --pattern-key=pulsar --grid-width=17 --grid-height=17 --generations=3
+deno run --allow-env --allow-read --allow-write mod.ts --interactive=true --pattern=pulsar
+deno run --allow-env --allow-read --allow-write mod.ts --interactive=false --pattern=pulsar --grid-width=17 --grid-height=17 --generations=3
 ```
 
 ### Interactive Controls

@@ -1,7 +1,7 @@
 import type { NonInteractiveArgs } from "./terminal.ts";
 
 import * as v from "@valibot/valibot";
-import { assertEquals, assertThrows } from "@std/assert";
+import { assertEquals, assertObjectMatch, assertThrows } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
 
 import { ArgSchema } from "./terminal.ts";
@@ -16,21 +16,21 @@ import {
 
 describe("argSchema", () => {
   describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} is "true"`, () => {
-    describe(`${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN_KEY}`, () => {
-      it(`accepts an explicit ${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN_KEY}`, () => {
+    describe(`${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN}`, () => {
+      it(`accepts an explicit ${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN}`, () => {
         const result = v.parse(ArgSchema, {
           [CLI_ARGS.INTERACTIVE]: "true",
-          [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
+          [CLI_ARGS.PATTERN]: PATTERN_KEYS.PULSAR,
         });
-        assertEquals(result[CLI_ARGS.PATTERN_KEY], PATTERN_KEYS.PULSAR);
+        assertEquals(result[CLI_ARGS.PATTERN].key, PATTERN_KEYS.PULSAR);
       });
 
-      it(`rejects an unknown ${CLI_ARGS.PATTERN_KEY}`, () => {
+      it(`rejects an unknown ${CLI_ARGS.PATTERN}`, () => {
         assertThrows(
           () =>
             v.parse(ArgSchema, {
               [CLI_ARGS.INTERACTIVE]: "true",
-              [CLI_ARGS.PATTERN_KEY]: "no-such",
+              [CLI_ARGS.PATTERN]: "no-such",
             }),
           v.ValiError,
           genMsgPatternNotFound("no-such"),
@@ -93,13 +93,13 @@ describe("argSchema", () => {
           [CLI_ARGS.GRID_WIDTH]: "10",
           [CLI_ARGS.GRID_HEIGHT]: "20",
         });
-        assertEquals(result, {
+        assertObjectMatch(result, {
           [CLI_ARGS.INTERACTIVE]: false,
-          [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
           [CLI_ARGS.GRID_WIDTH]: 10,
           [CLI_ARGS.GRID_HEIGHT]: 20,
           [CLI_ARGS.GENERATIONS]: MIN_GENERATIONS,
         });
+        assertEquals(result[CLI_ARGS.PATTERN].key, PATTERN_KEYS.PULSAR);
       });
 
       it("trims surrounding whitespace before coercing to a number", () => {
@@ -134,7 +134,9 @@ describe("argSchema", () => {
                 [CLI_ARGS.GRID_HEIGHT]: "10",
               }),
             v.ValiError,
-            `Invalid value: Expected >=${MIN_GRID_SIZE} but received ${MIN_GRID_SIZE - 1}`,
+            `Invalid value: Expected >=${MIN_GRID_SIZE} but received ${
+              MIN_GRID_SIZE - 1
+            }`,
           );
         });
 
@@ -173,7 +175,9 @@ describe("argSchema", () => {
                 [CLI_ARGS.GRID_HEIGHT]: `${MIN_GRID_SIZE - 1}`,
               }),
             v.ValiError,
-            `Invalid value: Expected >=${MIN_GRID_SIZE} but received ${MIN_GRID_SIZE - 1}`,
+            `Invalid value: Expected >=${MIN_GRID_SIZE} but received ${
+              MIN_GRID_SIZE - 1
+            }`,
           );
         });
 
@@ -192,25 +196,25 @@ describe("argSchema", () => {
       });
     });
 
-    describe(`${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN_KEY}`, () => {
-      it(`accepts an explicit ${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN_KEY}`, () => {
+    describe(`${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN}`, () => {
+      it(`accepts an explicit ${LONG_ARG_PREFIX}${CLI_ARGS.PATTERN}`, () => {
         const result = v.parse(ArgSchema, {
           [CLI_ARGS.INTERACTIVE]: "false",
           [CLI_ARGS.GRID_WIDTH]: "10",
           [CLI_ARGS.GRID_HEIGHT]: "10",
-          [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
+          [CLI_ARGS.PATTERN]: PATTERN_KEYS.PULSAR,
         });
-        assertEquals(result[CLI_ARGS.PATTERN_KEY], PATTERN_KEYS.PULSAR);
+        assertEquals(result[CLI_ARGS.PATTERN].key, PATTERN_KEYS.PULSAR);
       });
 
-      it(`rejects an unknown ${CLI_ARGS.PATTERN_KEY}`, () => {
+      it(`rejects an unknown ${CLI_ARGS.PATTERN}`, () => {
         assertThrows(
           () =>
             v.parse(ArgSchema, {
               [CLI_ARGS.INTERACTIVE]: "false",
               [CLI_ARGS.GRID_WIDTH]: "10",
               [CLI_ARGS.GRID_HEIGHT]: "10",
-              [CLI_ARGS.PATTERN_KEY]: "no-such",
+              [CLI_ARGS.PATTERN]: "no-such",
             }),
           v.ValiError,
           genMsgPatternNotFound("no-such"),
@@ -224,7 +228,7 @@ describe("argSchema", () => {
       assertThrows(
         () =>
           v.parse(ArgSchema, {
-            [CLI_ARGS.PATTERN_KEY]: PATTERN_KEYS.PULSAR,
+            [CLI_ARGS.PATTERN]: PATTERN_KEYS.PULSAR,
           }),
         v.ValiError,
         `Invalid type: Expected ("true" | "false") but received undefined`,

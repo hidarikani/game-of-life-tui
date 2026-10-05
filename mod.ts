@@ -8,7 +8,7 @@ import {
   handleArguments,
 } from "./src/terminal/terminal.ts";
 import { INVALID_ARGUMENTS } from "./src/constants/messages.ts";
-import { CLI_ARGS, LONG_ARG_PREFIX } from "./src/constants.ts";
+import { LONG_ARG_PREFIX } from "./src/constants.ts";
 
 async function main() {
   let args: ValidArgs;
@@ -22,7 +22,9 @@ async function main() {
         if (issue.path === null) {
           console.error(issue.message);
         } else {
-          console.error(`${LONG_ARG_PREFIX}${v.getDotPath(issue)}: ${issue.message}`);
+          console.error(
+            `${LONG_ARG_PREFIX}${v.getDotPath(issue)}: ${issue.message}`,
+          );
         }
       });
       Deno.exit(1);
@@ -32,7 +34,7 @@ async function main() {
 
   if (args.interactive) {
     try {
-      await enterInteractiveMode(args[CLI_ARGS.PATTERN_KEY]);
+      await enterInteractiveMode(args);
     } catch (e) {
       console.error(e instanceof Error ? e.message : e);
       Deno.exit(1);

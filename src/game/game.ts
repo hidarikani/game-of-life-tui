@@ -1,46 +1,25 @@
-import type {
-  GridSize,
-  IPatternLib,
-  Pattern,
-  Point,
-} from "@cell-auto/game-of-life-engine";
+import type { GridSize, Pattern, Point } from "@cell-auto/game-of-life-engine";
 
-import { Engine, Grid, PatternLib } from "@cell-auto/game-of-life-engine";
+import { Engine, Grid } from "@cell-auto/game-of-life-engine";
 import { ORIGIN } from "../constants.ts";
-import { genMsgPatternNotFound } from "../constants/messages.ts";
 
 let acceptedSize: GridSize | null = null;
-let acceptedPatternKey: string | null = null;
 let engine: Engine | null = null;
-let patternLib: null | IPatternLib = null;
 
-export function initGame(proposedSize: GridSize, patternKey: string): string {
-  if (patternLib === null) {
-    patternLib = PatternLib.fromBuiltInData();
-  }
-
-  const proposedPattern = patternLib.getPatternByKey(patternKey);
-
-  if (proposedPattern === null) {
-    throw new Error(genMsgPatternNotFound(patternKey));
-  }
-
+export function initGame(proposedSize: GridSize, pattern: Pattern): string {
   const sizeChanged = acceptedSize !== null &&
     (acceptedSize.w !== proposedSize.w || acceptedSize.h !== proposedSize.h);
-  const patternChanged = acceptedPatternKey !== null &&
-    acceptedPatternKey !== patternKey;
 
-  if (sizeChanged || patternChanged) {
+  if (sizeChanged) {
     engine = null;
   }
 
   acceptedSize = proposedSize;
-  acceptedPatternKey = patternKey;
 
   const firstGeneration = new Grid({ gridSize: acceptedSize });
 
   firstGeneration.writeGrid({
-    inner: proposedPattern.generations[0],
+    inner: pattern.generations[0],
   });
 
   if (engine === null) {
@@ -60,51 +39,12 @@ export function tick(): string {
 }
 
 /**
- * Lists every built-in pattern, for the pattern selection view.
- */
-export function listPatterns(): Pattern[] {
-  if (patternLib === null) {
-    patternLib = PatternLib.fromBuiltInData();
-  }
-
-  return patternLib.getPatterns(null);
-}
-
-/**
- * Renders a pattern's first generation on its own, at its natural size, for
- * the preview pane of the selection view. Needs no running simulation.
- */
-export function renderPatternPreview(patternKey: string): string {
-  if (patternLib === null) {
-    patternLib = PatternLib.fromBuiltInData();
-  }
-
-  const pattern = patternLib.getPatternByKey(patternKey);
-
-  if (pattern === null) {
-    throw new Error(genMsgPatternNotFound(patternKey));
-  }
-
-  const inner = pattern.generations[0];
-  const preview = new Grid({ gridSize: inner.gridSize });
-  preview.writeGrid({ inner });
-
-  return preview.toString();
-}
-
-/**
  * Builds a grid the size of the running simulation holding only the given
  * pattern, placed at `offset`. Throws when the pattern does not fit there.
  */
-function buildPatternGrid(patternKey: string, offset: Point): Grid {
-  if (acceptedSize === null || patternLib === null) {
+function buildPatternGrid(pattern: Pattern, offset: Point): Grid {
+  if (acceptedSize === null) {
     throw new Error("Engine uninitialized. Invoke initGame first.");
-  }
-
-  const pattern = patternLib.getPatternByKey(patternKey);
-
-  if (pattern === null) {
-    throw new Error(genMsgPatternNotFound(patternKey));
   }
 
   const grid = new Grid({ gridSize: acceptedSize });
@@ -117,8 +57,8 @@ function buildPatternGrid(patternKey: string, offset: Point): Grid {
  * Renders the placement preview: the full-size grid holding only the given
  * pattern at `offset`, as shown while the user positions it.
  */
-export function renderPlacement(patternKey: string, offset: Point): string {
-  return buildPatternGrid(patternKey, offset).toString();
+export function renderPlacement(pattern: Pattern, offset: Point): string {
+  return buildPatternGrid(pattern, offset).toString();
 }
 
 /**
@@ -128,13 +68,12 @@ export function renderPlacement(patternKey: string, offset: Point): string {
  * fit there, since the new grid is built before the engine is replaced.
  */
 export function selectPattern(
-  patternKey: string,
+  pattern: Pattern,
   offset: Point = ORIGIN,
 ): string {
-  const firstGeneration = buildPatternGrid(patternKey, offset);
+  const firstGeneration = buildPatternGrid(pattern, offset);
 
   engine = new Engine({ firstGeneration });
-  acceptedPatternKey = patternKey;
 
   return engine.toString();
 }
@@ -145,11 +84,9 @@ export function selectPattern(
  */
 export function getGameStateForTests(): {
   acceptedSize: GridSize | null;
-  acceptedPatternKey: string | null;
   engine: Engine | null;
-  patternLib: IPatternLib | null;
 } {
-  return { acceptedSize, acceptedPatternKey, engine, patternLib };
+  return { acceptedSize, engine };
 }
 
 /**
@@ -158,7 +95,5 @@ export function getGameStateForTests(): {
  */
 export function resetGameStateForTests(): void {
   acceptedSize = null;
-  acceptedPatternKey = null;
   engine = null;
-  patternLib = null;
 }

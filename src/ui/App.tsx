@@ -1,75 +1,25 @@
+import type { AppProps, PatternPickerProps, UiState } from "../types/app.ts";
+
 import { useRef, useState } from "react";
 import { Box, type Instance, render, Text, useApp, useInput } from "ink";
 import type { PassThrough } from "node:stream";
-import type { GridSize, Pattern, Point } from "@cell-auto/game-of-life-engine";
+import type { Pattern } from "@cell-auto/game-of-life-engine";
 import {
+  GAME_HINTS,
   KEY_PATTERNS_LOWER,
   KEY_PATTERNS_UPPER,
   KEY_QUIT_LOWER,
   KEY_QUIT_UPPER,
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
+  LIST_GAP,
+  MAX_LIST_WIDTH,
+  MIN_LIST_WIDTH,
+  PATTERNS_HINTS,
+  PLACEMENT_HINTS,
 } from "../constants.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
-
-/**
- * Props for the interactive Game of Life view.
- */
-export type AppProps = {
-  /** The already-rendered first generation to display on mount. */
-  initialFrame: string;
-  /** Key of the pattern the simulation started with. */
-  initialPatternKey: string;
-  /** Total rows the app may occupy, toolbar included. */
-  appHeight: number;
-  /** Size of the simulation grid, used to constrain placement offsets. */
-  gridSize: GridSize;
-  /** Every pattern available in the selection view. */
-  patterns: Pattern[];
-  /** Advances the simulation one generation and returns the rendered grid. */
-  onTick: () => string;
-  /** Renders a pattern on its own, at its natural size, for the preview. */
-  onRenderPreview: (patternKey: string) => string;
-  /**
-   * Renders the full-size grid holding only the given pattern at `offset`,
-   * for the placement step. May throw when the pattern does not fit.
-   */
-  onRenderPlacement: (patternKey: string, offset: Point) => string;
-  /**
-   * Restarts the simulation with the given pattern at `offset` and returns
-   * the rendered grid. May throw; the message is shown in the toolbar.
-   */
-  onSelectPattern: (patternKey: string, offset: Point) => string;
-};
-
-type View = "game" | "patterns" | "placement";
-
-type UiState = {
-  view: View;
-  /** Rendered grid shown in the game view. */
-  frame: string;
-  /** Pattern the running simulation was started from. */
-  patternKey: string;
-  /** Index of the highlighted entry in the selection list. */
-  selected: number;
-  /** First list entry visible, so long lists can scroll. */
-  scrollOffset: number;
-  /** Pattern being positioned in the placement step. */
-  placingKey: string | null;
-  /** Offset the pattern is currently positioned at. */
-  offset: Point;
-  /** Rendered grid shown in the placement step. */
-  placementFrame: string;
-  error: string | null;
-};
-
-const GAME_HINTS = "R next generation · P patterns · Q quit";
-const PATTERNS_HINTS = "↑↓ move · Enter place · Esc back · Q quit";
-const PLACEMENT_HINTS = "↑↓←→ move · Enter confirm · Esc back · Q quit";
-
-const MIN_LIST_WIDTH = 10;
-const MAX_LIST_WIDTH = 24;
-const LIST_GAP = 2;
+import { getPatternLib } from "../pattern/pattern.ts";
 
 /**
  * Interactive Game of Life app.
@@ -85,7 +35,7 @@ const LIST_GAP = 2;
 export function App(
   {
     initialFrame,
-    initialPatternKey,
+    pattern,
     appHeight,
     gridSize,
     patterns,
@@ -98,7 +48,7 @@ export function App(
   const [ui, setUiState] = useState<UiState>({
     view: "game",
     frame: initialFrame,
-    patternKey: initialPatternKey,
+    pattern,
     selected: 0,
     scrollOffset: 0,
     placingKey: null,
@@ -122,7 +72,7 @@ export function App(
   const contentHeight = Math.max(1, appHeight - 1);
 
   const openPatterns = (s: UiState): UiState => {
-    const current = patterns.findIndex((p) => p.key === s.patternKey);
+    const current = patterns.findIndex((p) => p.key === s.pattern.key);
     const selected = current === -1 ? 0 : current;
     return {
       ...s,
@@ -160,7 +110,7 @@ export function App(
         view: "placement",
         placingKey: pattern.key,
         offset,
-        placementFrame: onRenderPlacement(pattern.key, offset),
+        placementFrame: onRenderPlacement(pattern, offset),
       };
     } catch (cause) {
       return { ...s, error: messageOf(cause) };
@@ -187,7 +137,7 @@ export function App(
       return {
         ...s,
         offset,
-        placementFrame: onRenderPlacement(pattern.key, offset),
+        placementFrame: onRenderPlacement(pattern, offset),
       };
     } catch (cause) {
       return { ...s, error: messageOf(cause) };
@@ -201,8 +151,8 @@ export function App(
       return {
         ...s,
         view: "game",
-        frame: onSelectPattern(s.placingKey, s.offset),
-        patternKey: s.placingKey,
+        frame: onSelectPattern(s.pattern, s.offset),
+        pattern: getPatternLib().getPatternByKey(s.placingKey)!,
         placingKey: null,
       };
     } catch (cause) {
@@ -283,13 +233,8 @@ export function App(
  * pattern on the right.
  */
 function PatternPicker(
-  { patterns, selected, scrollOffset, contentHeight, onRenderPreview }: {
-    patterns: Pattern[];
-    selected: number;
-    scrollOffset: number;
-    contentHeight: number;
-    onRenderPreview: (patternKey: string) => string;
-  },
+  { patterns, selected, scrollOffset, contentHeight, onRenderPreview }:
+    PatternPickerProps,
 ) {
   const listWidth = clamp(
     Math.max(...patterns.map((p) => p.name.length)) + 1,
@@ -302,7 +247,7 @@ function PatternPicker(
   let previewError: string | null = null;
   if (current) {
     try {
-      preview = onRenderPreview(current.key);
+      preview = onRenderPreview(current);
     } catch (cause) {
       previewError = messageOf(cause);
     }

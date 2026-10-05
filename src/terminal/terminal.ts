@@ -1,5 +1,9 @@
 import type { GridSize } from "@cell-auto/game-of-life-engine";
-import type { NonInteractiveArgs, ValidArgs } from "../types/terminal.ts";
+import type {
+  InteractiveArgs,
+  NonInteractiveArgs,
+  ValidArgs,
+} from "../types/terminal.ts";
 import { ArgSchema } from "../types/terminal.ts";
 
 import { parseArgs } from "@std/cli/parse-args";
@@ -13,18 +17,18 @@ import {
   CURSOR_SHOW,
   DEFAULT_GRID_HEIGHT as DEFAULT_GRID_HEIGHT,
   DEFAULT_GRID_WIDTH as DEFAULT_GRID_WIDTH,
+  SEPARATOR_WIDTH,
 } from "../constants.ts";
 
 import {
   initGame,
-  listPatterns,
-  renderPatternPreview,
   renderPlacement,
   selectPattern,
   tick,
 } from "../game/game.ts";
 import { renderApp } from "../ui/App.tsx";
 import { createStdinBridge } from "../ui/stdin-bridge.ts";
+import { getPatternLib, renderPatternPreview } from "../pattern/pattern.ts";
 
 export function handleArguments(): ValidArgs {
   /*
@@ -38,7 +42,7 @@ export function handleArguments(): ValidArgs {
     {
       string: [
         CLI_ARGS.INTERACTIVE,
-        CLI_ARGS.PATTERN_KEY,
+        CLI_ARGS.PATTERN,
         CLI_ARGS.GRID_WIDTH,
         CLI_ARGS.GRID_HEIGHT,
         CLI_ARGS.GENERATIONS,
@@ -75,6 +79,22 @@ export async function leaveAltScreen() {
   await write(ALTERNATE_SCREEN_EXIT);
 }
 
+function genSeparatorLine(len: number = SEPARATOR_WIDTH.MAX): string {
+  let acc = "";
+
+  for (let i = 0; i < len; i++) {
+    acc += "=";
+  }
+
+  return acc;
+}
+
+async function writeHeading(msg: string) {
+  const separatorLen = SEPARATOR_WIDTH.MAX - msg.length - 1;
+  const separator = genSeparatorLine(separatorLen);
+  await write(`\n${msg} ${separator}\n\n`);
+}
+
 export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
   const size: GridSize = {
     w: args[CLI_ARGS.GRID_WIDTH],
@@ -82,12 +102,12 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
   };
 
   try {
-    await write("\nInitial Seed ===\n\n");
-    await write(initGame(size, args[CLI_ARGS.PATTERN_KEY]));
+    await writeHeading("InitialSeed");
+    await write(initGame(size, args[CLI_ARGS.PATTERN]));
 
     if (args.generations > 1) {
       for (let i = 1; i < args.generations; i++) {
-        await write(`\nGeneration ${i} ===\n\n`);
+        await writeHeading(`Generation ${i}`);
         await write(tick());
       }
     }
@@ -97,7 +117,7 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
   }
 }
 
-export async function enterInteractiveMode(patternKey: string) {
+export async function enterInteractiveMode(args: InteractiveArgs) {
   const size = getSize();
   // Ink terminates every frame with a newline, so a frame as tall as the
   // terminal would scroll the alternate screen by one row on each render.
@@ -106,7 +126,7 @@ export async function enterInteractiveMode(patternKey: string) {
   const appHeight = Math.max(2, size.h - 1);
   size.h = appHeight - 1;
 
-  const initialFrame = initGame(size, patternKey);
+  const initialFrame = initGame(size, args[CLI_ARGS.PATTERN]);
 
   await enterAltScreen();
   const bridge = createStdinBridge();
@@ -114,10 +134,10 @@ export async function enterInteractiveMode(patternKey: string) {
     const app = renderApp(
       {
         initialFrame,
-        initialPatternKey: patternKey,
+        pattern: args[CLI_ARGS.PATTERN],
         appHeight,
         gridSize: size,
-        patterns: listPatterns(),
+        patterns: getPatternLib().getPatterns(null),
         onTick: tick,
         onRenderPreview: renderPatternPreview,
         onRenderPlacement: renderPlacement,

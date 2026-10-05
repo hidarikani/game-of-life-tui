@@ -17,13 +17,18 @@ export const KEY_PATTERNS_UPPER = "P";
 
 export const CLI_ARGS = {
   INTERACTIVE: "interactive",
-  PATTERN_KEY: "pattern-key",
+  PATTERN: "pattern",
   GRID_WIDTH: "grid-width",
   GRID_HEIGHT: "grid-height",
   GENERATIONS: "generations",
 } as const;
 
 export const LONG_ARG_PREFIX = "--";
+
+export const SEPARATOR_WIDTH = {
+  MIN: 1,
+  MAX: 80,
+} as const;
 
 // Game ===
 export const PATTERN_KEYS = {
@@ -35,3 +40,12 @@ export const DEFAULT_GRID_WIDTH = 100;
 export const DEFAULT_GRID_HEIGHT = 100;
 export const MIN_GENERATIONS = 1 as const;
 export const ORIGIN: Point = { x: 0, y: 0 };
+
+
+export const GAME_HINTS = "R next generation · P patterns · Q quit";
+export const PATTERNS_HINTS = "↑↓ move · Enter place · Esc back · Q quit";
+export const PLACEMENT_HINTS = "↑↓←→ move · Enter confirm · Esc back · Q quit";
+ 
+export const MIN_LIST_WIDTH = 10;
+export const MAX_LIST_WIDTH = 24;
+export const LIST_GAP = 2;

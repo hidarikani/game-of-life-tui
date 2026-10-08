@@ -1,25 +1,20 @@
-import type { AppProps, PatternPickerProps, UiState } from "../types/app.ts";
+import type { AppProps, UiState } from "../types/app.ts";
 
 import { useRef, useState } from "react";
 import { Box, type Instance, render, Text, useApp, useInput } from "ink";
 import type { PassThrough } from "node:stream";
-import type { Pattern } from "@cell-auto/game-of-life-engine";
 import {
-  GAME_HINTS,
   KEY_PATTERNS_LOWER,
   KEY_PATTERNS_UPPER,
   KEY_QUIT_LOWER,
   KEY_QUIT_UPPER,
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
-  LIST_GAP,
-  MAX_LIST_WIDTH,
-  MIN_LIST_WIDTH,
-  PATTERNS_HINTS,
-  PLACEMENT_HINTS,
 } from "../constants.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
 import { getPatternLib } from "../pattern/pattern.ts";
+import { PatternPicker } from "./PatternPicker.tsx";
+import { clamp, hintsFor, isEnter, messageOf } from "../util/misc.ts";
 
 /**
  * Interactive Game of Life app.
@@ -226,91 +221,6 @@ export function App(
       </Box>
     </Box>
   );
-}
-
-/**
- * The selection step: pattern names on the left, a preview of the highlighted
- * pattern on the right.
- */
-function PatternPicker(
-  { patterns, selected, scrollOffset, contentHeight, onRenderPreview }:
-    PatternPickerProps,
-) {
-  const listWidth = clamp(
-    Math.max(...patterns.map((p) => p.name.length)) + 1,
-    MIN_LIST_WIDTH,
-    MAX_LIST_WIDTH,
-  );
-  const current = patterns[selected];
-
-  let preview = "";
-  let previewError: string | null = null;
-  if (current) {
-    try {
-      preview = onRenderPreview(current);
-    } catch (cause) {
-      previewError = messageOf(cause);
-    }
-  }
-
-  // Two rows of the preview pane are the pattern's name and metadata.
-  const previewRows = preview === "" ? [] : preview.split("\n");
-  const visibleRows = previewRows.slice(0, Math.max(0, contentHeight - 2));
-
-  return (
-    <Box flexDirection="row" flexGrow={1}>
-      <Box flexDirection="column" width={listWidth} marginRight={LIST_GAP}>
-        {patterns
-          .slice(scrollOffset, scrollOffset + contentHeight)
-          .map((pattern, i) => (
-            <Text
-              key={pattern.key}
-              inverse={scrollOffset + i === selected}
-              wrap="truncate"
-            >
-              {pattern.name}
-            </Text>
-          ))}
-      </Box>
-      <Box flexDirection="column" flexGrow={1} overflow="hidden">
-        {current && (
-          <>
-            <Text bold wrap="truncate">{current.name}</Text>
-            <Text dimColor wrap="truncate">
-              {current.type} · period {current.period} ·{" "}
-              {current.generations[0].gridSize.w}×
-              {current.generations[0].gridSize.h}
-            </Text>
-            {previewError === null
-              ? visibleRows.map((row, i) => (
-                <Text key={i} wrap="truncate">{row}</Text>
-              ))
-              : <Text color="red" wrap="truncate">{previewError}</Text>}
-          </>
-        )}
-      </Box>
-    </Box>
-  );
-}
-
-function hintsFor(ui: UiState, patterns: Pattern[]): string {
-  if (ui.view === "game") return GAME_HINTS;
-  if (ui.view === "placement") {
-    return `${PLACEMENT_HINTS} · (${ui.offset.x}, ${ui.offset.y})`;
-  }
-  return `${PATTERNS_HINTS} · ${ui.selected + 1}/${patterns.length}`;
-}
-
-function isEnter(ch: string): boolean {
-  return ch === "\r" || ch === "\n";
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), Math.max(min, max));
-}
-
-function messageOf(cause: unknown): string {
-  return cause instanceof Error ? cause.message : String(cause);
 }
 
 /**

@@ -27,7 +27,7 @@ import {
   tick,
 } from "../game/game.ts";
 import { renderApp } from "../ui/App.tsx";
-import { createStdinBridge } from "../ui/stdin-bridge.ts";
+import { createStdinBridge } from "./stdin/stdin-bridge.ts";
 import { getPatternLib, renderPatternPreview } from "../pattern/pattern.ts";
 
 export function handleArguments(): ValidArgs {

@@ -1,7 +1,7 @@
 import type { PatternPickerProps } from "../types/app.ts";
 
 import { Box, Text } from "ink";
-import { LIST_GAP, MAX_LIST_WIDTH, MIN_LIST_WIDTH } from "../constants.ts";
+import { LIST_GAP, MAX_LIST_WIDTH, MIN_LIST_WIDTH } from "../constants/constants.ts";
 import { clamp, messageOf } from "../util/misc.ts";
 
 /**

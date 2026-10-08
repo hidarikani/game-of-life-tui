@@ -12,7 +12,7 @@ import {
   MIN_GENERATIONS,
   MIN_GRID_SIZE,
   PATTERN_KEYS,
-} from "../constants.ts";
+} from "../constants/constants.ts";
 
 describe("argSchema", () => {
   describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} is "true"`, () => {

@@ -10,7 +10,7 @@ import {
   KEY_QUIT_UPPER,
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
-} from "../constants.ts";
+} from "../constants/constants.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
 import { getPatternLib } from "../pattern/pattern.ts";
 import { PatternPicker } from "./PatternPicker.tsx";

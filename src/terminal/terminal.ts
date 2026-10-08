@@ -18,7 +18,7 @@ import {
   DEFAULT_GRID_HEIGHT as DEFAULT_GRID_HEIGHT,
   DEFAULT_GRID_WIDTH as DEFAULT_GRID_WIDTH,
   SEPARATOR_WIDTH,
-} from "../constants.ts";
+} from "../constants/constants.ts";
 
 import {
   initGame,

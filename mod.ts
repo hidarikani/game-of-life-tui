@@ -8,7 +8,7 @@ import {
   handleArguments,
 } from "./src/terminal/terminal.ts";
 import { INVALID_ARGUMENTS } from "./src/constants/messages.ts";
-import { LONG_ARG_PREFIX } from "./src/constants.ts";
+import { LONG_ARG_PREFIX } from "./src/constants/constants.ts";
 
 async function main() {
   let args: ValidArgs;

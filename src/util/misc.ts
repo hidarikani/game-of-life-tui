@@ -1,7 +1,7 @@
 import type { UiState } from "../types/app.ts";
 
 import type { Pattern } from "@cell-auto/game-of-life-engine";
-import { GAME_HINTS, PATTERNS_HINTS, PLACEMENT_HINTS } from "../constants.ts";
+import { GAME_HINTS, PATTERNS_HINTS, PLACEMENT_HINTS } from "../constants/constants.ts";
 
 export function hintsFor(ui: UiState, patterns: Pattern[]): string {
   if (ui.view === "game") return GAME_HINTS;

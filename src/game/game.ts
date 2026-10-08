@@ -1,7 +1,7 @@
 import type { GridSize, Pattern, Point } from "@cell-auto/game-of-life-engine";
 
 import { Engine, Grid } from "@cell-auto/game-of-life-engine";
-import { ORIGIN } from "../constants.ts";
+import { ORIGIN } from "../constants/constants.ts";
 
 let acceptedSize: GridSize | null = null;
 let engine: Engine | null = null;

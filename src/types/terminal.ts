@@ -1,4 +1,4 @@
-import { MIN_GRID_SIZE, Pattern } from "@cell-auto/game-of-life-engine";
+import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 import * as v from "@valibot/valibot";
 
 import { getPatternLib } from "../pattern/pattern.ts";

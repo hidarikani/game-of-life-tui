@@ -41,11 +41,10 @@ export const DEFAULT_GRID_HEIGHT = 100;
 export const MIN_GENERATIONS = 1 as const;
 export const ORIGIN: Point = { x: 0, y: 0 };
 
-
 export const GAME_HINTS = "R next generation · P patterns · Q quit";
 export const PATTERNS_HINTS = "↑↓ move · Enter place · Esc back · Q quit";
 export const PLACEMENT_HINTS = "↑↓←→ move · Enter confirm · Esc back · Q quit";
- 
+
 export const MIN_LIST_WIDTH = 10;
 export const MAX_LIST_WIDTH = 24;
 export const LIST_GAP = 2;

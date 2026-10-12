@@ -13,7 +13,7 @@ import {
 } from "../constants/constants.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
 import { getPatternLib } from "../pattern/pattern.ts";
-import { PatternPicker } from "./PatternPicker.tsx";
+import { PatternPicker } from "./patternPicker/PatternPicker.tsx";
 import { clamp, hintsFor, isEnter, messageOf } from "../util/misc.ts";
 
 /**
@@ -35,7 +35,6 @@ export function App(
     gridSize,
     patterns,
     onTick,
-    onRenderPreview,
     onRenderPlacement,
     onSelectPattern,
   }: AppProps,
@@ -141,18 +140,17 @@ export function App(
 
   /** Restarts the simulation with the pattern at its current offset. */
   const confirmPlacement = (s: UiState): UiState => {
-    if (s.placingKey === null) return s;
-    try {
-      return {
-        ...s,
-        view: "game",
-        frame: onSelectPattern(s.pattern, s.offset),
-        pattern: getPatternLib().getPatternByKey(s.placingKey)!,
-        placingKey: null,
-      };
-    } catch (cause) {
-      return { ...s, error: messageOf(cause) };
+    if (s.placingKey === null) {
+      return s;
     }
+    const pattern = getPatternLib().getPatternByKey(s.placingKey)!;
+    return {
+      ...s,
+      view: "game",
+      frame: onSelectPattern(pattern, s.offset),
+      pattern,
+      placingKey: null,
+    };
   };
 
   useInput((input, key) => {
@@ -210,7 +208,6 @@ export function App(
             selected={ui.selected}
             scrollOffset={ui.scrollOffset}
             contentHeight={contentHeight}
-            onRenderPreview={onRenderPreview}
           />
         )}
       </Box>

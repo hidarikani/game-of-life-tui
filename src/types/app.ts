@@ -16,8 +16,6 @@ export type AppProps = {
   patterns: Pattern[];
   /** Advances the simulation one generation and returns the rendered grid. */
   onTick: () => string;
-  /** Renders a pattern on its own, at its natural size, for the preview. */
-  onRenderPreview: (pattern: Pattern) => string;
   /**
    * Renders the full-size grid holding only the given pattern at `offset`,
    * for the placement step. May throw when the pattern does not fit.
@@ -56,5 +54,9 @@ export type PatternPickerProps = {
   selected: number;
   scrollOffset: number;
   contentHeight: number;
-  onRenderPreview: (pattern: Pattern) => string;
+};
+
+export type PatternHeaderProps = {
+  pattern: Pattern;
+  currentGeneration: number;
 };

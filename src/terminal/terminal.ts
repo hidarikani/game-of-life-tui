@@ -28,7 +28,7 @@ import {
 } from "../game/game.ts";
 import { renderApp } from "../ui/App.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
-import { getPatternLib, renderPatternPreview } from "../pattern/pattern.ts";
+import { getPatternLib } from "../pattern/pattern.ts";
 
 export function handleArguments(): ValidArgs {
   /*
@@ -139,7 +139,6 @@ export async function enterInteractiveMode(args: InteractiveArgs) {
         gridSize: size,
         patterns: getPatternLib().getPatterns(null),
         onTick: tick,
-        onRenderPreview: renderPatternPreview,
         onRenderPlacement: renderPlacement,
         onSelectPattern: selectPattern,
       },

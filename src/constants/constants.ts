@@ -15,13 +15,40 @@ export const KEY_REFRESH_UPPER = "R";
 export const KEY_PATTERNS_LOWER = "p";
 export const KEY_PATTERNS_UPPER = "P";
 
+// args ===
+export const CLI_ARGS = {
+  INTERACTIVE: "interactive",
+  PATTERN: "pattern",
+  GRID_WIDTH: "grid-width",
+  GRID_HEIGHT: "grid-height",
+  GENERATIONS: "generations",
+} as const;
+
+export const LONG_ARG_PREFIX = "--";
+
 // Game ===
+/**
+ * @deprecated use PatternLib API
+ */
 export const PATTERN_KEYS = {
   PULSAR: "pulsar",
 };
 
-export const MIN_GRID_SIZE = 3 as const;
-export const DEFAULT_GRID_WIDTH = 100;
-export const DEFAULT_GRID_HEIGHT = 100;
+/**
+ * @deprecated @cell-auto/game-of-life-engine
+ */
 export const MIN_GENERATIONS = 1 as const;
+/**
+ * @deprecated @cell-auto/game-of-life-engine
+ */
 export const ORIGIN: Point = { x: 0, y: 0 };
+
+// tui
+export const SEPARATOR_WIDTH = {
+  MIN: 1,
+  MAX: 80,
+} as const;
+
+export const MIN_LIST_WIDTH = 10;
+export const MAX_LIST_WIDTH = 24;
+export const LIST_GAP = 2;

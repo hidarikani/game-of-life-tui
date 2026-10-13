@@ -90,6 +90,31 @@ deno task test:watch
 deno task test
 ```
 
+### Debugging
+
+VS Code debug configurations live in [`launch.json`][launch]. Pick one from the
+**Run and Debug** view and press `F5`:
+
+| Configuration                           | What it does                                                                                    |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `Interactive (integrated terminal)`     | Launches the app with `--interactive=true --pattern=pulsar`                                     |
+| `Interactive (external)`                | Attaches to an app already running in an external terminal                                      |
+| `Non-interactive (integrated terminal)` | Launches with `--interactive=false --pattern=pulsar` on a 17×17 grid, stops after 3 generations |
+| `Tests (integrated terminal)`           | Runs `deno test` under the debugger                                                             |
+
+The launch configurations start Deno with `--inspect-wait`, so the app pauses
+until the debugger attaches on port `9229`. They run in the integrated terminal
+because Ink needs a real TTY for raw-mode input and terminal size, and they
+expect Deno at `/opt/homebrew/bin/deno` — adjust `runtimeExecutable` if yours is
+installed elsewhere.
+
+To use `Interactive (external)`, start the app in a separate terminal first,
+then attach:
+
+```bash
+deno run --inspect-wait --allow-env --allow-read --allow-write mod.ts --interactive=true --pattern=pulsar
+```
+
 ### Publishing
 
 Published to [JSR][jsr] at [@game-of-life-tui][tui] happens automatically in CI
@@ -119,6 +144,7 @@ deno publish
 
 [publish-workflow]: .github/workflows/publish.yml
 [deno-json]: deno.json
+[launch]: .vscode/launch.json
 [readme]: README.md
 [mod]: mod.ts
 [app]: src/ui/App.tsx

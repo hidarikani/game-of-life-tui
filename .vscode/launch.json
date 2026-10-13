@@ -1,0 +1,65 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "request": "launch",
+      "name": "Interactive (integrated terminal)",
+      "type": "node",
+      "program": "${workspaceFolder}/mod.ts",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "/opt/homebrew/bin/deno",
+      "runtimeArgs": [
+        "run",
+        "--inspect-wait",
+        "--allow-env",
+        "--allow-read",
+        "--allow-write"
+      ],
+      "args": ["--interactive=true", "--pattern=pulsar"],
+      "console": "integratedTerminal",
+      "attachSimplePort": 9229
+    },
+    {
+      "request": "attach",
+      "name": "Interactive (external)",
+      "type": "node",
+      "cwd": "${workspaceFolder}",
+      "address": "127.0.0.1",
+      "port": 9229
+    },
+    {
+      "request": "launch",
+      "name": "Non-interactive (integrated terminal)",
+      "type": "node",
+      "program": "${workspaceFolder}/mod.ts",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "/opt/homebrew/bin/deno",
+      "runtimeArgs": [
+        "run",
+        "--inspect-wait",
+        "--allow-env",
+        "--allow-read",
+        "--allow-write"
+      ],
+      "args": [
+        "--interactive=false",
+        "--pattern=pulsar",
+        "--grid-width=17",
+        "--grid-height=17",
+        "--generations=3"
+      ],
+      "console": "integratedTerminal",
+      "attachSimplePort": 9229
+    },
+    {
+      "request": "launch",
+      "name": "Tests (integrated terminal)",
+      "type": "node",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "/opt/homebrew/bin/deno",
+      "runtimeArgs": ["test", "--inspect-wait", "--allow-env"],
+      "console": "integratedTerminal",
+      "attachSimplePort": 9229
+    }
+  ]
+}

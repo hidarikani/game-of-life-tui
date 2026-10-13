@@ -95,12 +95,12 @@ deno task test
 VS Code debug configurations live in [`launch.json`][launch]. Pick one from the
 **Run and Debug** view and press `F5`:
 
-| Configuration                     | What it does                                                                                    |
-| --------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `Interactive (VSCode)`            | Launches the app with `--interactive=true --pattern=pulsar`                                     |
-| `Interactive (external)`          | Attaches to an app already running in an external terminal                                      |
-| `Non-interactive (3 generations)` | Launches with `--interactive=false --pattern=pulsar` on a 17×17 grid, stops after 3 generations |
-| `Tests`                           | Runs `deno test` under the debugger                                                             |
+| Configuration                           | What it does                                                                                    |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `Interactive (integrated terminal)`     | Launches the app with `--interactive=true --pattern=pulsar`                                     |
+| `Interactive (external)`                | Attaches to an app already running in an external terminal                                      |
+| `Non-interactive (integrated terminal)` | Launches with `--interactive=false --pattern=pulsar` on a 17×17 grid, stops after 3 generations |
+| `Tests (integrated terminal)`           | Runs `deno test` under the debugger                                                             |
 
 The launch configurations start Deno with `--inspect-wait`, so the app pauses
 until the debugger attaches on port `9229`. They run in the integrated terminal

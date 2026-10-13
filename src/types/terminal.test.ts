@@ -3,6 +3,7 @@ import type { NonInteractiveArgs } from "./terminal.ts";
 import * as v from "@valibot/valibot";
 import { assertEquals, assertObjectMatch, assertThrows } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
+import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 
 import { ArgSchema } from "./terminal.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
@@ -10,7 +11,6 @@ import {
   CLI_ARGS,
   LONG_ARG_PREFIX,
   MIN_GENERATIONS,
-  MIN_GRID_SIZE,
   PATTERN_KEYS,
 } from "../constants/constants.ts";
 

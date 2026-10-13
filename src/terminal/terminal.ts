@@ -15,8 +15,6 @@ import {
   CLI_ARGS,
   CURSOR_HIDE,
   CURSOR_SHOW,
-  DEFAULT_GRID_HEIGHT as DEFAULT_GRID_HEIGHT,
-  DEFAULT_GRID_WIDTH as DEFAULT_GRID_WIDTH,
   SEPARATOR_WIDTH,
 } from "../constants/constants.ts";
 
@@ -29,6 +27,7 @@ import {
 import { renderApp } from "../ui/App.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
 import { getPatternLib } from "../pattern/pattern.ts";
+import { UNKNOWN_CONSOLE_SIZE } from "../constants/messages.ts";
 
 export function handleArguments(): ValidArgs {
   /*
@@ -65,7 +64,7 @@ export function getSize(): GridSize {
     const { columns, rows } = Deno.consoleSize();
     return { w: Math.floor(columns / 2), h: rows };
   } catch {
-    return { w: DEFAULT_GRID_WIDTH, h: DEFAULT_GRID_HEIGHT };
+    throw new Error(UNKNOWN_CONSOLE_SIZE);
   }
 }
 

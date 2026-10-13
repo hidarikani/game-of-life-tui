@@ -34,10 +34,13 @@ export const PATTERN_KEYS = {
   PULSAR: "pulsar",
 };
 
-export const MIN_GRID_SIZE = 3 as const;
-export const DEFAULT_GRID_WIDTH = 100;
-export const DEFAULT_GRID_HEIGHT = 100;
+/**
+ * @deprecated @cell-auto/game-of-life-engine
+ */
 export const MIN_GENERATIONS = 1 as const;
+/**
+ * @deprecated @cell-auto/game-of-life-engine
+ */
 export const ORIGIN: Point = { x: 0, y: 0 };
 
 // tui

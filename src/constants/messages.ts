@@ -1,4 +1,5 @@
-export const INVALID_ARGUMENTS = "Invalid arguments";
+export const INVALID_ARGUMENTS = "Invalid arguments.";
+export const UNKNOWN_CONSOLE_SIZE = "Unknown console size.";
 
 export const GAME_HINTS = "R next generation · P patterns · Q quit";
 export const PATTERNS_HINTS = "↑↓ move · Enter place · Esc back · Q quit";

@@ -43,9 +43,7 @@ export function PatternPicker(
       <Box flexDirection="column" flexGrow={1} overflow="hidden">
         {current && (
           <>
-            <Text wrap="truncate">
-              <Header pattern={current} currentGeneration={1} />
-            </Text>
+            <Header pattern={current} currentGeneration={1} />
             <GridView grid={preview} />
           </>
         )}

@@ -16,7 +16,6 @@ export type AppProps = {
   appHeight: number;
   gridSize: GridSize;
   mode: GridMode;
-  patterns: Pattern[];
   onTick: () => string;
   onRenderPlacement: (pattern: Pattern, offset: Point) => string;
   onSelectPattern: (pattern: Pattern, offset: Point) => string;

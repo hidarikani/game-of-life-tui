@@ -136,7 +136,6 @@ export async function enterInteractiveMode(args: InteractiveArgs) {
         pattern: args[CLI_ARGS.PATTERN],
         appHeight,
         gridSize: size,
-        patterns: getPatternLib().getPatterns(null),
         onTick: tick,
         onRenderPlacement: renderPlacement,
         onSelectPattern: selectPattern,

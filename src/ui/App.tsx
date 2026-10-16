@@ -15,7 +15,11 @@ import {
   KEY_REFRESH_UPPER,
 } from "../constants/constants.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
-import { getPatternLib, PatternProvider } from "../pattern/pattern.tsx";
+import {
+  getPatternLib,
+  PatternProvider,
+  usePatterns,
+} from "../pattern/pattern.tsx";
 import { PatternPicker } from "./patternPicker/PatternPicker.tsx";
 import { clamp, hintsFor, isEnter, messageOf } from "../util/misc.ts";
 import { EngineProvider } from "../engine/EngineProvider.tsx";
@@ -38,7 +42,6 @@ export function App(
     appHeight,
     gridSize,
     mode,
-    patterns,
     onTick,
     onRenderPlacement,
     onSelectPattern,
@@ -55,6 +58,10 @@ export function App(
     placementFrame: "",
     error: null,
   });
+
+  const patternLib = usePatterns();
+  const patterns = patternLib.getPatterns(null);
+
   // Key events can be handled back-to-back before React commits the state
   // update from the previous event (batched startup input, pasted key
   // sequences). Decisions therefore read the ref, which is always current,

@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { greetingSlice } from "./GeneralSlice.ts";
+import { generalSlice } from "./general.ts";
 
 export const store = configureStore({
   reducer: {
-    [greetingSlice.reducerPath]: greetingSlice.reducer,
+    [generalSlice.reducerPath]: generalSlice.reducer,
   },
 });
 

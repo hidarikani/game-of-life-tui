@@ -1,17 +1,14 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { GreetingState } from "../types/state.ts";
 
-interface GreetingState {
-  name: string;
-  clicks: number;
-}
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: GreetingState = {
-  name: 'World',
+  name: "World",
   clicks: 0,
 };
 
-export const greetingSlice = createSlice({
-  name: 'greeting',
+export const generalSlice = createSlice({
+  name: "greeting",
   initialState,
   reducers: {
     setName: (state, action: PayloadAction<string>) => {
@@ -28,5 +25,5 @@ export const greetingSlice = createSlice({
   },
 });
 
-export const { setName, wave, reset } = greetingSlice.actions;
-export const { selectName, selectClicks } = greetingSlice.selectors;
+export const { setName, wave, reset } = generalSlice.actions;
+export const { selectName, selectClicks } = generalSlice.selectors;

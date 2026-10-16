@@ -7,6 +7,7 @@ export const PLACEMENT_HINTS = "↑↓←→ move · Enter confirm · Esc back �
 
 export const CONTEXTS = {
   PATTERN_LIB: "Pattern Library Context",
+  ENGINE: "Game Engine",
 } as const;
 
 export function genMsgContextMissing(

@@ -22,7 +22,11 @@ import {
 } from "../pattern/pattern.tsx";
 import { PatternPicker } from "./patternPicker/PatternPicker.tsx";
 import { clamp, hintsFor, isEnter, messageOf } from "../util/misc.ts";
-import { EngineProvider } from "../engine/EngineProvider.tsx";
+import { EngineProvider, useEngine } from "../engine/engine.tsx";
+import {
+  EngineProviderProps,
+  FirstGenerationFactoryProps,
+} from "../types/engine.ts";
 
 /**
  * Interactive Game of Life app.
@@ -37,19 +41,16 @@ import { EngineProvider } from "../engine/EngineProvider.tsx";
  */
 export function App(
   {
-    initialFrame,
     pattern,
     appHeight,
     gridSize,
     mode,
     onTick,
     onRenderPlacement,
-    onSelectPattern,
   }: AppProps,
 ) {
   const [ui, setUiState] = useState<UiState>({
     view: "game",
-    frame: initialFrame,
     pattern,
     selected: 0,
     scrollOffset: 0,
@@ -61,6 +62,7 @@ export function App(
 
   const patternLib = usePatterns();
   const patterns = patternLib.getPatterns(null);
+  const engine = useEngine();
 
   // Key events can be handled back-to-back before React commits the state
   // update from the previous event (batched startup input, pasted key
@@ -159,8 +161,8 @@ export function App(
     return {
       ...s,
       view: "game",
-      frame: onSelectPattern(pattern, s.offset),
       pattern,
+      offset: s.offset,
       placingKey: null,
     };
   };
@@ -212,7 +214,9 @@ export function App(
   return (
     <Box flexDirection="column" height={appHeight}>
       <Box flexDirection="column" flexGrow={1}>
-        {ui.view === "game" && <Text>{ui.frame}</Text>}
+        {ui.view === "game" && (
+          <Text>{engine.presentGeneration.toString()}</Text>
+        )}
         {ui.view === "placement" && <Text>{ui.placementFrame}</Text>}
         {ui.view === "patterns" && (
           <PatternPicker
@@ -232,22 +236,19 @@ export function App(
   );
 }
 
-/**
- * Mounts the interactive view, reading keys from the given bridged stdin
- * stream. Await the returned instance's `waitUntilExit()` to block until the
- * user quits.
- */
-export function renderApp(props: AppProps, stdin: PassThrough): Instance {
+export function renderApp(
+  engineProps: FirstGenerationFactoryProps,
+  appProps: AppProps,
+  stdin: PassThrough,
+): Instance {
   return render(
     (<StrictMode>
       <Provider store={store}>
         <EngineProvider
-          size={props.gridSize}
-          pattern={props.pattern}
-          mode={props.mode}
+          factoryProps={engineProps}
         >
           <PatternProvider>
-            <App {...props} />
+            <App {...appProps} />
           </PatternProvider>
         </EngineProvider>
       </Provider>

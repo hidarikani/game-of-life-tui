@@ -15,18 +15,13 @@ import {
   CLI_ARGS,
   CURSOR_HIDE,
   CURSOR_SHOW,
+  ORIGIN,
   SEPARATOR_WIDTH,
 } from "../constants/constants.ts";
 
-import {
-  initGame,
-  renderPlacement,
-  selectPattern,
-  tick,
-} from "../game/game.ts";
+import { initGame, renderPlacement, tick } from "../game/game.ts";
 import { renderApp } from "../ui/App.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
-import { getPatternLib } from "../pattern/pattern.tsx";
 import { UNKNOWN_CONSOLE_SIZE } from "../constants/messages.ts";
 
 export function handleArguments(): ValidArgs {
@@ -125,20 +120,17 @@ export async function enterInteractiveMode(args: InteractiveArgs) {
   const appHeight = Math.max(2, size.h - 1);
   size.h = appHeight - 1;
 
-  const initialFrame = initGame(size, args[CLI_ARGS.PATTERN]);
-
   await enterAltScreen();
   const bridge = createStdinBridge();
   try {
     const app = renderApp(
       {
-        initialFrame,
         pattern: args[CLI_ARGS.PATTERN],
+        offset: ORIGIN,
         appHeight,
         gridSize: size,
         onTick: tick,
         onRenderPlacement: renderPlacement,
-        onSelectPattern: selectPattern,
         mode: GRID_MODES.FINITE,
       },
       bridge.stdin,

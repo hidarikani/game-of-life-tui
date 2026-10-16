@@ -1,7 +1,6 @@
 import type { GridSize, Pattern, Point } from "@cell-auto/game-of-life-engine";
 
 import { Engine, Grid } from "@cell-auto/game-of-life-engine";
-import { ORIGIN } from "../constants/constants.ts";
 
 let acceptedSize: GridSize | null = null;
 let engine: Engine | null = null;
@@ -59,23 +58,6 @@ function buildPatternGrid(pattern: Pattern, offset: Point): Grid {
  */
 export function renderPlacement(pattern: Pattern, offset: Point): string {
   return buildPatternGrid(pattern, offset).toString();
-}
-
-/**
- * Restarts the simulation with the given pattern: clears the grid and places
- * the pattern's first generation at `offset`. Returns the rendered grid.
- * Throws without touching the running simulation when the pattern does not
- * fit there, since the new grid is built before the engine is replaced.
- */
-export function selectPattern(
-  pattern: Pattern,
-  offset: Point = ORIGIN,
-): string {
-  const firstGeneration = buildPatternGrid(pattern, offset);
-
-  engine = new Engine({ firstGeneration });
-
-  return engine.toString();
 }
 
 /**

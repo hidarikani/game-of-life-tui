@@ -1,8 +1,11 @@
 import type { AppProps, UiState } from "../types/app.ts";
-
-import { useRef, useState } from "react";
-import { Box, type Instance, render, Text, useApp, useInput } from "ink";
 import type { PassThrough } from "node:stream";
+
+import { StrictMode, useRef, useState } from "react";
+import { Provider } from "react-redux";
+import { Box, type Instance, render, Text, useApp, useInput } from "ink";
+
+import { store } from "../store/store.ts";
 import {
   KEY_PATTERNS_LOWER,
   KEY_PATTERNS_UPPER,
@@ -12,9 +15,10 @@ import {
   KEY_REFRESH_UPPER,
 } from "../constants/constants.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
-import { getPatternLib } from "../pattern/pattern.ts";
+import { getPatternLib, PatternProvider } from "../pattern/pattern.tsx";
 import { PatternPicker } from "./patternPicker/PatternPicker.tsx";
 import { clamp, hintsFor, isEnter, messageOf } from "../util/misc.ts";
+import { EngineProvider } from "../engine/EngineProvider.tsx";
 
 /**
  * Interactive Game of Life app.
@@ -33,6 +37,7 @@ export function App(
     pattern,
     appHeight,
     gridSize,
+    mode,
     patterns,
     onTick,
     onRenderPlacement,
@@ -226,7 +231,22 @@ export function App(
  * user quits.
  */
 export function renderApp(props: AppProps, stdin: PassThrough): Instance {
-  return render(<App {...props} />, {
-    stdin: stdin as unknown as NodeJS.ReadStream,
-  });
+  return render(
+    (<StrictMode>
+      <Provider store={store}>
+        <EngineProvider
+          size={props.gridSize}
+          pattern={props.pattern}
+          mode={props.mode}
+        >
+          <PatternProvider>
+            <App {...props} />
+          </PatternProvider>
+        </EngineProvider>
+      </Provider>
+    </StrictMode>),
+    {
+      stdin: stdin as unknown as NodeJS.ReadStream,
+    },
+  );
 }

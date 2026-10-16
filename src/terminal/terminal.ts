@@ -1,4 +1,4 @@
-import type { GridSize } from "@cell-auto/game-of-life-engine";
+import { GRID_MODES, type GridSize } from "@cell-auto/game-of-life-engine";
 import type {
   InteractiveArgs,
   NonInteractiveArgs,
@@ -26,7 +26,7 @@ import {
 } from "../game/game.ts";
 import { renderApp } from "../ui/App.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
-import { getPatternLib } from "../pattern/pattern.ts";
+import { getPatternLib } from "../pattern/pattern.tsx";
 import { UNKNOWN_CONSOLE_SIZE } from "../constants/messages.ts";
 
 export function handleArguments(): ValidArgs {
@@ -140,6 +140,7 @@ export async function enterInteractiveMode(args: InteractiveArgs) {
         onTick: tick,
         onRenderPlacement: renderPlacement,
         onSelectPattern: selectPattern,
+        mode: GRID_MODES.FINITE,
       },
       bridge.stdin,
     );

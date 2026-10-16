@@ -16,8 +16,10 @@
     "jsr:@std/testing@1": "1.0.20",
     "jsr:@std/yaml@1": "1.2.0",
     "jsr:@valibot/valibot@^1.5.0": "1.5.0",
+    "npm:@reduxjs/toolkit@^2.13.0": "2.13.0_react@19.2.8_react-redux@9.3.0_@types+react@19.2.18",
     "npm:@types/react@19": "19.2.18",
     "npm:ink@^6.4.0": "6.8.0_@types+react@19.2.18_react@19.2.8",
+    "npm:react-redux@^9.3.0": "9.3.0_@types+react@19.2.18_react@19.2.8_redux@5.0.1",
     "npm:react@19": "19.2.8"
   },
   "jsr": {
@@ -90,11 +92,37 @@
         "is-fullwidth-code-point"
       ]
     },
+    "@reduxjs/toolkit@2.13.0_react@19.2.8_react-redux@9.3.0_@types+react@19.2.18": {
+      "integrity": "sha512-f6jwVRfwW30+tnllz4YcsHHpPYYOE7abcHkyUCovD+P7DyhdAI5prz2Fh/8TLhakjpN+7aIEion1s5L/tvlYlA==",
+      "dependencies": [
+        "@standard-schema/spec",
+        "@standard-schema/utils",
+        "immer",
+        "react",
+        "react-redux",
+        "redux",
+        "redux-thunk",
+        "reselect"
+      ],
+      "optionalPeers": [
+        "react",
+        "react-redux"
+      ]
+    },
+    "@standard-schema/spec@1.1.0": {
+      "integrity": "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="
+    },
+    "@standard-schema/utils@0.3.0": {
+      "integrity": "sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g=="
+    },
     "@types/react@19.2.18": {
       "integrity": "sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==",
       "dependencies": [
         "csstype"
       ]
+    },
+    "@types/use-sync-external-store@0.0.6": {
+      "integrity": "sha512-zFDAD+tlpf2r4asuHEj0XH6pY6i0g5NeAHPn+15wk3BV6JA69eERFXC1gyGThDkVa1zCyKr5jox1+2LbV/AMLg=="
     },
     "ansi-escapes@7.3.0": {
       "integrity": "sha512-BvU8nYgGQBxcmMuEeUEmNTvrMVjJNSH7RgW24vXexN4Ven6qCvy4TntnvlnwnMLTVlcRQQdbRY8NKnaIoeWDNg==",
@@ -156,6 +184,9 @@
     },
     "get-east-asian-width@1.6.0": {
       "integrity": "sha512-QRbvDIbx6YklUe6RxeTeleMR0yv3cYH6PsPZHcnVn7xv7zO1BHN8r0XETu8n6Ye3Q+ahtSarc3WgtNWmehIBfA=="
+    },
+    "immer@11.1.21": {
+      "integrity": "sha512-bZSadeCPGdaY5/qRLgr6mDSH1ra21rD3rqpiWk7+QTr4ayYPTE9qZYdLh/NdPhMe0wSrTvHD/Lk8q5EwhUs0aw=="
     },
     "indent-string@5.0.0": {
       "integrity": "sha512-m6FAo/spmsW2Ab2fU35JTYwtOKa2yAwXSwgjSv1TJzh4Mh7mC3lzAOVLBprb72XsTrgkEIsl7YrFNAiDiRhIGg=="
@@ -224,8 +255,34 @@
         "scheduler"
       ]
     },
+    "react-redux@9.3.0_@types+react@19.2.18_react@19.2.8_redux@5.0.1": {
+      "integrity": "sha512-KQopgqFo/p/fgmAs5qz6p5RWaNAzq40WAu7fJIXnQpYxFPbJYtsJPWvGeF2rOBaY/kEuV77AVsX8TsQzKm+A/g==",
+      "dependencies": [
+        "@types/react",
+        "@types/use-sync-external-store",
+        "react",
+        "redux",
+        "use-sync-external-store"
+      ],
+      "optionalPeers": [
+        "@types/react",
+        "redux"
+      ]
+    },
     "react@19.2.8": {
       "integrity": "sha512-PWaYA1L/q9u2u7xYQi+Y3L3Yfnie7XyLeaJICV1MGD6LprsBxcAqGjYyr0eY3p+QdsA+x/Irkt4Qif8D63+Sbw=="
+    },
+    "redux-thunk@3.1.0_redux@5.0.1": {
+      "integrity": "sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==",
+      "dependencies": [
+        "redux"
+      ]
+    },
+    "redux@5.0.1": {
+      "integrity": "sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w=="
+    },
+    "reselect@5.3.0": {
+      "integrity": "sha512-XGoLeRAVzUTcJ1qkxPQhDJyIZ5d6zzZD9nT7AEZOaaU9UbWclhycElmhO+VD5bFeLuzhPBaOV2oXC8uG35ZSpg=="
     },
     "restore-cursor@4.0.0": {
       "integrity": "sha512-I9fPXU9geO9bHOt9pHHOhOkYerIMsmVaWB0rA2AI9ERh/+x/i7MV5HKBNrg+ljO5eoPVgCcnFuRjJ9uH6I/3eg==",
@@ -286,6 +343,12 @@
         "tagged-tag"
       ]
     },
+    "use-sync-external-store@1.7.0_react@19.2.8": {
+      "integrity": "sha512-6L+EeigHMQhdaIPNIFUKwfWJSwWFQ8gJbJ2DLOs5sDIegTwR9fRxvnM3uciHKjIZhFz+KAv2emhWMRvDmMcY8A==",
+      "dependencies": [
+        "react"
+      ]
+    },
     "widest-line@6.0.0": {
       "integrity": "sha512-U89AsyEeAsyoF0zVJBkG9zBgekjgjK7yk9sje3F4IQpXBJ10TF6ByLlIfjMhcmHMJgHZI4KHt4rdNfktzxIAMA==",
       "dependencies": [
@@ -314,8 +377,10 @@
       "jsr:@std/cli@^1.0.32",
       "jsr:@std/testing@1",
       "jsr:@valibot/valibot@^1.5.0",
+      "npm:@reduxjs/toolkit@^2.13.0",
       "npm:@types/react@19",
       "npm:ink@^6.4.0",
+      "npm:react-redux@^9.3.0",
       "npm:react@19"
     ]
   }

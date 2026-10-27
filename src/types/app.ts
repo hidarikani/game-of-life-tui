@@ -7,24 +7,17 @@ import type {
   Point,
 } from "@cell-auto/game-of-life-engine";
 
-/**
- * Props for the interactive Game of Life view.
- */
 export type AppProps = {
-  pattern: Pattern;
   offset: Point;
   appHeight: number;
   gridSize: GridSize;
   mode: GridMode;
-  onTick: () => string;
-  onRenderPlacement: (pattern: Pattern, offset: Point) => string;
 };
 
 export type View = "game" | "patterns" | "placement";
 
 export type UiState = {
   view: View;
-  pattern: Pattern;
   selected: number;
   scrollOffset: number;
   placingKey: string | null;

@@ -5,10 +5,18 @@ export const GAME_HINTS = "R next generation · P patterns · Q quit";
 export const PATTERNS_HINTS = "↑↓ move · Enter place · Esc back · Q quit";
 export const PLACEMENT_HINTS = "↑↓←→ move · Enter confirm · Esc back · Q quit";
 
+export const SLICES = {
+  FIRST_GENERATION: "First Generation Slice",
+} as const;
+
 export const CONTEXTS = {
   PATTERN_LIB: "Pattern Library Context",
   ENGINE: "Game Engine",
 } as const;
+
+export function genMsgUninitializedSlice(slice: string): string {
+  return `Redux slice "${slice}" MUST be initialized before use. Set values before selecting.`;
+}
 
 export function genMsgContextMissing(
   hookName: string,

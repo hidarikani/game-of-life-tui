@@ -1,4 +1,3 @@
-import { GRID_MODES, type GridSize } from "@cell-auto/game-of-life-engine";
 import type {
   InteractiveArgs,
   NonInteractiveArgs,
@@ -8,6 +7,11 @@ import { ArgSchema } from "../types/terminal.ts";
 
 import { parseArgs } from "@std/cli/parse-args";
 import * as v from "@valibot/valibot";
+import {
+  type Engine,
+  GRID_MODES,
+  type GridSize,
+} from "@cell-auto/game-of-life-engine";
 
 import {
   ALTERNATE_SCREEN_ENTER,
@@ -19,10 +23,17 @@ import {
   SEPARATOR_WIDTH,
 } from "../constants/constants.ts";
 
-import { initGame, renderPlacement, tick } from "../game/game.ts";
-import { renderApp } from "../ui/App.tsx";
+import { renderRoot } from "../ui/GRoot.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
 import { UNKNOWN_CONSOLE_SIZE } from "../constants/messages.ts";
+import { makeEngine } from "../engine/engine.tsx";
+import {
+  setPatternKey,
+  setPatternOffset,
+} from "../store/firstGenerationSlice.ts";
+import { makePatternLib } from "../pattern/pattern.tsx";
+import type { FirstGenerationProps } from "../types/state.ts";
+import { store } from "../store/store.ts";
 
 export function handleArguments(): ValidArgs {
   /*
@@ -97,12 +108,28 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
 
   try {
     await writeHeading("InitialSeed");
-    await write(initGame(size, args[CLI_ARGS.PATTERN]));
+    const patternLib = makePatternLib();
+    const firstGeneration: FirstGenerationProps = {
+      patternKey: args[CLI_ARGS.PATTERN].key,
+      patternOffset: ORIGIN,
+    };
+
+    const engine = makeEngine(
+      {
+        size,
+        generation: 0,
+        mode: GRID_MODES.FINITE,
+      },
+      patternLib,
+      firstGeneration,
+    );
+    await write((engine as Engine).toString());
 
     if (args.generations > 1) {
       for (let i = 1; i < args.generations; i++) {
         await writeHeading(`Generation ${i}`);
-        await write(tick());
+        (engine as Engine).evolveGrid();
+        await write((engine as Engine).toString());
       }
     }
   } catch (error) {
@@ -123,16 +150,19 @@ export async function enterInteractiveMode(args: InteractiveArgs) {
   await enterAltScreen();
   const bridge = createStdinBridge();
   try {
-    const app = renderApp(
-      {
-        pattern: args[CLI_ARGS.PATTERN],
-        offset: ORIGIN,
-        appHeight,
-        gridSize: size,
-        onTick: tick,
-        onRenderPlacement: renderPlacement,
-        mode: GRID_MODES.FINITE,
-      },
+    const pattern = args[CLI_ARGS.PATTERN];
+    const patternOffset = ORIGIN;
+    const appProps = {
+      pattern: args[CLI_ARGS.PATTERN],
+      offset: ORIGIN,
+      appHeight,
+      gridSize: size,
+      mode: GRID_MODES.FINITE,
+    };
+    store.dispatch(setPatternKey(pattern.key));
+    store.dispatch(setPatternOffset(patternOffset));
+    const app = renderRoot(
+      appProps,
       bridge.stdin,
     );
     await app.waitUntilExit();

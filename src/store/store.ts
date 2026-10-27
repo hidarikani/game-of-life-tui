@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { generalSlice } from "./general.ts";
+import { generalSlice } from "./firstGenerationSlice.ts";
 
 export const store = configureStore({
   reducer: {

@@ -11,7 +11,7 @@ import {
 
 let patternLib: null | IPatternLib = null;
 
-export function getPatternLib(): IPatternLib {
+export function makePatternLib(): IPatternLib {
   return (patternLib ??= PatternLib.fromBuiltInData());
 }
 
@@ -19,7 +19,7 @@ const PatternContext = createContext<IPatternLib | null>(null);
 PatternContext.displayName = CONTEXTS.PATTERN_LIB;
 
 export function PatternProvider({ children }: PatternProviderProps) {
-  const patternLib = getPatternLib();
+  const patternLib = makePatternLib();
 
   return <PatternContext value={patternLib}>{children}</PatternContext>;
 }

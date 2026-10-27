@@ -1,11 +1,8 @@
 import type { AppProps, UiState } from "../types/app.ts";
-import type { PassThrough } from "node:stream";
 
-import { StrictMode, useRef, useState } from "react";
-import { Provider } from "react-redux";
-import { Box, type Instance, render, Text, useApp, useInput } from "ink";
+import { useRef, useState } from "react";
+import { Box, Text, useApp, useInput } from "ink";
 
-import { store } from "../store/store.ts";
 import {
   KEY_PATTERNS_LOWER,
   KEY_PATTERNS_UPPER,
@@ -15,43 +12,31 @@ import {
   KEY_REFRESH_UPPER,
 } from "../constants/constants.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
-import {
-  getPatternLib,
-  PatternProvider,
-  usePatterns,
-} from "../pattern/pattern.tsx";
+import { usePatterns } from "../pattern/pattern.tsx";
 import { PatternPicker } from "./patternPicker/PatternPicker.tsx";
-import { clamp, hintsFor, isEnter, messageOf } from "../util/misc.ts";
-import { EngineProvider, useEngine } from "../engine/engine.tsx";
 import {
-  EngineProviderProps,
-  FirstGenerationFactoryProps,
-} from "../types/engine.ts";
+  buildPreviewSnapshot,
+  clamp,
+  hintsFor,
+  isEnter,
+  messageOf,
+} from "../util/misc.ts";
+import { useEngineSnapshot, useEngineTick } from "../engine/engine.tsx";
+import { useAppDispatch, useAppSelector } from "../store/hooks.ts";
+import {
+  selectPatternKey,
+  setPatternKey,
+  setPatternOffset,
+} from "../store/firstGenerationSlice.ts";
 
-/**
- * Interactive Game of Life app.
- *
- * The game view shows one rendered generation at a time (R advances, P opens
- * pattern selection, Q quits). Choosing a pattern is a two-step wizard: the
- * selection view lists patterns on the left with a preview of the highlighted
- * one on the right, and Enter moves to the placement step, where the pattern
- * is drawn on a full-size grid that the arrow keys reposition. Enter there
- * restarts the simulation with the pattern at the chosen offset. A one-row
- * toolbar at the bottom lists the controls for the active view.
- */
 export function App(
   {
-    pattern,
     appHeight,
     gridSize,
-    mode,
-    onTick,
-    onRenderPlacement,
   }: AppProps,
 ) {
   const [ui, setUiState] = useState<UiState>({
     view: "game",
-    pattern,
     selected: 0,
     scrollOffset: 0,
     placingKey: null,
@@ -60,9 +45,12 @@ export function App(
     error: null,
   });
 
+  const dispatch = useAppDispatch();
+  const patternKey = useAppSelector(selectPatternKey);
   const patternLib = usePatterns();
   const patterns = patternLib.getPatterns(null);
-  const engine = useEngine();
+  const snapshot = useEngineSnapshot();
+  const tick = useEngineTick();
 
   // Key events can be handled back-to-back before React commits the state
   // update from the previous event (batched startup input, pasted key
@@ -80,7 +68,7 @@ export function App(
   const contentHeight = Math.max(1, appHeight - 1);
 
   const openPatterns = (s: UiState): UiState => {
-    const current = patterns.findIndex((p) => p.key === s.pattern.key);
+    const current = patterns.findIndex((p) => p.key === patternKey);
     const selected = current === -1 ? 0 : current;
     return {
       ...s,
@@ -118,7 +106,11 @@ export function App(
         view: "placement",
         placingKey: pattern.key,
         offset,
-        placementFrame: onRenderPlacement(pattern, offset),
+        placementFrame: buildPreviewSnapshot(
+          gridSize,
+          pattern,
+          offset,
+        ),
       };
     } catch (cause) {
       return { ...s, error: messageOf(cause) };
@@ -145,7 +137,11 @@ export function App(
       return {
         ...s,
         offset,
-        placementFrame: onRenderPlacement(pattern, offset),
+        placementFrame: buildPreviewSnapshot(
+          gridSize,
+          pattern,
+          offset,
+        ),
       };
     } catch (cause) {
       return { ...s, error: messageOf(cause) };
@@ -157,12 +153,12 @@ export function App(
     if (s.placingKey === null) {
       return s;
     }
-    const pattern = getPatternLib().getPatternByKey(s.placingKey)!;
+    dispatch(setPatternKey(s.placingKey));
+    dispatch(setPatternOffset(s.offset));
+
     return {
       ...s,
       view: "game",
-      pattern,
-      offset: s.offset,
       placingKey: null,
     };
   };
@@ -200,7 +196,8 @@ export function App(
       }
       if (s.view === "game") {
         if (ch === KEY_REFRESH_LOWER || ch === KEY_REFRESH_UPPER) {
-          s = { ...s, frame: onTick() };
+          s = { ...s };
+          tick();
         } else if (ch === KEY_PATTERNS_LOWER || ch === KEY_PATTERNS_UPPER) {
           s = openPatterns(s);
         }
@@ -214,9 +211,7 @@ export function App(
   return (
     <Box flexDirection="column" height={appHeight}>
       <Box flexDirection="column" flexGrow={1}>
-        {ui.view === "game" && (
-          <Text>{engine.presentGeneration.toString()}</Text>
-        )}
+        {ui.view === "game" && <Text>{snapshot}</Text>}
         {ui.view === "placement" && <Text>{ui.placementFrame}</Text>}
         {ui.view === "patterns" && (
           <PatternPicker
@@ -233,28 +228,5 @@ export function App(
           : <Text color="red" wrap="truncate">{ui.error}</Text>}
       </Box>
     </Box>
-  );
-}
-
-export function renderApp(
-  engineProps: FirstGenerationFactoryProps,
-  appProps: AppProps,
-  stdin: PassThrough,
-): Instance {
-  return render(
-    (<StrictMode>
-      <Provider store={store}>
-        <EngineProvider
-          factoryProps={engineProps}
-        >
-          <PatternProvider>
-            <App {...appProps} />
-          </PatternProvider>
-        </EngineProvider>
-      </Provider>
-    </StrictMode>),
-    {
-      stdin: stdin as unknown as NodeJS.ReadStream,
-    },
   );
 }

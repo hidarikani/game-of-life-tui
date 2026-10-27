@@ -1,28 +1,28 @@
-import type {
-  GridMode,
-  GridSize,
-  Pattern,
-  Point,
-} from "@cell-auto/game-of-life-engine";
+import type { GridMode, GridSize } from "@cell-auto/game-of-life-engine";
 import type { ReactNode } from "react";
+import type { FirstGenerationProps } from "./state.ts";
 
-export type FirstGenerationState = {
-  size: GridSize | null;
-  pattern: Pattern | null;
-  generation: number | null;
-  offset: Point | null;
-  mode: GridMode | null;
+export type Callback = () => void;
+
+export interface IEngineStore {
+  subscribe(listener: Callback): Callback;
+  getSnapshot(): string;
+  tick(): void;
+}
+
+export type EngineContext = {
+  currentGeneration: string;
+  tick: () => void;
 };
 
 export type FirstGenerationFactoryProps = {
   size: GridSize;
-  pattern: Pattern;
   generation: number;
-  offset: Point;
   mode: GridMode;
 };
 
 export type EngineProviderProps = {
   factoryProps: FirstGenerationFactoryProps;
+  firstGeneration: FirstGenerationProps;
   children: ReactNode;
 };

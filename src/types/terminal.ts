@@ -3,7 +3,11 @@ import * as v from "@valibot/valibot";
 
 import { makePatternLib } from "../pattern/pattern.tsx";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
-import { CLI_ARGS, MIN_GENERATIONS, PATTERN_KEYS } from "../constants/constants.ts";
+import {
+  CLI_ARGS,
+  MIN_GENERATIONS,
+  PATTERN_KEYS,
+} from "../constants/constants.ts";
 
 const NonEmptyString = v.pipe(v.string(), v.trim(), v.nonEmpty());
 
@@ -64,4 +68,8 @@ export type ValidArgs = v.InferOutput<typeof ArgSchema>;
 export type InteractiveArgs = Extract<ValidArgs, { interactive: true }>;
 export type NonInteractiveArgs = Extract<ValidArgs, { interactive: false }>;
 
+export type ViewportSize = {
+  columns: number;
+  rows: number;
+};
 export type RawStdin = { setRaw?: (mode: boolean) => void };

@@ -2,18 +2,12 @@ import type { Point } from "@cell-auto/game-of-life-engine";
 import type { FirstGenerationState } from "../types/state.ts";
 
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { genMsgUninitializedSlice, SLICES } from "../constants/messages.ts";
+import { SLICES } from "../constants/messages.ts";
+import { required } from "../util/misc.ts";
 
 const initialState: FirstGenerationState = {
   patternKey: null,
   patternOffset: null,
-};
-
-export const required = <T>(value: T | null): T => {
-  if (value === null) {
-    throw new Error(genMsgUninitializedSlice(SLICES.FIRST_GENERATION));
-  }
-  return value;
 };
 
 export const generalSlice = createSlice({
@@ -30,8 +24,10 @@ export const generalSlice = createSlice({
     reset: () => initialState,
   },
   selectors: {
-    selectPatternKey: (state) => required(state.patternKey),
-    selectPatternOffset: (state) => required(state.patternOffset),
+    selectPatternKey: (state) =>
+      required(state.patternKey, SLICES.FIRST_GENERATION),
+    selectPatternOffset: (state) =>
+      required(state.patternOffset, SLICES.FIRST_GENERATION),
   },
 });
 

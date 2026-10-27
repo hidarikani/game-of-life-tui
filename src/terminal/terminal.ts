@@ -2,6 +2,7 @@ import type {
   InteractiveArgs,
   NonInteractiveArgs,
   ValidArgs,
+  ViewportSize,
 } from "../types/terminal.ts";
 import { ArgSchema } from "../types/terminal.ts";
 
@@ -34,6 +35,7 @@ import {
 import { makePatternLib } from "../pattern/pattern.tsx";
 import type { FirstGenerationProps } from "../types/state.ts";
 import { store } from "../store/store.ts";
+import { setColumns, setRows } from "../store/terminalSlice.ts";
 
 export function handleArguments(): ValidArgs {
   /*
@@ -65,10 +67,9 @@ export async function write(s: string) {
   await Deno.stdout.write(encoder.encode(s));
 }
 
-export function getSize(): GridSize {
+export function getSize(): ViewportSize {
   try {
-    const { columns, rows } = Deno.consoleSize();
-    return { w: Math.floor(columns / 2), h: rows };
+    return Deno.consoleSize();
   } catch {
     throw new Error(UNKNOWN_CONSOLE_SIZE);
   }
@@ -139,30 +140,17 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
 }
 
 export async function enterInteractiveMode(args: InteractiveArgs) {
-  const size = getSize();
-  // Ink terminates every frame with a newline, so a frame as tall as the
-  // terminal would scroll the alternate screen by one row on each render.
-  // The app may therefore occupy rows - 1 lines, one of which is the
-  // toolbar; the grid gets the rest.
-  const appHeight = Math.max(2, size.h - 1);
-  size.h = appHeight - 1;
-
+  const terminalSize = getSize();
   await enterAltScreen();
   const bridge = createStdinBridge();
   try {
     const pattern = args[CLI_ARGS.PATTERN];
     const patternOffset = ORIGIN;
-    const appProps = {
-      pattern: args[CLI_ARGS.PATTERN],
-      offset: ORIGIN,
-      appHeight,
-      gridSize: size,
-      mode: GRID_MODES.FINITE,
-    };
+    store.dispatch(setRows(terminalSize.rows));
+    store.dispatch(setColumns(terminalSize.columns));
     store.dispatch(setPatternKey(pattern.key));
     store.dispatch(setPatternOffset(patternOffset));
     const app = renderRoot(
-      appProps,
       bridge.stdin,
     );
     await app.waitUntilExit();

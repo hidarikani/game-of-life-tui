@@ -49,6 +49,8 @@ export const SEPARATOR_WIDTH = {
   MAX: 80,
 } as const;
 
+export const INK_NEW_LINE = 1;
+export const LEGEND_HEIGHT = 1;
 export const MIN_LIST_WIDTH = 10;
 export const MAX_LIST_WIDTH = 24;
 export const LIST_GAP = 2;

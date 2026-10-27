@@ -6,6 +6,7 @@ export const PATTERNS_HINTS = "↑↓ move · Enter place · Esc back · Q quit"
 export const PLACEMENT_HINTS = "↑↓←→ move · Enter confirm · Esc back · Q quit";
 
 export const SLICES = {
+  TERMINAL: "Terminal Slice",
   FIRST_GENERATION: "First Generation Slice",
 } as const;
 

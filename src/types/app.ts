@@ -1,18 +1,6 @@
 import type { ReactNode } from "react";
 
-import type {
-  GridMode,
-  GridSize,
-  Pattern,
-  Point,
-} from "@cell-auto/game-of-life-engine";
-
-export type AppProps = {
-  offset: Point;
-  appHeight: number;
-  gridSize: GridSize;
-  mode: GridMode;
-};
+import type { Pattern, Point } from "@cell-auto/game-of-life-engine";
 
 export type View = "game" | "patterns" | "placement";
 

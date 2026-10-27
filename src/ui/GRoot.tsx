@@ -1,5 +1,4 @@
 import type { Instance } from "ink";
-import type { AppProps } from "../types/app.ts";
 import type { PassThrough } from "node:stream";
 
 import { StrictMode } from "react";
@@ -16,12 +15,15 @@ import {
   selectPatternOffset,
 } from "../store/firstGenerationSlice.ts";
 import { GRID_MODES } from "@cell-auto/game-of-life-engine";
+import { selectGridHeight, selectGridWidth } from "../store/terminalSlice.ts";
 
-export function Root({ appProps }: { appProps: AppProps }) {
+export function Root() {
   const patternKey = useAppSelector(selectPatternKey);
   const patternOffset = useAppSelector(selectPatternOffset);
+  const gameGridHeight = useAppSelector(selectGridHeight);
+  const gameGridWidth = useAppSelector(selectGridWidth);
   const engineProps = {
-    size: appProps.gridSize,
+    size: { w: gameGridWidth, h: gameGridHeight },
     generation: 0,
     mode: GRID_MODES.FINITE,
   };
@@ -36,20 +38,22 @@ export function Root({ appProps }: { appProps: AppProps }) {
         factoryProps={engineProps}
         firstGeneration={firstGeneration}
       >
-        <App {...appProps} />
+        <App />
       </EngineProvider>
     </PatternProvider>
   );
 }
 
+/**
+ * Warning! this is NOT a React component
+ */
 export function renderRoot(
-  appProps: AppProps,
   stdin: PassThrough,
 ): Instance {
   return render(
     (<StrictMode>
       <Provider store={store}>
-        <Root appProps={appProps} />
+        <Root />
       </Provider>
     </StrictMode>),
     {

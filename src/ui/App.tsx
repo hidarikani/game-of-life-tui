@@ -1,4 +1,4 @@
-import type { AppProps, UiState } from "../types/app.ts";
+import type { UiState } from "../types/app.ts";
 
 import { useRef, useState } from "react";
 import { Box, Text, useApp, useInput } from "ink";
@@ -28,13 +28,13 @@ import {
   setPatternKey,
   setPatternOffset,
 } from "../store/firstGenerationSlice.ts";
+import {
+  selectAppHeight,
+  selectGridHeight,
+  selectGridWidth,
+} from "../store/terminalSlice.ts";
 
-export function App(
-  {
-    appHeight,
-    gridSize,
-  }: AppProps,
-) {
+export function App() {
   const [ui, setUiState] = useState<UiState>({
     view: "game",
     selected: 0,
@@ -49,6 +49,9 @@ export function App(
   const patternKey = useAppSelector(selectPatternKey);
   const patternLib = usePatterns();
   const patterns = patternLib.getPatterns(null);
+  const appHeight = useAppSelector(selectAppHeight);
+  const gameGridHeight = useAppSelector(selectGridHeight);
+  const gameGridWidth = useAppSelector(selectGridWidth);
   const snapshot = useEngineSnapshot();
   const tick = useEngineTick();
 
@@ -63,10 +66,6 @@ export function App(
   };
   const { exit } = useApp();
 
-  // One row is reserved for the toolbar; the rest is the content area, which
-  // also caps how many list entries are visible at once.
-  const contentHeight = Math.max(1, appHeight - 1);
-
   const openPatterns = (s: UiState): UiState => {
     const current = patterns.findIndex((p) => p.key === patternKey);
     const selected = current === -1 ? 0 : current;
@@ -75,8 +74,8 @@ export function App(
       view: "patterns",
       selected,
       scrollOffset: Math.min(
-        Math.max(0, selected - contentHeight + 1),
-        Math.max(0, patterns.length - contentHeight),
+        Math.max(0, selected - gameGridHeight + 1),
+        Math.max(0, patterns.length - gameGridHeight),
       ),
     };
   };
@@ -89,8 +88,8 @@ export function App(
     let scrollOffset = s.scrollOffset;
     if (selected < scrollOffset) {
       scrollOffset = selected;
-    } else if (selected >= scrollOffset + contentHeight) {
-      scrollOffset = selected - contentHeight + 1;
+    } else if (selected >= scrollOffset + gameGridHeight) {
+      scrollOffset = selected - gameGridHeight + 1;
     }
     return { ...s, selected, scrollOffset };
   };
@@ -107,7 +106,7 @@ export function App(
         placingKey: pattern.key,
         offset,
         placementFrame: buildPreviewSnapshot(
-          gridSize,
+          { w: gameGridWidth, h: gameGridHeight },
           pattern,
           offset,
         ),
@@ -129,8 +128,8 @@ export function App(
     // The engine rejects a pattern that would extend past the grid, and
     // silently accepts negative offsets, so clamp to the valid range here.
     const offset = {
-      x: clamp(s.offset.x + dx, 0, gridSize.w - size.w),
-      y: clamp(s.offset.y + dy, 0, gridSize.h - size.h),
+      x: clamp(s.offset.x + dx, 0, gameGridWidth - size.w),
+      y: clamp(s.offset.y + dy, 0, gameGridHeight - size.h),
     };
     if (offset.x === s.offset.x && offset.y === s.offset.y) return s;
     try {
@@ -138,7 +137,7 @@ export function App(
         ...s,
         offset,
         placementFrame: buildPreviewSnapshot(
-          gridSize,
+          { w: gameGridWidth, h: gameGridHeight },
           pattern,
           offset,
         ),
@@ -218,7 +217,7 @@ export function App(
             patterns={patterns}
             selected={ui.selected}
             scrollOffset={ui.scrollOffset}
-            contentHeight={contentHeight}
+            contentHeight={gameGridHeight}
           />
         )}
       </Box>

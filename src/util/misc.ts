@@ -1,18 +1,30 @@
-import type { UiState } from "../types/app.ts";
-import type { Pattern } from "@cell-auto/game-of-life-engine";
+import type { Pattern, Point } from "@cell-auto/game-of-life-engine";
 
 import {
   GAME_HINTS,
+  genMsgUninitializedSlice,
   PATTERNS_HINTS,
   PLACEMENT_HINTS,
 } from "../constants/messages.ts";
+import type { View } from "../types/app.ts";
 
-export function hintsFor(ui: UiState, patterns: Pattern[]): string {
-  if (ui.view === "game") return GAME_HINTS;
-  if (ui.view === "placement") {
-    return `${PLACEMENT_HINTS} · (${ui.offset.x}, ${ui.offset.y})`;
+export const required = <T>(value: T | null, slice: string): T => {
+  if (value === null) {
+    throw new Error(genMsgUninitializedSlice(slice));
   }
-  return `${PATTERNS_HINTS} · ${ui.selected + 1}/${patterns.length}`;
+  return value;
+};
+
+export function hintsFor(
+  view: View,
+  offset: Point,
+  patterns: Pattern[],
+): string {
+  if (view === "game") return GAME_HINTS;
+  if (view === "placement") {
+    return `${PLACEMENT_HINTS} · (${offset.x}, ${offset.y})`;
+  }
+  return `${PATTERNS_HINTS} · Total: ${patterns.length}`;
 }
 
 export function isEnter(ch: string): boolean {

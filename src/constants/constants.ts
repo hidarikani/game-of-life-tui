@@ -44,11 +44,19 @@ export const MIN_GENERATIONS = 1 as const;
 export const ORIGIN: Point = { x: 0, y: 0 };
 
 // tui
+export const VIEWS = {
+  GAME: "game",
+  PATTERNS: "patterns",
+  PLACEMENT: "placement",
+} as const;
+
 export const SEPARATOR_WIDTH = {
   MIN: 1,
   MAX: 80,
 } as const;
 
+export const INK_NEW_LINE = 1;
+export const LEGEND_HEIGHT = 1;
 export const MIN_LIST_WIDTH = 10;
 export const MAX_LIST_WIDTH = 24;
 export const LIST_GAP = 2;

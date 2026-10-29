@@ -1,6 +1,4 @@
-import type { UiState } from "../types/app.ts";
-import { Grid } from "@cell-auto/game-of-life-engine";
-import type { GridSize, Pattern, Point } from "@cell-auto/game-of-life-engine";
+import type { Pattern, Point } from "@cell-auto/game-of-life-engine";
 
 import {
   GAME_HINTS,
@@ -8,6 +6,7 @@ import {
   PATTERNS_HINTS,
   PLACEMENT_HINTS,
 } from "../constants/messages.ts";
+import type { View } from "../types/app.ts";
 
 export const required = <T>(value: T | null, slice: string): T => {
   if (value === null) {
@@ -16,12 +15,16 @@ export const required = <T>(value: T | null, slice: string): T => {
   return value;
 };
 
-export function hintsFor(ui: UiState, patterns: Pattern[]): string {
-  if (ui.view === "game") return GAME_HINTS;
-  if (ui.view === "placement") {
-    return `${PLACEMENT_HINTS} · (${ui.offset.x}, ${ui.offset.y})`;
+export function hintsFor(
+  view: View,
+  offset: Point,
+  patterns: Pattern[],
+): string {
+  if (view === "game") return GAME_HINTS;
+  if (view === "placement") {
+    return `${PLACEMENT_HINTS} · (${offset.x}, ${offset.y})`;
   }
-  return `${PATTERNS_HINTS} · ${ui.selected + 1}/${patterns.length}`;
+  return `${PATTERNS_HINTS} · Total: ${patterns.length}`;
 }
 
 export function isEnter(ch: string): boolean {
@@ -34,14 +37,4 @@ export function clamp(value: number, min: number, max: number): number {
 
 export function messageOf(cause: unknown): string {
   return cause instanceof Error ? cause.message : String(cause);
-}
-
-export function buildPreviewSnapshot(
-  gridSize: GridSize,
-  pattern: Pattern,
-  offset: Point,
-): string {
-  const grid = new Grid({ gridSize });
-  grid.writeGrid({ inner: pattern.generations[0], offset });
-  return grid.toString();
 }

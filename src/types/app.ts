@@ -1,28 +1,19 @@
 import type { ReactNode } from "react";
 
-import type { Pattern, Point } from "@cell-auto/game-of-life-engine";
+import type { Pattern } from "@cell-auto/game-of-life-engine";
+import type { VIEWS } from "../constants/constants.ts";
 
-export type View = "game" | "patterns" | "placement";
-
-export type UiState = {
-  view: View;
-  selected: number;
-  scrollOffset: number;
-  placingKey: string | null;
-  offset: Point;
-  placementFrame: string;
-};
+export type View = (typeof VIEWS)[keyof typeof VIEWS];
 
 export type PatternProviderProps = {
   children: ReactNode;
 };
 
-export type PatternPickerProps = {
-  selected: number;
-  scrollOffset: number;
-};
-
 export type PatternHeaderProps = {
   pattern: Pattern;
   currentGeneration: number;
+};
+
+export type PatternPickerProps = {
+  onSelectionChange: (patternKey: string) => void;
 };

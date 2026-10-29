@@ -1,6 +1,6 @@
-import type { UiState } from "../types/app.ts";
+import type { View } from "../types/app.ts";
 
-import { useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { Box, Text, useApp, useInput } from "ink";
 
 import {
@@ -10,168 +10,108 @@ import {
   KEY_QUIT_UPPER,
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
+  ORIGIN,
+  VIEWS,
 } from "../constants/constants.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
 import { usePatterns } from "../pattern/pattern.tsx";
 import { PatternPicker } from "./patternPicker/PatternPicker.tsx";
+import { clamp, hintsFor, isEnter } from "../util/misc.ts";
 import {
-  buildPreviewSnapshot,
-  clamp,
-  hintsFor,
-  isEnter,
-  messageOf,
-} from "../util/misc.ts";
-import { useEngineSnapshot, useEngineTick } from "../engine/engine.tsx";
+  makeFirstGeneration,
+  useEngineSnapshot,
+  useEngineTick,
+} from "../engine/engine.tsx";
 import { useAppDispatch, useAppSelector } from "../store/hooks.ts";
 import {
+  selectGridMode,
+  selectPatternGeneration,
   selectPatternKey,
   setPatternKey,
   setPatternOffset,
 } from "../store/firstGenerationSlice.ts";
-import {
-  selectAppHeight,
-  selectGridHeight,
-  selectGridWidth,
-} from "../store/terminalSlice.ts";
+import { selectAppHeight, selectGridSize } from "../store/terminalSlice.ts";
 
 export function App() {
-  const [ui, setUiState] = useState<UiState>({
-    view: "game",
-    selected: 0,
-    scrollOffset: 0,
-    placingKey: null,
-    offset: { x: 0, y: 0 },
-    placementFrame: "",
-  });
-
-  const dispatch = useAppDispatch();
-  const patternKey = useAppSelector(selectPatternKey);
   const patternLib = usePatterns();
+  const patternKey = useAppSelector(selectPatternKey);
+  const patternGeneration = useAppSelector(selectPatternGeneration);
+  const gridSize = useAppSelector(selectGridSize);
+  const gridMode = useAppSelector(selectGridMode);
+
+  // Placement Begin ===
+  const [placementOffset, setPlacementOffset] = useState(ORIGIN);
+  const [placementKey, setPlacementKey] = useState(patternKey);
+  const [placementGeneration, setPlacementGeneration] = useState(
+    patternGeneration,
+  );
+  const placementSnapshot = makeFirstGeneration(patternLib, {
+    patternKey: placementKey,
+    patternOffset: placementOffset,
+    patternGeneration: placementGeneration,
+    gridSize,
+    gridMode,
+  }).toString();
+  // Placement End ===
+
+  const [view, setView] = useState<View>(VIEWS.GAME);
+  const dispatch = useAppDispatch();
   const patterns = patternLib.getPatterns(null);
   const appHeight = useAppSelector(selectAppHeight);
-  const gameGridHeight = useAppSelector(selectGridHeight);
-  const gameGridWidth = useAppSelector(selectGridWidth);
   const snapshot = useEngineSnapshot();
   const tick = useEngineTick();
-
-  // Key events can be handled back-to-back before React commits the state
-  // update from the previous event (batched startup input, pasted key
-  // sequences). Decisions therefore read the ref, which is always current,
-  // while `ui` drives rendering.
-  const uiRef = useRef(ui);
-  const setUi = (next: UiState) => {
-    uiRef.current = next;
-    setUiState(next);
-  };
   const { exit } = useApp();
 
-  const openPatterns = (s: UiState): UiState => {
-    const current = patterns.findIndex((p) => p.key === patternKey);
-    const selected = current === -1 ? 0 : current;
-    return {
-      ...s,
-      view: "patterns",
-      selected,
-      scrollOffset: Math.min(
-        Math.max(0, selected - gameGridHeight + 1),
-        Math.max(0, patterns.length - gameGridHeight),
-      ),
-    };
-  };
+  const onSelectionChange = useCallback((patternKey: string) => {
+    setPlacementKey(patternKey);
+    setView("placement");
+  }, []);
 
-  const moveSelection = (s: UiState, delta: number): UiState => {
-    const selected = Math.min(
-      Math.max(0, s.selected + delta),
-      patterns.length - 1,
-    );
-    let scrollOffset = s.scrollOffset;
-    if (selected < scrollOffset) {
-      scrollOffset = selected;
-    } else if (selected >= scrollOffset + gameGridHeight) {
-      scrollOffset = selected - gameGridHeight + 1;
-    }
-    return { ...s, selected, scrollOffset };
-  };
-
-  /** Enters the placement step with the highlighted pattern at the origin. */
-  const beginPlacement = (s: UiState): UiState => {
-    const pattern = patterns[s.selected];
-    if (!pattern) return s;
-    const offset = { x: 0, y: 0 };
-    return {
-      ...s,
-      view: "placement",
-      placingKey: pattern.key,
-      offset,
-      placementFrame: buildPreviewSnapshot(
-        { w: gameGridWidth, h: gameGridHeight },
-        pattern,
-        offset,
-      ),
-    };
-  };
-
-  const movePlacement = (s: UiState, dx: number, dy: number): UiState => {
-    const pattern = patterns.find((p) => p.key === s.placingKey);
+  const movePlacement = (dx: number, dy: number) => {
+    const pattern = patterns.find((p) => p.key === placementKey);
 
     if (pattern === null || pattern === undefined) {
-      throw new Error(genMsgPatternNotFound(s.placingKey ?? ""));
+      throw new Error(genMsgPatternNotFound(placementKey));
     }
 
     const size = pattern.generations[0].gridSize;
-    if (!pattern) return s;
     // The engine rejects a pattern that would extend past the grid, and
     // silently accepts negative offsets, so clamp to the valid range here.
     const offset = {
-      x: clamp(s.offset.x + dx, 0, gameGridWidth - size.w),
-      y: clamp(s.offset.y + dy, 0, gameGridHeight - size.h),
+      x: clamp(placementOffset.x + dx, 0, gridSize.w - size.w),
+      y: clamp(placementOffset.y + dy, 0, gridSize.h - size.h),
     };
-    if (offset.x === s.offset.x && offset.y === s.offset.y) return s;
-    return {
-      ...s,
-      offset,
-      placementFrame: buildPreviewSnapshot(
-        { w: gameGridWidth, h: gameGridHeight },
-        pattern,
-        offset,
-      ),
-    };
+    if (offset.x === placementOffset.x && offset.y === placementOffset.y) {
+      return;
+    }
+
+    setPlacementOffset(offset);
   };
 
   /** Restarts the simulation with the pattern at its current offset. */
-  const confirmPlacement = (s: UiState): UiState => {
-    if (s.placingKey === null) {
-      return s;
-    }
-    dispatch(setPatternKey(s.placingKey));
-    dispatch(setPatternOffset(s.offset));
-
-    return {
-      ...s,
-      view: "game",
-      placingKey: null,
-    };
+  const confirmPlacement = () => {
+    dispatch(setPatternKey(placementKey));
+    dispatch(setPatternOffset(placementOffset));
+    setView(VIEWS.GAME);
   };
 
   useInput((input, key) => {
-    let s: UiState = { ...uiRef.current };
-
     // Special keys arrive as their own event with an empty input string.
     if (input === "") {
-      if (s.view === "patterns") {
-        if (key.upArrow) s = moveSelection(s, -1);
-        else if (key.downArrow) s = moveSelection(s, 1);
-        else if (key.return) s = beginPlacement(s);
-        else if (key.escape) s = { ...s, view: "game" };
-      } else if (s.view === "placement") {
-        if (key.upArrow) s = movePlacement(s, 0, -1);
-        else if (key.downArrow) s = movePlacement(s, 0, 1);
-        else if (key.leftArrow) s = movePlacement(s, -1, 0);
-        else if (key.rightArrow) s = movePlacement(s, 1, 0);
-        else if (key.return) s = confirmPlacement(s);
-        else if (key.escape) s = { ...s, view: "patterns", placingKey: null };
+      if (view === VIEWS.PATTERNS) {
+        if (key.escape) {
+          setView(VIEWS.GAME);
+        }
+      } else if (view === VIEWS.PLACEMENT) {
+        if (key.upArrow) movePlacement(0, -1);
+        else if (key.downArrow) movePlacement(0, 1);
+        else if (key.leftArrow) movePlacement(-1, 0);
+        else if (key.rightArrow) movePlacement(1, 0);
+        else if (key.return) confirmPlacement();
+        else if (key.escape) {
+          setView(VIEWS.PATTERNS);
+        }
       }
-      setUi(s);
       return;
     }
 
@@ -184,34 +124,33 @@ export function App() {
         exit();
         return;
       }
-      if (s.view === "game") {
+      if (view === VIEWS.GAME) {
         if (ch === KEY_REFRESH_LOWER || ch === KEY_REFRESH_UPPER) {
-          s = { ...s };
           tick();
         } else if (ch === KEY_PATTERNS_LOWER || ch === KEY_PATTERNS_UPPER) {
-          s = openPatterns(s);
+          setView(VIEWS.PATTERNS);
         }
       } else if (isEnter(ch)) {
-        s = s.view === "patterns" ? beginPlacement(s) : confirmPlacement(s);
+        if (view === VIEWS.PLACEMENT) {
+          confirmPlacement();
+        }
       }
     }
-    setUi(s);
   });
 
   return (
     <Box flexDirection="column" height={appHeight}>
       <Box flexDirection="column" flexGrow={1}>
-        {ui.view === "game" && <Text>{snapshot}</Text>}
-        {ui.view === "placement" && <Text>{ui.placementFrame}</Text>}
-        {ui.view === "patterns" && (
-          <PatternPicker
-            selected={ui.selected}
-            scrollOffset={ui.scrollOffset}
-          />
+        {view === VIEWS.GAME && <Text>{snapshot}</Text>}
+        {view === VIEWS.PLACEMENT && <Text>{placementSnapshot}</Text>}
+        {view === VIEWS.PATTERNS && (
+          <PatternPicker onSelectionChange={onSelectionChange} />
         )}
       </Box>
       <Box height={1}>
-        <Text inverse wrap="truncate">{hintsFor(ui, patterns)}</Text>
+        <Text inverse wrap="truncate">
+          {hintsFor(view, placementOffset, patterns)}
+        </Text>
       </Box>
     </Box>
   );

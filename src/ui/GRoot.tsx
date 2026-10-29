@@ -15,19 +15,18 @@ import {
   selectPatternOffset,
 } from "../store/firstGenerationSlice.ts";
 import { GRID_MODES } from "@cell-auto/game-of-life-engine";
-import { selectGridHeight, selectGridWidth } from "../store/terminalSlice.ts";
 import type { FirstGenerationProps } from "../types/state.ts";
+import { selectGridSize } from "../store/terminalSlice.ts";
 
 export function Root() {
   const patternKey = useAppSelector(selectPatternKey);
   const patternOffset = useAppSelector(selectPatternOffset);
-  const gameGridHeight = useAppSelector(selectGridHeight);
-  const gameGridWidth = useAppSelector(selectGridWidth);
+  const gridSize = useAppSelector(selectGridSize);
 
   const firstGeneration: FirstGenerationProps = {
     patternKey,
     patternOffset,
-    gridSize: { w: gameGridWidth, h: gameGridHeight },
+    gridSize,
     patternGeneration: 0,
     gridMode: GRID_MODES.FINITE,
   };

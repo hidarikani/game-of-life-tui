@@ -44,6 +44,12 @@ export const MIN_GENERATIONS = 1 as const;
 export const ORIGIN: Point = { x: 0, y: 0 };
 
 // tui
+export const VIEWS = {
+  GAME: "game",
+  PATTERNS: "patterns",
+  PLACEMENT: "placement",
+} as const;
+
 export const SEPARATOR_WIDTH = {
   MIN: 1,
   MAX: 80,

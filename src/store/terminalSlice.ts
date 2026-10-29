@@ -3,6 +3,7 @@ import { SLICES } from "../constants/messages.ts";
 import type { TerminalState } from "../types/state.ts";
 import { required } from "../util/misc.ts";
 import { INK_NEW_LINE, LEGEND_HEIGHT } from "../constants/constants.ts";
+import type { GridSize } from "@cell-auto/game-of-life-engine";
 
 const initialState: TerminalState = {
   rows: null,
@@ -31,13 +32,14 @@ export const terminalSlice = createSlice({
     selectAppHeight: (state): number =>
       required(state.rows, SLICES.TERMINAL) - INK_NEW_LINE,
     selectColumns: (state): number => required(state.columns, SLICES.TERMINAL),
-    selectGridWidth: (state): number => {
+    selectGridSize: (state): GridSize => {
       const columns = required(state.columns, SLICES.TERMINAL);
       const spacedColumns = Math.floor(columns / 2);
-      return spacedColumns;
+      const rows = required(state.rows, SLICES.TERMINAL);
+      const appRows = rows - INK_NEW_LINE - LEGEND_HEIGHT;
+
+      return { w: spacedColumns, h: appRows };
     },
-    selectGridHeight: (state): number =>
-      required(state.rows, SLICES.TERMINAL) - INK_NEW_LINE - LEGEND_HEIGHT,
   },
 });
 
@@ -46,6 +48,5 @@ export const {
   selectRows,
   selectAppHeight,
   selectColumns,
-  selectGridWidth,
-  selectGridHeight,
+  selectGridSize,
 } = terminalSlice.selectors;

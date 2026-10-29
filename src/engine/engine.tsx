@@ -9,7 +9,6 @@ import type {
   Callback,
   EngineContext,
   EngineProviderProps,
-  FirstGenerationFactoryProps,
   IEngineStore,
 } from "../types/engine.ts";
 
@@ -28,6 +27,9 @@ import {
 import type { FirstGenerationProps } from "../types/state.ts";
 import { usePatterns } from "../pattern/pattern.tsx";
 
+/**
+ * @deprecated use implementation from @cell-auto/game-of-life-engine
+ */
 export class EngineStore implements IEngineStore {
   #engine: IEngine;
   #listeners = new Set<() => void>();
@@ -55,13 +57,13 @@ export class EngineStore implements IEngineStore {
 }
 
 export function makeFirstGeneration(
-  props: FirstGenerationFactoryProps,
   patternLib: IPatternLib,
-  { patternKey, patternOffset, gridSize }: FirstGenerationProps,
+  { patternKey, patternOffset, patternGeneration, gridSize, gridMode }:
+    FirstGenerationProps,
 ): IGrid {
   const firstGeneration = new Grid({
     gridSize,
-    mode: props.mode,
+    mode: gridMode,
   });
   const pattern = patternLib.getPatternByKey(patternKey);
 
@@ -70,7 +72,7 @@ export function makeFirstGeneration(
   }
 
   firstGeneration.writeGrid({
-    inner: pattern.generations[props.generation],
+    inner: pattern.generations[patternGeneration],
     offset: patternOffset,
   });
 
@@ -78,28 +80,26 @@ export function makeFirstGeneration(
 }
 
 export function makeEngine(
-  props: FirstGenerationFactoryProps,
   patternLib: IPatternLib,
   firstGeneration: FirstGenerationProps,
 ): IEngine {
   return new Engine({
-    firstGeneration: makeFirstGeneration(props, patternLib, firstGeneration),
+    firstGeneration: makeFirstGeneration(patternLib, firstGeneration),
   });
 }
 
 function makeEngineStore(
-  props: FirstGenerationFactoryProps,
   patternLib: IPatternLib,
   firstGeneration: FirstGenerationProps,
 ): IEngineStore {
-  return new EngineStore(makeEngine(props, patternLib, firstGeneration));
+  return new EngineStore(makeEngine(patternLib, firstGeneration));
 }
 
 const EngineContext = createContext<IEngineStore | null>(null);
 EngineContext.displayName = CONTEXTS.ENGINE;
 
 function EngineStoreProvider(
-  { factoryProps, firstGeneration, children }: EngineProviderProps,
+  { firstGeneration, children }: EngineProviderProps,
 ) {
   const patternLib = usePatterns();
 
@@ -112,14 +112,13 @@ function EngineStoreProvider(
    * `makeEngineStore` on every render.
    */
   const [engineStore] = useState(() =>
-    makeEngineStore(factoryProps, patternLib, firstGeneration)
+    makeEngineStore(patternLib, firstGeneration)
   );
 
   return <EngineContext value={engineStore}>{children}</EngineContext>;
 }
 
 function makeKey(
-  factoryProps: FirstGenerationFactoryProps,
   firstGeneration: FirstGenerationProps,
 ): string {
   /*
@@ -129,14 +128,14 @@ function makeKey(
   const key = `(${firstGeneration.gridSize.w},${firstGeneration.gridSize.h}),` +
     `${firstGeneration.patternKey},` +
     `(${firstGeneration.patternOffset.x},${firstGeneration.patternOffset.y}),` +
-    `${factoryProps.generation},` +
-    `${factoryProps.mode}.`;
+    `${firstGeneration.patternGeneration},` +
+    `${firstGeneration.gridMode}.`;
 
   return key;
 }
 
 export function EngineProvider(
-  { factoryProps, firstGeneration, children }: EngineProviderProps,
+  { firstGeneration, children }: EngineProviderProps,
 ) {
   /*
    * Changing the key remounts `EngineStoreProvider`, which re-runs its
@@ -144,8 +143,7 @@ export function EngineProvider(
    */
   return (
     <EngineStoreProvider
-      key={makeKey(factoryProps, firstGeneration)}
-      factoryProps={factoryProps}
+      key={makeKey(firstGeneration)}
       firstGeneration={firstGeneration}
     >
       {children}

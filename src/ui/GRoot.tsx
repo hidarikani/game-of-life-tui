@@ -23,21 +23,18 @@ export function Root() {
   const patternOffset = useAppSelector(selectPatternOffset);
   const gameGridHeight = useAppSelector(selectGridHeight);
   const gameGridWidth = useAppSelector(selectGridWidth);
-  const engineProps = {
-    size: { w: gameGridWidth, h: gameGridHeight },
-    generation: 0,
-    mode: GRID_MODES.FINITE,
-  };
+
   const firstGeneration: FirstGenerationProps = {
     patternKey,
     patternOffset,
     gridSize: { w: gameGridWidth, h: gameGridHeight },
+    patternGeneration: 0,
+    gridMode: GRID_MODES.FINITE,
   };
 
   return (
     <PatternProvider>
       <EngineProvider
-        factoryProps={engineProps}
         firstGeneration={firstGeneration}
       >
         <App />

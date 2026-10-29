@@ -1,4 +1,3 @@
-import type { GridMode, GridSize } from "@cell-auto/game-of-life-engine";
 import type { ReactNode } from "react";
 import type { FirstGenerationProps } from "./state.ts";
 
@@ -15,13 +14,7 @@ export type EngineContext = {
   tick: () => void;
 };
 
-export type FirstGenerationFactoryProps = {
-  generation: number;
-  mode: GridMode;
-};
-
 export type EngineProviderProps = {
-  factoryProps: FirstGenerationFactoryProps;
   firstGeneration: FirstGenerationProps;
   children: ReactNode;
 };

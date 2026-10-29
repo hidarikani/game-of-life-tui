@@ -113,14 +113,12 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
     const firstGeneration: FirstGenerationProps = {
       patternKey: args[CLI_ARGS.PATTERN].key,
       patternOffset: ORIGIN,
+      patternGeneration: 0,
       gridSize,
+      gridMode: GRID_MODES.FINITE,
     };
 
     const engine = makeEngine(
-      {
-        generation: 0,
-        mode: GRID_MODES.FINITE,
-      },
       patternLib,
       firstGeneration,
     );

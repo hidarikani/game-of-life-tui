@@ -18,7 +18,6 @@ export type PatternProviderProps = {
 };
 
 export type PatternPickerProps = {
-  patterns: Pattern[];
   selected: number;
   scrollOffset: number;
   contentHeight: number;

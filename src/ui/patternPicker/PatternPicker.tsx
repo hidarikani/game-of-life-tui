@@ -9,26 +9,29 @@ import {
 import { clamp } from "../../util/misc.ts";
 import { GridView } from "../GridView.tsx";
 import { Header } from "./Header.tsx";
+import { usePatterns } from "../../pattern/pattern.tsx";
 
 /**
  * The selection step: pattern names on the left, a preview of the highlighted
  * pattern on the right.
  */
 export function PatternPicker(
-  { patterns, selected, scrollOffset, contentHeight }: PatternPickerProps,
+  { selected, scrollOffset, contentHeight }: PatternPickerProps,
 ) {
+  const patternLib = usePatterns();
+  const allPatterns = patternLib.getPatterns(null);
   const listWidth = clamp(
-    Math.max(...patterns.map((p) => p.name.length)) + 1,
+    Math.max(...allPatterns.map((p) => p.name.length)) + 1,
     MIN_LIST_WIDTH,
     MAX_LIST_WIDTH,
   );
-  const current = patterns[selected];
+  const current = allPatterns[selected];
   const preview = current.generations[0];
 
   return (
     <Box flexDirection="row" flexGrow={1}>
       <Box flexDirection="column" width={listWidth} marginRight={LIST_GAP}>
-        {patterns
+        {allPatterns
           .slice(scrollOffset, scrollOffset + contentHeight)
           .map((pattern, i) => (
             <Text

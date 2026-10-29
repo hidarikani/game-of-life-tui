@@ -205,7 +205,6 @@ export function App() {
         {ui.view === "placement" && <Text>{ui.placementFrame}</Text>}
         {ui.view === "patterns" && (
           <PatternPicker
-            patterns={patterns}
             selected={ui.selected}
             scrollOffset={ui.scrollOffset}
             contentHeight={gameGridHeight}

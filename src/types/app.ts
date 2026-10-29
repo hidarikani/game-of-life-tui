@@ -20,7 +20,6 @@ export type PatternProviderProps = {
 export type PatternPickerProps = {
   selected: number;
   scrollOffset: number;
-  contentHeight: number;
 };
 
 export type PatternHeaderProps = {

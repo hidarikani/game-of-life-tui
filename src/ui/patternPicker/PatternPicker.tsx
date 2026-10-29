@@ -10,14 +10,17 @@ import { clamp } from "../../util/misc.ts";
 import { GridView } from "../GridView.tsx";
 import { Header } from "./Header.tsx";
 import { usePatterns } from "../../pattern/pattern.tsx";
+import { useAppSelector } from "../../store/hooks.ts";
+import { selectGridHeight } from "../../store/terminalSlice.ts";
 
 /**
  * The selection step: pattern names on the left, a preview of the highlighted
  * pattern on the right.
  */
 export function PatternPicker(
-  { selected, scrollOffset, contentHeight }: PatternPickerProps,
+  { selected, scrollOffset }: PatternPickerProps,
 ) {
+  const gridHeight = useAppSelector(selectGridHeight);
   const patternLib = usePatterns();
   const allPatterns = patternLib.getPatterns(null);
   const listWidth = clamp(
@@ -32,7 +35,7 @@ export function PatternPicker(
     <Box flexDirection="row" flexGrow={1}>
       <Box flexDirection="column" width={listWidth} marginRight={LIST_GAP}>
         {allPatterns
-          .slice(scrollOffset, scrollOffset + contentHeight)
+          .slice(scrollOffset, scrollOffset + gridHeight)
           .map((pattern, i) => (
             <Text
               key={pattern.key}

@@ -207,12 +207,11 @@ export function App() {
           <PatternPicker
             selected={ui.selected}
             scrollOffset={ui.scrollOffset}
-            contentHeight={gameGridHeight}
           />
         )}
       </Box>
       <Box height={1}>
-        <Text dimColor wrap="truncate">{hintsFor(ui, patterns)}</Text>
+        <Text inverse wrap="truncate">{hintsFor(ui, patterns)}</Text>
       </Box>
     </Box>
   );

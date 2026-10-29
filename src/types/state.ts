@@ -1,9 +1,4 @@
-import type {
-  Grid,
-  GridMode,
-  GridSize,
-  Point,
-} from "@cell-auto/game-of-life-engine";
+import type { GridMode, GridSize, Point } from "@cell-auto/game-of-life-engine";
 
 export type TerminalState = {
   rows: number | null;

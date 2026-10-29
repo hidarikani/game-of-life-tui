@@ -42,7 +42,6 @@ export function App() {
     placingKey: null,
     offset: { x: 0, y: 0 },
     placementFrame: "",
-    error: null,
   });
 
   const dispatch = useAppDispatch();
@@ -99,21 +98,17 @@ export function App() {
     const pattern = patterns[s.selected];
     if (!pattern) return s;
     const offset = { x: 0, y: 0 };
-    try {
-      return {
-        ...s,
-        view: "placement",
-        placingKey: pattern.key,
+    return {
+      ...s,
+      view: "placement",
+      placingKey: pattern.key,
+      offset,
+      placementFrame: buildPreviewSnapshot(
+        { w: gameGridWidth, h: gameGridHeight },
+        pattern,
         offset,
-        placementFrame: buildPreviewSnapshot(
-          { w: gameGridWidth, h: gameGridHeight },
-          pattern,
-          offset,
-        ),
-      };
-    } catch (cause) {
-      return { ...s, error: messageOf(cause) };
-    }
+      ),
+    };
   };
 
   const movePlacement = (s: UiState, dx: number, dy: number): UiState => {
@@ -132,19 +127,15 @@ export function App() {
       y: clamp(s.offset.y + dy, 0, gameGridHeight - size.h),
     };
     if (offset.x === s.offset.x && offset.y === s.offset.y) return s;
-    try {
-      return {
-        ...s,
+    return {
+      ...s,
+      offset,
+      placementFrame: buildPreviewSnapshot(
+        { w: gameGridWidth, h: gameGridHeight },
+        pattern,
         offset,
-        placementFrame: buildPreviewSnapshot(
-          { w: gameGridWidth, h: gameGridHeight },
-          pattern,
-          offset,
-        ),
-      };
-    } catch (cause) {
-      return { ...s, error: messageOf(cause) };
-    }
+      ),
+    };
   };
 
   /** Restarts the simulation with the pattern at its current offset. */
@@ -163,7 +154,7 @@ export function App() {
   };
 
   useInput((input, key) => {
-    let s: UiState = { ...uiRef.current, error: null };
+    let s: UiState = { ...uiRef.current };
 
     // Special keys arrive as their own event with an empty input string.
     if (input === "") {
@@ -222,9 +213,7 @@ export function App() {
         )}
       </Box>
       <Box height={1}>
-        {ui.error === null
-          ? <Text dimColor wrap="truncate">{hintsFor(ui, patterns)}</Text>
-          : <Text color="red" wrap="truncate">{ui.error}</Text>}
+        <Text dimColor wrap="truncate">{hintsFor(ui, patterns)}</Text>
       </Box>
     </Box>
   );

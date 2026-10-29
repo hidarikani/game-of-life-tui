@@ -11,7 +11,6 @@ export type UiState = {
   placingKey: string | null;
   offset: Point;
   placementFrame: string;
-  error: string | null;
 };
 
 export type PatternProviderProps = {

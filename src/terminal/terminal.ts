@@ -102,7 +102,7 @@ async function writeHeading(msg: string) {
 }
 
 export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
-  const size: GridSize = {
+  const gridSize: GridSize = {
     w: args[CLI_ARGS.GRID_WIDTH],
     h: args[CLI_ARGS.GRID_HEIGHT],
   };
@@ -113,11 +113,11 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
     const firstGeneration: FirstGenerationProps = {
       patternKey: args[CLI_ARGS.PATTERN].key,
       patternOffset: ORIGIN,
+      gridSize,
     };
 
     const engine = makeEngine(
       {
-        size,
         generation: 0,
         mode: GRID_MODES.FINITE,
       },

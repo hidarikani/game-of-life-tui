@@ -57,10 +57,10 @@ export class EngineStore implements IEngineStore {
 export function makeFirstGeneration(
   props: FirstGenerationFactoryProps,
   patternLib: IPatternLib,
-  { patternKey, patternOffset }: FirstGenerationProps,
+  { patternKey, patternOffset, gridSize }: FirstGenerationProps,
 ): IGrid {
   const firstGeneration = new Grid({
-    gridSize: props.size,
+    gridSize,
     mode: props.mode,
   });
   const pattern = patternLib.getPatternByKey(patternKey);
@@ -126,7 +126,7 @@ function makeKey(
    * without separator `,` keys can collide, for example
    * w=1, h=23 and w=12, h=3 both give "123"
    */
-  const key = `(${factoryProps.size.w},${factoryProps.size.h}),` +
+  const key = `(${firstGeneration.gridSize.w},${firstGeneration.gridSize.h}),` +
     `${firstGeneration.patternKey},` +
     `(${firstGeneration.patternOffset.x},${firstGeneration.patternOffset.y}),` +
     `${factoryProps.generation},` +

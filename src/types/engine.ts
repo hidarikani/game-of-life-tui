@@ -16,7 +16,6 @@ export type EngineContext = {
 };
 
 export type FirstGenerationFactoryProps = {
-  size: GridSize;
   generation: number;
   mode: GridMode;
 };

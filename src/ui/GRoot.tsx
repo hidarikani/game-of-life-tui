@@ -16,6 +16,7 @@ import {
 } from "../store/firstGenerationSlice.ts";
 import { GRID_MODES } from "@cell-auto/game-of-life-engine";
 import { selectGridHeight, selectGridWidth } from "../store/terminalSlice.ts";
+import type { FirstGenerationProps } from "../types/state.ts";
 
 export function Root() {
   const patternKey = useAppSelector(selectPatternKey);
@@ -27,9 +28,10 @@ export function Root() {
     generation: 0,
     mode: GRID_MODES.FINITE,
   };
-  const firstGeneration = {
+  const firstGeneration: FirstGenerationProps = {
     patternKey,
     patternOffset,
+    gridSize: { w: gameGridWidth, h: gameGridHeight },
   };
 
   return (

@@ -1,4 +1,4 @@
-import type { Point } from "@cell-auto/game-of-life-engine";
+import type { GridSize, Point } from "@cell-auto/game-of-life-engine";
 
 export type TerminalState = {
   rows: number | null;
@@ -13,4 +13,5 @@ export interface FirstGenerationState {
 export type FirstGenerationProps = {
   patternKey: string;
   patternOffset: Point;
+  gridSize: GridSize;
 };

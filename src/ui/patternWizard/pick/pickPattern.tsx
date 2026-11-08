@@ -5,11 +5,11 @@ import {
   genMsgPatternNotFound,
   genMsgPatternWizardHeading,
   PATTERN_WIZARD_STEP_1,
-  PATTERNS_BY_NAME_HEADING,
   PATTERNS_GENERATIONS as PATTERNS_GENERATIONS_HEADING,
 } from "../../../constants/messages.ts";
 import { usePatternLib } from "../../../pattern/pattern.tsx";
 import type { Step1Props } from "../../../types/app.ts";
+import { PatternNameSelect } from "./patternName/patternNameSelect.tsx";
 
 export function PickPattern({ onChange }: Step1Props) {
   const heading = genMsgPatternWizardHeading(
@@ -17,11 +17,6 @@ export function PickPattern({ onChange }: Step1Props) {
     PATTERN_WIZARD_STEP_1,
   );
   const patternLib = usePatternLib();
-  const allPatterns = patternLib.getPatterns(null);
-  const patternOptions = allPatterns.map((pattern) => ({
-    label: pattern.name,
-    value: pattern.key,
-  }));
 
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [selectedGeneration, setSelectedGeneration] = useState<number | null>(
@@ -52,7 +47,6 @@ export function PickPattern({ onChange }: Step1Props) {
     }
   }
 
-  const checkIsPatternSelectDisabled = () => selectedKey !== null;
   const checkIsGenerationSelectDisabled = () => selectedKey === null;
 
   const getPreview = () => {
@@ -72,16 +66,7 @@ export function PickPattern({ onChange }: Step1Props) {
       </Box>
       <Box width="100%" padding={1} flexDirection="row">
         <Box flexDirection="column">
-          <Box flexDirection="column">
-            <Text>{PATTERNS_BY_NAME_HEADING}</Text>
-            <Box borderStyle="round">
-              <Select
-                options={patternOptions}
-                onChange={handlePatternChange}
-                isDisabled={checkIsPatternSelectDisabled()}
-              />
-            </Box>
-          </Box>
+          <PatternNameSelect onChange={handlePatternChange} />
           <Box flexDirection="column">
             <Text>{PATTERNS_GENERATIONS_HEADING}</Text>
             <Box borderStyle="round">

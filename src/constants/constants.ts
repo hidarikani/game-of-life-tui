@@ -55,6 +55,11 @@ export const VIEWS = {
   PATTERN_WIZARD: "wizard",
 } as const;
 
+export const FOCUS_INDICATOR = {
+  YES: "❯",
+  NO: "#",
+} as const;
+
 export const SEPARATOR_WIDTH = {
   MIN: 1,
   MAX: 80,

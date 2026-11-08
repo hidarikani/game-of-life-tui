@@ -4,7 +4,7 @@ import {
   PATTERN_WIZARD_STEP_2,
 } from "../../../constants/messages.ts";
 
-export function Step2() {
+export function PlacePattern() {
   const heading = genMsgPatternWizardHeading(
     2,
     PATTERN_WIZARD_STEP_2,

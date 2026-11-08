@@ -1,6 +1,6 @@
 import { type ReactNode, useCallback, useState } from "react";
-import { Step1 } from "./Step1/step1.tsx";
-import { Step2 } from "./place/step2.tsx";
+import { PickPattern } from "./pick/pickPattern.tsx";
+import { PlacePattern } from "./place/placePattern.tsx";
 
 export function PatternWizard() {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -10,8 +10,8 @@ export function PatternWizard() {
   }, []);
 
   const visibleStep: ReactNode = selectedKey === null
-    ? <Step1 onChange={handleKeyChange} />
-    : <Step2 />;
+    ? <PickPattern onChange={handleKeyChange} />
+    : <PlacePattern />;
 
   return (
     <>

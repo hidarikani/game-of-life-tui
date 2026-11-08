@@ -11,7 +11,7 @@ import {
 import { usePatternLib } from "../../../pattern/pattern.tsx";
 import type { Step1Props } from "../../../types/app.ts";
 
-export function Step1({ onChange }: Step1Props) {
+export function PickPattern({ onChange }: Step1Props) {
   const heading = genMsgPatternWizardHeading(
     1,
     PATTERN_WIZARD_STEP_1,

@@ -4,10 +4,11 @@ import type { Props } from "./types.ts";
 import { usePatternLib } from "../../../../pattern/pattern.tsx";
 import { PATTERNS_BY_NAME_HEADING } from "./messages.ts";
 import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
+import { MAX_SELECT_WIDTH } from "../../../../constants/constants.ts";
 
 export function PatternNameSelect({ onChange }: Props) {
   const { isFocused } = useFocus();
-  const isPatternSelectDisabled = !isFocused;
+  const isSelectDisabled = !isFocused;
   const patternLib = usePatternLib();
   const allPatterns = patternLib.getPatterns(null);
   const patternOptions = allPatterns.map((pattern) => ({
@@ -21,11 +22,11 @@ export function PatternNameSelect({ onChange }: Props) {
         isFocused={isFocused}
         message={PATTERNS_BY_NAME_HEADING}
       />
-      <Box borderStyle="round">
+      <Box maxWidth={MAX_SELECT_WIDTH} borderStyle="round">
         <Select
           options={patternOptions}
           onChange={onChange}
-          isDisabled={isPatternSelectDisabled}
+          isDisabled={isSelectDisabled}
         />
       </Box>
     </Box>

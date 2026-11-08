@@ -33,8 +33,6 @@ export function genMsgPatternNotFound(patternKey: string): string {
 export const PATTERN_WIZARD_STEP_1 = "Select pattern.";
 export const PATTERN_WIZARD_STEP_2 = "Place pattern.";
 
-export const PATTERNS_GENERATIONS = "Pattern Generations";
-
 export const genMsgPatternWizardHeading = (
   step: number,
   stepInstructions: string,

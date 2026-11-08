@@ -1,15 +1,14 @@
 import { useCallback, useState } from "react";
 import { Box, Text } from "ink";
-import { Select } from "@inkjs/ui";
 import {
   genMsgPatternNotFound,
   genMsgPatternWizardHeading,
   PATTERN_WIZARD_STEP_1,
-  PATTERNS_GENERATIONS as PATTERNS_GENERATIONS_HEADING,
 } from "../../../constants/messages.ts";
 import { usePatternLib } from "../../../pattern/pattern.tsx";
 import type { Step1Props } from "../../../types/app.ts";
 import { PatternNameSelect } from "./patternName/patternNameSelect.tsx";
+import { PatternGenerationSelect } from "./patternGeneration/patternGenerationSelect.tsx";
 
 export function PickPattern({ onChange }: Step1Props) {
   const heading = genMsgPatternWizardHeading(
@@ -23,12 +22,12 @@ export function PickPattern({ onChange }: Step1Props) {
     null,
   );
 
-  const handlePatternChange = useCallback((newKey: string) => {
+  const handleKeyChange = useCallback((newKey: string) => {
     setSelectedKey(newKey);
   }, []);
 
-  const handleGenerationChange = useCallback((newGeneration: string) => {
-    setSelectedGeneration(Number.parseInt(newGeneration));
+  const handleGenerationChange = useCallback((newGeneration: number) => {
+    setSelectedGeneration(newGeneration);
   }, []);
 
   let pattern = null;
@@ -39,15 +38,6 @@ export function PickPattern({ onChange }: Step1Props) {
       throw new Error(genMsgPatternNotFound(selectedKey));
     }
   }
-
-  const patternGenerationOptions = [];
-  if (pattern !== null) {
-    for (let i = 0; i < pattern.generations.length; i++) {
-      patternGenerationOptions.push({ label: `${i + 1}`, value: `${i}` });
-    }
-  }
-
-  const checkIsGenerationSelectDisabled = () => selectedKey === null;
 
   const getPreview = () => {
     if (pattern === null || selectedGeneration === null) {
@@ -66,17 +56,11 @@ export function PickPattern({ onChange }: Step1Props) {
       </Box>
       <Box width="100%" padding={1} flexDirection="row">
         <Box flexDirection="column">
-          <PatternNameSelect onChange={handlePatternChange} />
-          <Box flexDirection="column">
-            <Text>{PATTERNS_GENERATIONS_HEADING}</Text>
-            <Box borderStyle="round">
-              <Select
-                options={patternGenerationOptions}
-                onChange={handleGenerationChange}
-                isDisabled={checkIsGenerationSelectDisabled()}
-              />
-            </Box>
-          </Box>
+          <PatternNameSelect onChange={handleKeyChange} />
+          <PatternGenerationSelect
+            patternKey={selectedKey}
+            onChange={handleGenerationChange}
+          />
         </Box>
         <Box borderStyle="round" flexGrow={1}>
           <Text>{getPreview()}</Text>

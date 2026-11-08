@@ -60,6 +60,8 @@ export const FOCUS_INDICATOR = {
   NO: "#",
 } as const;
 
+export const PADDING = 1;
+
 export const MAX_SELECT_WIDTH = 20;
 
 export const SEPARATOR_WIDTH = {

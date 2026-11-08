@@ -9,6 +9,7 @@ import { usePatternLib } from "../../../pattern/pattern.tsx";
 import type { Step1Props } from "../../../types/app.ts";
 import { PatternNameSelect } from "./patternName/patternNameSelect.tsx";
 import { PatternGenerationSelect } from "./patternGeneration/patternGenerationSelect.tsx";
+import { PatternInfo } from "./info/patternInfo.tsx";
 
 export function PickPattern({ onChange }: Step1Props) {
   const heading = genMsgPatternWizardHeading(
@@ -54,7 +55,7 @@ export function PickPattern({ onChange }: Step1Props) {
           {heading}
         </Text>
       </Box>
-      <Box width="100%" padding={1} flexDirection="row">
+      <Box width="100%" flexDirection="row">
         <Box flexDirection="column">
           <PatternNameSelect onChange={handleKeyChange} />
           <PatternGenerationSelect
@@ -62,6 +63,7 @@ export function PickPattern({ onChange }: Step1Props) {
             onChange={handleGenerationChange}
           />
         </Box>
+        <PatternInfo pattern={pattern} generation={selectedGeneration} />
         <Box borderStyle="round" flexGrow={1}>
           <Text>{getPreview()}</Text>
         </Box>

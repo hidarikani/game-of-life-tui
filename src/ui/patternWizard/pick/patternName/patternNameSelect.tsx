@@ -1,4 +1,4 @@
-import { Box, Text, useFocus } from "ink";
+import { Box, useFocus } from "ink";
 import { Select } from "@inkjs/ui";
 import type { Props } from "./types.ts";
 import { usePatternLib } from "../../../../pattern/pattern.tsx";

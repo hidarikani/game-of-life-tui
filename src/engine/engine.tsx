@@ -25,7 +25,7 @@ import {
   UNKNOWN,
 } from "../constants/messages.ts";
 import type { FirstGenerationProps } from "../types/state.ts";
-import { usePatterns } from "../pattern/pattern.tsx";
+import { usePatternLib } from "../pattern/pattern.tsx";
 
 /**
  * @deprecated use implementation from @cell-auto/game-of-life-engine
@@ -101,7 +101,7 @@ EngineContext.displayName = CONTEXTS.ENGINE;
 function EngineStoreProvider(
   { firstGeneration, children }: EngineProviderProps,
 ) {
-  const patternLib = usePatterns();
+  const patternLib = usePatternLib();
 
   /*
    * The store is stateful: each tick appends to the generation history,

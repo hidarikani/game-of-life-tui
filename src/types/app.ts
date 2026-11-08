@@ -5,6 +5,10 @@ import type { VIEWS } from "../constants/constants.ts";
 
 export type View = (typeof VIEWS)[keyof typeof VIEWS];
 
+export type Step1Props = {
+  onChange: (patternKey: string) => void;
+};
+
 export type PatternProviderProps = {
   children: ReactNode;
 };

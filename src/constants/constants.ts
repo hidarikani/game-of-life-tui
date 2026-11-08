@@ -14,6 +14,10 @@ export const KEY_REFRESH_LOWER = "r";
 export const KEY_REFRESH_UPPER = "R";
 export const KEY_PATTERNS_LOWER = "p";
 export const KEY_PATTERNS_UPPER = "P";
+export const KEY_WIZARD = {
+  UPPER: "N",
+  LOWER: "n",
+} as const;
 
 // args ===
 export const CLI_ARGS = {
@@ -48,6 +52,7 @@ export const VIEWS = {
   GAME: "game",
   PATTERNS: "patterns",
   PLACEMENT: "placement",
+  PATTERN_WIZARD: "wizard",
 } as const;
 
 export const SEPARATOR_WIDTH = {

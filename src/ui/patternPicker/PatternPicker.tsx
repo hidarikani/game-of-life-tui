@@ -7,7 +7,7 @@ import {
 import { clamp, isEnter } from "../../util/misc.ts";
 import { GridView } from "../GridView.tsx";
 import { Header } from "./Header.tsx";
-import { usePatterns } from "../../pattern/pattern.tsx";
+import { usePatternLib } from "../../pattern/pattern.tsx";
 import { useState } from "react";
 import type { PatternPickerProps } from "../../types/app.ts";
 
@@ -29,7 +29,7 @@ function moveDown(prev: number, len: number) {
 
 export function PatternPicker({ onSelectionChange }: PatternPickerProps) {
   const [selectedIndex, setSelectedIndex] = useState(1);
-  const patternLib = usePatterns();
+  const patternLib = usePatternLib();
   const allPatterns = patternLib.getPatterns(null);
   useInput((input, key) => {
     if (input === "") {

@@ -10,11 +10,12 @@ import {
   KEY_QUIT_UPPER,
   KEY_REFRESH_LOWER,
   KEY_REFRESH_UPPER,
+  KEY_WIZARD,
   ORIGIN,
   VIEWS,
 } from "../constants/constants.ts";
 import { genMsgPatternNotFound } from "../constants/messages.ts";
-import { usePatterns } from "../pattern/pattern.tsx";
+import { usePatternLib } from "../pattern/pattern.tsx";
 import { PatternPicker } from "./patternPicker/PatternPicker.tsx";
 import { clamp, hintsFor, isEnter } from "../util/misc.ts";
 import {
@@ -30,10 +31,16 @@ import {
   setPatternKey,
   setPatternOffset,
 } from "../store/firstGenerationSlice.ts";
-import { selectAppHeight, selectGridSize } from "../store/terminalSlice.ts";
+import {
+  selectAppHeight,
+  selectColumns,
+  selectGridSize,
+  selectRows,
+} from "../store/terminalSlice.ts";
+import { PatternWizard } from "./patternWizard/patternWizard.tsx";
 
 export function App() {
-  const patternLib = usePatterns();
+  const patternLib = usePatternLib();
   const patternKey = useAppSelector(selectPatternKey);
   const patternGeneration = useAppSelector(selectPatternGeneration);
   const gridSize = useAppSelector(selectGridSize);
@@ -57,6 +64,8 @@ export function App() {
   const [view, setView] = useState<View>(VIEWS.GAME);
   const dispatch = useAppDispatch();
   const patterns = patternLib.getPatterns(null);
+  const terminalColumns = useAppSelector(selectColumns);
+  const terminalRows = useAppSelector(selectRows);
   const appHeight = useAppSelector(selectAppHeight);
   const snapshot = useEngineSnapshot();
   const tick = useEngineTick();
@@ -129,6 +138,8 @@ export function App() {
           tick();
         } else if (ch === KEY_PATTERNS_LOWER || ch === KEY_PATTERNS_UPPER) {
           setView(VIEWS.PATTERNS);
+        } else if (ch === KEY_WIZARD.LOWER || ch === KEY_WIZARD.UPPER) {
+          setView(VIEWS.PATTERN_WIZARD);
         }
       } else if (isEnter(ch)) {
         if (view === VIEWS.PLACEMENT) {
@@ -139,13 +150,14 @@ export function App() {
   });
 
   return (
-    <Box flexDirection="column" height={appHeight}>
+    <Box flexDirection="column" width={terminalColumns} height={terminalRows}>
       <Box flexDirection="column" flexGrow={1}>
         {view === VIEWS.GAME && <Text>{snapshot}</Text>}
         {view === VIEWS.PLACEMENT && <Text>{placementSnapshot}</Text>}
         {view === VIEWS.PATTERNS && (
           <PatternPicker onSelectionChange={onSelectionChange} />
         )}
+        {view === VIEWS.PATTERN_WIZARD && <PatternWizard />}
       </Box>
       <Box height={1}>
         <Text inverse wrap="truncate">

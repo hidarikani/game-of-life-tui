@@ -30,6 +30,19 @@ export function genMsgPatternNotFound(patternKey: string): string {
   return `Pattern with key '${patternKey} not found.`;
 }
 
+export const PATTERN_WIZARD_STEP_1 = "Select pattern.";
+export const PATTERN_WIZARD_STEP_2 = "Place pattern.";
+
+export const PATTERNS_BY_NAME_HEADING = "Pattern Names";
+export const PATTERNS_GENERATIONS = "Pattern Generations";
+
+export const genMsgPatternWizardHeading = (
+  step: number,
+  stepInstructions: string,
+) => {
+  return `Pattern Wizard step ${step} of 2. ${stepInstructions}`;
+};
+
 export const genMsgPatternName = (name: string): string => `Name: ${name};`;
 export const genMsgPatternSize = (w: number, h: number): string =>
   `Size: ${w}x${h};`;

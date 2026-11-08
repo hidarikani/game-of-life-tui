@@ -24,7 +24,7 @@ export function PatternProvider({ children }: PatternProviderProps) {
   return <PatternContext value={patternLib}>{children}</PatternContext>;
 }
 
-export function usePatterns(): IPatternLib {
+export function usePatternLib(): IPatternLib {
   const patternLib = useContext(PatternContext);
   if (patternLib === null) {
     throw new Error(

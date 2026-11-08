@@ -10,6 +10,7 @@ import type { Step1Props } from "../../../types/app.ts";
 import { PatternNameSelect } from "./patternName/patternNameSelect.tsx";
 import { PatternGenerationSelect } from "./patternGeneration/patternGenerationSelect.tsx";
 import { PatternInfo } from "./info/patternInfo.tsx";
+import { PatternPreview } from "./preview/patternPreview.tsx";
 
 export function PickPattern({ onChange }: Step1Props) {
   const heading = genMsgPatternWizardHeading(
@@ -40,13 +41,11 @@ export function PickPattern({ onChange }: Step1Props) {
     }
   }
 
-  const getPreview = () => {
-    if (pattern === null || selectedGeneration === null) {
-      return "Select a pattern generation to preview.";
-    }
+  let previewGrid = null;
 
-    return pattern.generations[selectedGeneration].toString();
-  };
+  if (pattern !== null && selectedGeneration !== null) {
+    previewGrid = pattern.generations[selectedGeneration];
+  }
 
   return (
     <>
@@ -64,9 +63,7 @@ export function PickPattern({ onChange }: Step1Props) {
           />
         </Box>
         <PatternInfo pattern={pattern} generation={selectedGeneration} />
-        <Box borderStyle="round" flexGrow={1}>
-          <Text>{getPreview()}</Text>
-        </Box>
+        <PatternPreview grid={previewGrid} />
       </Box>
       <Box>
       </Box>

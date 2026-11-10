@@ -6,7 +6,6 @@ import {
   NEXT,
 } from "../../../../constants/messages.ts";
 import { usePatternLib } from "../../../../pattern/pattern.tsx";
-import type { Step1Props } from "../../../../types/app.ts";
 import { PatternNameSelect } from "../patternName/patternNameSelect.tsx";
 import { PatternGenerationSelect } from "../patternGeneration/patternGenerationSelect.tsx";
 import { PatternInfo } from "../info/patternInfo.tsx";
@@ -16,8 +15,9 @@ import { HEADING as STEP_HEADING, INSTRUCTIONS, STEP } from "./messages.ts";
 import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
 import { HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
 import { GAP } from "../../../../constants/constants.ts";
+import type { Props } from "./types.ts";
 
-export function PickPattern({ onChange }: Step1Props) {
+export function PickPattern({ onCancel, onSubmit }: Props) {
   const heading = `${WIZARD_HEADING} / ${STEP_HEADING}`;
   const patternLib = usePatternLib();
 
@@ -49,6 +49,18 @@ export function PickPattern({ onChange }: Step1Props) {
     previewGrid = pattern.generations[selectedGeneration];
   }
 
+  const handleCancel = useCallback(() => {
+    onCancel();
+  }, [onCancel]);
+
+  const handleNext = useCallback(() => {
+    if (selectedKey === null || selectedGeneration === null) {
+      return;
+    }
+
+    onSubmit(selectedKey, selectedGeneration);
+  }, [selectedKey, selectedGeneration, onSubmit]);
+
   return (
     <>
       <Box flexDirection="column" marginBottom={1}>
@@ -69,8 +81,8 @@ export function PickPattern({ onChange }: Step1Props) {
       <Box>
       </Box>
       <Box width="100%" gap={GAP} alignItems="center">
-        <Button label={CANCEL} onPress={() => {}}></Button>
-        <Button label={NEXT} onPress={() => {}}></Button>
+        <Button label={CANCEL} onPress={handleCancel}></Button>
+        <Button label={NEXT} onPress={handleNext}></Button>
         <Text dimColor>{STEP}</Text>
       </Box>
     </>

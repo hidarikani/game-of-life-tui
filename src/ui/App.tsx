@@ -14,7 +14,7 @@ import {
   ORIGIN,
   VIEWS,
 } from "../constants/constants.ts";
-import { genMsgPatternNotFound } from "../constants/messages.ts";
+import { genErrPatternNotFound } from "../constants/messages.ts";
 import { usePatternLib } from "../pattern/pattern.tsx";
 import { PatternPicker } from "./patternPicker/PatternPicker.tsx";
 import { clamp, hintsFor, isEnter } from "../util/misc.ts";
@@ -37,7 +37,7 @@ import {
   selectGridSize,
   selectRows,
 } from "../store/terminalSlice.ts";
-import { PatternWizard } from "./patternWizard/patternWizard.tsx";
+import { PatternWizard } from "./patternWizard/wizard/patternWizard.tsx";
 
 export function App() {
   const patternLib = usePatternLib();
@@ -80,7 +80,7 @@ export function App() {
     const pattern = patterns.find((p) => p.key === placementKey);
 
     if (pattern === null || pattern === undefined) {
-      throw new Error(genMsgPatternNotFound(placementKey));
+      throw new Error(genErrPatternNotFound(placementKey));
     }
 
     const size = pattern.generations[0].gridSize;

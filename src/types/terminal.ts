@@ -2,7 +2,7 @@ import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 import * as v from "@valibot/valibot";
 
 import { makePatternLib } from "../pattern/pattern.tsx";
-import { genMsgPatternNotFound } from "../constants/messages.ts";
+import { genErrPatternNotFound } from "../constants/messages.ts";
 import {
   CLI_ARGS,
   MIN_GENERATIONS,
@@ -17,7 +17,7 @@ const PatternPipe = v.optional(
     v.rawTransform(({ dataset, addIssue, NEVER }) => {
       const pattern = makePatternLib().getPatternByKey(dataset.value);
       if (pattern === null) {
-        addIssue({ message: genMsgPatternNotFound(dataset.value) });
+        addIssue({ message: genErrPatternNotFound(dataset.value) });
         return NEVER;
       }
       return pattern;

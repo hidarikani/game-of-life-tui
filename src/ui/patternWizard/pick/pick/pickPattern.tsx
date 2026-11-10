@@ -1,22 +1,24 @@
 import { useCallback, useState } from "react";
 import { Box, Text } from "ink";
 import {
-  genMsgPatternNotFound,
-  genMsgPatternWizardHeading,
-  PATTERN_WIZARD_STEP_1,
-} from "../../../constants/messages.ts";
-import { usePatternLib } from "../../../pattern/pattern.tsx";
-import type { Step1Props } from "../../../types/app.ts";
-import { PatternNameSelect } from "./patternName/patternNameSelect.tsx";
-import { PatternGenerationSelect } from "./patternGeneration/patternGenerationSelect.tsx";
-import { PatternInfo } from "./info/patternInfo.tsx";
-import { PatternPreview } from "./preview/patternPreview.tsx";
+  CANCEL,
+  genErrPatternNotFound,
+  NEXT,
+} from "../../../../constants/messages.ts";
+import { usePatternLib } from "../../../../pattern/pattern.tsx";
+import type { Step1Props } from "../../../../types/app.ts";
+import { PatternNameSelect } from "../patternName/patternNameSelect.tsx";
+import { PatternGenerationSelect } from "../patternGeneration/patternGenerationSelect.tsx";
+import { PatternInfo } from "../info/patternInfo.tsx";
+import { PatternPreview } from "../preview/patternPreview.tsx";
+import { Button } from "../../button/Button.tsx";
+import { HEADING as STEP_HEADING, INSTRUCTIONS, STEP } from "./messages.ts";
+import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
+import { HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
+import { GAP } from "../../../../constants/constants.ts";
 
 export function PickPattern({ onChange }: Step1Props) {
-  const heading = genMsgPatternWizardHeading(
-    1,
-    PATTERN_WIZARD_STEP_1,
-  );
+  const heading = `${WIZARD_HEADING} / ${STEP_HEADING}`;
   const patternLib = usePatternLib();
 
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -37,7 +39,7 @@ export function PickPattern({ onChange }: Step1Props) {
   if (selectedKey !== null) {
     pattern = patternLib.getPatternByKey(selectedKey);
     if (pattern === null) {
-      throw new Error(genMsgPatternNotFound(selectedKey));
+      throw new Error(genErrPatternNotFound(selectedKey));
     }
   }
 
@@ -49,10 +51,9 @@ export function PickPattern({ onChange }: Step1Props) {
 
   return (
     <>
-      <Box width="100%" backgroundColor="white">
-        <Text color="black">
-          {heading}
-        </Text>
+      <Box flexDirection="column" marginBottom={1}>
+        <FocusableHeading message={heading} />
+        <Text dimColor>{INSTRUCTIONS}</Text>
       </Box>
       <Box width="100%" flexDirection="row">
         <Box flexDirection="column">
@@ -66,6 +67,11 @@ export function PickPattern({ onChange }: Step1Props) {
         <PatternPreview grid={previewGrid} />
       </Box>
       <Box>
+      </Box>
+      <Box width="100%" gap={GAP} alignItems="center">
+        <Button label={CANCEL} onPress={() => {}}></Button>
+        <Button label={NEXT} onPress={() => {}}></Button>
+        <Text dimColor>{STEP}</Text>
       </Box>
     </>
   );

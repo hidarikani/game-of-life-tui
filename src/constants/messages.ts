@@ -26,19 +26,9 @@ export function genMsgContextMissing(
   return `${hookName} must be called within <${providerName}>; add it as an ancestor.`;
 }
 
-export function genMsgPatternNotFound(patternKey: string): string {
+export function genErrPatternNotFound(patternKey: string): string {
   return `Pattern with key '${patternKey} not found.`;
 }
-
-export const PATTERN_WIZARD_STEP_1 = "Select pattern.";
-export const PATTERN_WIZARD_STEP_2 = "Place pattern.";
-
-export const genMsgPatternWizardHeading = (
-  step: number,
-  stepInstructions: string,
-) => {
-  return `Pattern Wizard step ${step} of 2. ${stepInstructions}`;
-};
 
 export const genMsgPatternName = (name: string): string => `Name: ${name};`;
 export const genMsgPatternSize = (w: number, h: number): string =>
@@ -49,3 +39,5 @@ export const genMsgGeneration = (current: number, generations: number) =>
 
 export const NONE = "none";
 export const UNKNOWN = "unknown";
+export const CANCEL = "Cancel";
+export const NEXT = "Next";

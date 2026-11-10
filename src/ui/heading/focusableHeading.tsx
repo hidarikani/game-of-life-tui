@@ -1,10 +1,13 @@
 import { Text } from "ink";
-import { FOCUS_INDICATOR } from "../../constants/constants.ts";
 import type { Props } from "./types.ts";
 
-export function FocusableHeading({ isFocused, message }: Props) {
-  const headingText = `${
-    isFocused ? FOCUS_INDICATOR.YES : FOCUS_INDICATOR.NO
-  } ${message}`;
-  return <Text>{headingText}</Text>;
+export function FocusableHeading(
+  { level = 1, isFocused = false, message }: Props,
+) {
+  let prefix = "";
+  for (let i = 0; i < level; i++) {
+    prefix += "#";
+  }
+  const headingText = `${prefix} ${message}`;
+  return <Text bold underline={isFocused}>{headingText}</Text>;
 }

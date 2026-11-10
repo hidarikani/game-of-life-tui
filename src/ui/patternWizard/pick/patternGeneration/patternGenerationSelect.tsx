@@ -43,6 +43,7 @@ export function PatternGenerationSelect({ patternKey, onChange }: Props) {
   return (
     <Box flexDirection="column">
       <FocusableHeading
+        level={2}
         isFocused={isFocused}
         message={SELECT_HEADING}
       />

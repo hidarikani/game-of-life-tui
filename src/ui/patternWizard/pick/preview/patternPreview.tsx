@@ -9,7 +9,7 @@ export function PatternPreview({ grid }: Props) {
 
   return (
     <Box flexDirection="column">
-      <FocusableHeading isFocused={false} message={HEADING} />
+      <FocusableHeading level={2} isFocused={false} message={HEADING} />
       <Box borderStyle="round" padding={PADDING}>
         <Text>{preview}</Text>
       </Box>

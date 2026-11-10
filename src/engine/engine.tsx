@@ -21,7 +21,7 @@ import {
 import {
   CONTEXTS,
   genMsgContextMissing,
-  genMsgPatternNotFound,
+  genErrPatternNotFound,
   UNKNOWN,
 } from "../constants/messages.ts";
 import type { FirstGenerationProps } from "../types/state.ts";
@@ -68,7 +68,7 @@ export function makeFirstGeneration(
   const pattern = patternLib.getPatternByKey(patternKey);
 
   if (pattern === null) {
-    throw new Error(genMsgPatternNotFound(patternKey));
+    throw new Error(genErrPatternNotFound(patternKey));
   }
 
   firstGeneration.writeGrid({

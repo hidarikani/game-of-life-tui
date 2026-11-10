@@ -40,8 +40,8 @@ export function PatternInfo(
 
   return (
     <Box flexDirection="column">
-      <FocusableHeading isFocused={false} message={HEADING} />
-      <Box borderStyle="round" flexDirection="column" padding={PADDING}>
+      <FocusableHeading level={2} isFocused={false} message={HEADING} />
+      <Box borderStyle="single" flexDirection="column" padding={PADDING}>
         {final}
       </Box>
     </Box>

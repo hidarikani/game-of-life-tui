@@ -1,14 +1,8 @@
 import { Box, Text } from "ink";
-import {
-  genMsgPatternWizardHeading,
-  PATTERN_WIZARD_STEP_2,
-} from "../../../constants/messages.ts";
+import { HEADING as WIZARD_HEADING } from "../wizard/messages.ts";
 
 export function PlacePattern() {
-  const heading = genMsgPatternWizardHeading(
-    2,
-    PATTERN_WIZARD_STEP_2,
-  );
+  const heading = `${WIZARD_HEADING}`;
 
   return (
     <Box width="100%" backgroundColor="white">

@@ -1,6 +1,6 @@
 import { type ReactNode, useCallback, useState } from "react";
-import { PickPattern } from "./pick/pickPattern.tsx";
-import { PlacePattern } from "./place/placePattern.tsx";
+import { PickPattern } from "../pick/pick/pickPattern.tsx";
+import { PlacePattern } from "../place/placePattern.tsx";
 
 export function PatternWizard() {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);

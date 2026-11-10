@@ -55,12 +55,8 @@ export const VIEWS = {
   PATTERN_WIZARD: "wizard",
 } as const;
 
-export const FOCUS_INDICATOR = {
-  YES: "❯",
-  NO: "#",
-} as const;
-
 export const PADDING = 1;
+export const GAP = 1;
 
 export const MAX_SELECT_WIDTH = 20;
 

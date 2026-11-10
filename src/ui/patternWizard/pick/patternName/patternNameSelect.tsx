@@ -19,6 +19,7 @@ export function PatternNameSelect({ onChange }: Props) {
   return (
     <Box flexDirection="column">
       <FocusableHeading
+        level={2}
         isFocused={isFocused}
         message={PATTERNS_BY_NAME_HEADING}
       />

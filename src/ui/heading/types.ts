@@ -1,4 +1,5 @@
 export type Props = {
-  isFocused: boolean;
+  level?: number;
+  isFocused?: boolean;
   message: string;
 };

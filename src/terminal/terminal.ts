@@ -1,13 +1,18 @@
-import type { GridSize } from "@cell-auto/game-of-life-engine";
 import type {
   InteractiveArgs,
   NonInteractiveArgs,
   ValidArgs,
+  ViewportSize,
 } from "../types/terminal.ts";
 import { ArgSchema } from "../types/terminal.ts";
 
 import { parseArgs } from "@std/cli/parse-args";
 import * as v from "@valibot/valibot";
+import {
+  type Engine,
+  GRID_MODES,
+  type GridSize,
+} from "@cell-auto/game-of-life-engine";
 
 import {
   ALTERNATE_SCREEN_ENTER,
@@ -15,19 +20,22 @@ import {
   CLI_ARGS,
   CURSOR_HIDE,
   CURSOR_SHOW,
+  ORIGIN,
   SEPARATOR_WIDTH,
 } from "../constants/constants.ts";
 
-import {
-  initGame,
-  renderPlacement,
-  selectPattern,
-  tick,
-} from "../game/game.ts";
-import { renderApp } from "../ui/App.tsx";
+import { renderRoot } from "../ui/GRoot.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
-import { getPatternLib } from "../pattern/pattern.ts";
 import { UNKNOWN_CONSOLE_SIZE } from "../constants/messages.ts";
+import { makeEngine } from "../engine/engine.tsx";
+import {
+  setPatternKey,
+  setPatternOffset,
+} from "../store/firstGenerationSlice.ts";
+import { makePatternLib } from "../pattern/pattern.tsx";
+import type { FirstGenerationProps } from "../types/state.ts";
+import { store } from "../store/store.ts";
+import { setColumns, setRows } from "../store/terminalSlice.ts";
 
 export function handleArguments(): ValidArgs {
   /*
@@ -59,10 +67,9 @@ export async function write(s: string) {
   await Deno.stdout.write(encoder.encode(s));
 }
 
-export function getSize(): GridSize {
+export function getSize(): ViewportSize {
   try {
-    const { columns, rows } = Deno.consoleSize();
-    return { w: Math.floor(columns / 2), h: rows };
+    return Deno.consoleSize();
   } catch {
     throw new Error(UNKNOWN_CONSOLE_SIZE);
   }
@@ -95,19 +102,33 @@ async function writeHeading(msg: string) {
 }
 
 export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
-  const size: GridSize = {
+  const gridSize: GridSize = {
     w: args[CLI_ARGS.GRID_WIDTH],
     h: args[CLI_ARGS.GRID_HEIGHT],
   };
 
   try {
     await writeHeading("InitialSeed");
-    await write(initGame(size, args[CLI_ARGS.PATTERN]));
+    const patternLib = makePatternLib();
+    const firstGeneration: FirstGenerationProps = {
+      patternKey: args[CLI_ARGS.PATTERN].key,
+      patternOffset: ORIGIN,
+      patternGeneration: 0,
+      gridSize,
+      gridMode: GRID_MODES.FINITE,
+    };
+
+    const engine = makeEngine(
+      patternLib,
+      firstGeneration,
+    );
+    await write((engine as Engine).toString());
 
     if (args.generations > 1) {
       for (let i = 1; i < args.generations; i++) {
         await writeHeading(`Generation ${i}`);
-        await write(tick());
+        (engine as Engine).evolveGrid();
+        await write((engine as Engine).toString());
       }
     }
   } catch (error) {
@@ -117,30 +138,17 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
 }
 
 export async function enterInteractiveMode(args: InteractiveArgs) {
-  const size = getSize();
-  // Ink terminates every frame with a newline, so a frame as tall as the
-  // terminal would scroll the alternate screen by one row on each render.
-  // The app may therefore occupy rows - 1 lines, one of which is the
-  // toolbar; the grid gets the rest.
-  const appHeight = Math.max(2, size.h - 1);
-  size.h = appHeight - 1;
-
-  const initialFrame = initGame(size, args[CLI_ARGS.PATTERN]);
-
+  const terminalSize = getSize();
   await enterAltScreen();
   const bridge = createStdinBridge();
   try {
-    const app = renderApp(
-      {
-        initialFrame,
-        pattern: args[CLI_ARGS.PATTERN],
-        appHeight,
-        gridSize: size,
-        patterns: getPatternLib().getPatterns(null),
-        onTick: tick,
-        onRenderPlacement: renderPlacement,
-        onSelectPattern: selectPattern,
-      },
+    const pattern = args[CLI_ARGS.PATTERN];
+    const patternOffset = ORIGIN;
+    store.dispatch(setRows(terminalSize.rows));
+    store.dispatch(setColumns(terminalSize.columns));
+    store.dispatch(setPatternKey(pattern.key));
+    store.dispatch(setPatternOffset(patternOffset));
+    const app = renderRoot(
       bridge.stdin,
     );
     await app.waitUntilExit();

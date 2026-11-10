@@ -14,6 +14,10 @@ export const KEY_REFRESH_LOWER = "r";
 export const KEY_REFRESH_UPPER = "R";
 export const KEY_PATTERNS_LOWER = "p";
 export const KEY_PATTERNS_UPPER = "P";
+export const KEY_WIZARD = {
+  UPPER: "N",
+  LOWER: "n",
+} as const;
 
 // args ===
 export const CLI_ARGS = {
@@ -44,11 +48,25 @@ export const MIN_GENERATIONS = 1 as const;
 export const ORIGIN: Point = { x: 0, y: 0 };
 
 // tui
+export const VIEWS = {
+  GAME: "game",
+  PATTERNS: "patterns",
+  PLACEMENT: "placement",
+  PATTERN_WIZARD: "wizard",
+} as const;
+
+export const PADDING = 1;
+export const GAP = 1;
+
+export const MAX_SELECT_WIDTH = 20;
+
 export const SEPARATOR_WIDTH = {
   MIN: 1,
   MAX: 80,
 } as const;
 
+export const INK_NEW_LINE = 1;
+export const LEGEND_HEIGHT = 1;
 export const MIN_LIST_WIDTH = 10;
 export const MAX_LIST_WIDTH = 24;
 export const LIST_GAP = 2;

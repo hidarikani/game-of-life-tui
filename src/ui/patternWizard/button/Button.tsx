@@ -1,12 +1,7 @@
 import { Box, Text, useFocus, useInput } from "ink";
+import type { Props } from "./types.ts";
 
-type ButtonProps = {
-  label: string;
-  onPress: () => void;
-  id?: string;
-};
-
-export const Button = ({ label, onPress, id }: ButtonProps) => {
+export const Button = ({ label, onPress, id }: Props) => {
   const { isFocused } = useFocus({ id });
 
   useInput(

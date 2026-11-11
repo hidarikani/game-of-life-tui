@@ -1,5 +1,6 @@
 import { PassThrough } from "node:stream";
 import type { RawStdin } from "../../types/terminal.ts";
+import type { EmptyCallback } from "../../types/general.ts";
 
 /**
  * A Node-style stdin stream Ink can consume, backed by a pump that this
@@ -15,7 +16,7 @@ export type StdinBridge = {
   /** The stream to pass to Ink's `render(..., { stdin })`. */
   stdin: PassThrough;
   /** Stops the pump and restores the terminal out of raw mode. */
-  stop: () => void;
+  stop: EmptyCallback;
 };
 
 /**
@@ -25,8 +26,8 @@ export type StdinBridge = {
 type InkStdinProps = {
   isTTY: boolean;
   setRawMode: (mode: boolean) => void;
-  ref: () => void;
-  unref: () => void;
+  ref: EmptyCallback;
+  unref: EmptyCallback;
 };
 
 /**

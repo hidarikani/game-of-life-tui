@@ -1,11 +1,12 @@
 import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
 import { createStdinBridge } from "./stdin-bridge.ts";
+import type { EmptyCallback } from "../../types/general.ts";
 
 function sourceFromController(): {
   source: ReadableStream<Uint8Array>;
   push: (s: string) => void;
-  close: () => void;
+  close: EmptyCallback;
 } {
   let controller!: ReadableStreamDefaultController<Uint8Array>;
   const source = new ReadableStream<Uint8Array>({

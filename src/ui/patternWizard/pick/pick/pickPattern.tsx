@@ -1,10 +1,6 @@
 import { useCallback, useState } from "react";
 import { Box, Text } from "ink";
-import {
-  CANCEL,
-  genErrPatternNotFound,
-  NEXT,
-} from "../../../../constants/messages.ts";
+import { genErrPatternNotFound } from "../../../../constants/messages.ts";
 import { usePatternLib } from "../../../../pattern/pattern.tsx";
 import { PatternNameSelect } from "../patternName/patternNameSelect.tsx";
 import { PatternGenerationSelect } from "../patternGeneration/patternGenerationSelect.tsx";
@@ -13,7 +9,11 @@ import { PatternPreview } from "../preview/patternPreview.tsx";
 import { Button } from "../../button/Button.tsx";
 import { HEADING as STEP_HEADING, INSTRUCTIONS, STEP } from "./messages.ts";
 import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
-import { HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
+import {
+  CANCEL,
+  HEADING as WIZARD_HEADING,
+  NEXT,
+} from "../../wizard/messages.ts";
 import { GAP } from "../../../../constants/constants.ts";
 import type { Props } from "./types.ts";
 
@@ -62,8 +62,8 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
   }, [selectedKey, selectedGeneration, onSubmit]);
 
   return (
-    <>
-      <Box flexDirection="column" marginBottom={1}>
+    <Box flexDirection="column" gap={GAP}>
+      <Box flexDirection="column">
         <FocusableHeading message={heading} />
         <Text dimColor>{INSTRUCTIONS}</Text>
       </Box>
@@ -80,11 +80,11 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
       </Box>
       <Box>
       </Box>
-      <Box width="100%" gap={GAP} alignItems="center">
+      <Box gap={GAP} alignItems="center">
         <Button label={CANCEL} onPress={handleCancel}></Button>
         <Button label={NEXT} onPress={handleNext}></Button>
         <Text dimColor>{STEP}</Text>
       </Box>
-    </>
+    </Box>
   );
 }

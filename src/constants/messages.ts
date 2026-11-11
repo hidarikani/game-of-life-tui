@@ -39,5 +39,3 @@ export const genMsgGeneration = (current: number, generations: number) =>
 
 export const NONE = "none";
 export const UNKNOWN = "unknown";
-export const CANCEL = "Cancel";
-export const NEXT = "Next";

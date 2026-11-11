@@ -6,7 +6,6 @@ import {
   type IPatternLib,
 } from "@cell-auto/game-of-life-engine";
 import type {
-  Callback,
   EngineContext,
   EngineProviderProps,
   IEngineStore,
@@ -20,19 +19,20 @@ import {
 } from "react";
 import {
   CONTEXTS,
-  genMsgContextMissing,
   genErrPatternNotFound,
+  genMsgContextMissing,
   UNKNOWN,
 } from "../constants/messages.ts";
 import type { FirstGenerationProps } from "../types/state.ts";
 import { usePatternLib } from "../pattern/pattern.tsx";
+import type { EmptyCallback } from "../types/general.ts";
 
 /**
  * @deprecated use implementation from @cell-auto/game-of-life-engine
  */
 export class EngineStore implements IEngineStore {
   #engine: IEngine;
-  #listeners = new Set<() => void>();
+  #listeners = new Set<EmptyCallback>();
   constructor(engine: IEngine) {
     this.#engine = engine;
 
@@ -41,7 +41,7 @@ export class EngineStore implements IEngineStore {
     this.tick = this.tick.bind(this);
   }
 
-  subscribe(listener: () => void): Callback {
+  subscribe(listener: EmptyCallback): EmptyCallback {
     this.#listeners.add(listener);
     return () => void this.#listeners.delete(listener);
   }
@@ -186,7 +186,7 @@ export function useEngineSnapshot(): string {
  *
  * @throws If called outside of an `EngineProvider`.
  */
-export function useEngineTick(): Callback {
+export function useEngineTick(): EmptyCallback {
   const engineStore = useContext(EngineContext);
   if (engineStore === null) {
     throw new Error(

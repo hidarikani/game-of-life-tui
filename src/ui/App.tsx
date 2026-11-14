@@ -149,6 +149,10 @@ export function App() {
     }
   });
 
+  const handlePatternWizardCancel = useCallback(() => {
+    setView(VIEWS.GAME);
+  }, []);
+
   return (
     <Box flexDirection="column" width={terminalColumns} height={terminalRows}>
       <Box flexDirection="column" flexGrow={1}>
@@ -157,7 +161,9 @@ export function App() {
         {view === VIEWS.PATTERNS && (
           <PatternPicker onSelectionChange={onSelectionChange} />
         )}
-        {view === VIEWS.PATTERN_WIZARD && <PatternWizard />}
+        {view === VIEWS.PATTERN_WIZARD && (
+          <PatternWizard onCancel={handlePatternWizardCancel} />
+        )}
       </Box>
       <Box height={1}>
         <Text inverse wrap="truncate">

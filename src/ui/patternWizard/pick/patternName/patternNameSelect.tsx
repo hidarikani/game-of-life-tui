@@ -7,7 +7,9 @@ import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
 import { MAX_SELECT_WIDTH } from "../../../../constants/constants.ts";
 
 export function PatternNameSelect({ onChange }: Props) {
-  const { isFocused } = useFocus();
+  const { isFocused } = useFocus({
+    autoFocus: true,
+  });
   const isSelectDisabled = !isFocused;
   const patternLib = usePatternLib();
   const allPatterns = patternLib.getPatterns(null);

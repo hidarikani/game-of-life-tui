@@ -4,8 +4,9 @@ import { PlacePattern } from "../place/place/placePattern.tsx";
 import { Grid, type IGrid } from "@cell-auto/game-of-life-engine";
 import { useAppSelector } from "../../../store/hooks.ts";
 import { selectGridSize } from "../../../store/terminalSlice.ts";
+import { Props } from "./types.ts";
 
-export function PatternWizard() {
+export function PatternWizard({ onCancel }: Props) {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [selectedGeneration, setSelectedGeneration] = useState<number | null>(
     null,
@@ -14,7 +15,7 @@ export function PatternWizard() {
   const [grid, setGrid] = useState<IGrid>(new Grid({ gridSize }));
 
   const handleCancel = useCallback(() => {
-    // TODO: implement cancel
+    onCancel();
   }, []);
 
   const handlePickContinue = useCallback(

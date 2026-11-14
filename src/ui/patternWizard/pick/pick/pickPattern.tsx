@@ -7,13 +7,14 @@ import { PatternGenerationSelect } from "../patternGeneration/patternGenerationS
 import { PatternInfo } from "../info/patternInfo.tsx";
 import { PatternPreview } from "../preview/patternPreview.tsx";
 import { Button } from "../../button/Button.tsx";
-import { HEADING as STEP_HEADING, INSTRUCTIONS, STEP } from "./messages.ts";
-import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
 import {
-  CANCEL,
-  HEADING as WIZARD_HEADING,
+  HEADING as STEP_HEADING,
+  INSTRUCTIONS,
   NEXT,
-} from "../../wizard/messages.ts";
+  STEP,
+} from "./messages.ts";
+import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
+import { CANCEL, HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
 import { GAP } from "../../../../constants/constants.ts";
 import type { Props } from "./types.ts";
 
@@ -34,6 +35,18 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
     setSelectedGeneration(newGeneration);
   }, []);
 
+  const handleCancel = useCallback(() => {
+    onCancel();
+  }, [onCancel]);
+
+  const handleNext = useCallback(() => {
+    if (selectedKey === null || selectedGeneration === null) {
+      return;
+    }
+
+    onSubmit(selectedKey, selectedGeneration);
+  }, [selectedKey, selectedGeneration, onSubmit]);
+
   let pattern = null;
 
   if (selectedKey !== null) {
@@ -49,17 +62,7 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
     previewGrid = pattern.generations[selectedGeneration];
   }
 
-  const handleCancel = useCallback(() => {
-    onCancel();
-  }, [onCancel]);
-
-  const handleNext = useCallback(() => {
-    if (selectedKey === null || selectedGeneration === null) {
-      return;
-    }
-
-    onSubmit(selectedKey, selectedGeneration);
-  }, [selectedKey, selectedGeneration, onSubmit]);
+  const isNextDisabled = selectedKey === null || selectedGeneration === null;
 
   return (
     <Box flexDirection="column" gap={GAP}>
@@ -82,7 +85,8 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
       </Box>
       <Box gap={GAP} alignItems="center">
         <Button label={CANCEL} onPress={handleCancel}></Button>
-        <Button label={NEXT} onPress={handleNext}></Button>
+        <Button label={NEXT} isDisabled={isNextDisabled} onPress={handleNext}>
+        </Button>
         <Text dimColor>{STEP}</Text>
       </Box>
     </Box>

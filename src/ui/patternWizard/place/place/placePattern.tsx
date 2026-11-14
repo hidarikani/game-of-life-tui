@@ -1,13 +1,12 @@
 import { useCallback, useState } from "react";
 import { Box, Text } from "ink";
+import { CANCEL, HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
 import {
-  CANCEL,
   FINISH,
-  HEADING as WIZARD_HEADING,
-  NEXT,
-  PREV,
-} from "../../wizard/messages.ts";
-import { HEADING as STEP_HEADING, INSTRUCTIONS, STEP } from "./messages.ts";
+  HEADING as STEP_HEADING,
+  INSTRUCTIONS,
+  STEP,
+} from "./messages.ts";
 import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
 import { GAP } from "../../../../constants/constants.ts";
 import { Button } from "../../button/Button.tsx";
@@ -25,13 +24,6 @@ export function PlacePattern(
     onCancel();
   }, [onCancel]);
 
-  const handlePrevious = useCallback(() => {
-  }, []);
-
-  const handleNext = useCallback(() => {
-    onSubmit(grid);
-  }, [grid, onSubmit]);
-
   const handleFinish = useCallback(() => {
     onFinish(grid);
   }, [grid, onFinish]);
@@ -45,8 +37,6 @@ export function PlacePattern(
       <Text>Preview Placeholder</Text>
       <Box gap={GAP} alignItems="center">
         <Button label={CANCEL} onPress={handleCancel}></Button>
-        <Button label={PREV} onPress={handlePrevious}></Button>
-        <Button label={NEXT} onPress={handleNext}></Button>
         <Button label={FINISH} onPress={handleFinish}></Button>
         <Text dimColor>{STEP}</Text>
       </Box>

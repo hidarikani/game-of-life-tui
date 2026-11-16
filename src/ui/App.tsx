@@ -75,7 +75,6 @@ export function App() {
       <Box
         height={terminalRows}
         overflow="hidden"
-        backgroundColor="blue"
       >
         {view === VIEWS.GAME && <Game />}
         {view === VIEWS.PATTERN_WIZARD && (

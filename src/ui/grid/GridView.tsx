@@ -8,9 +8,8 @@ export function GridView({ grid }: Props) {
     <Box
       flexGrow={1}
       overflow="hidden"
-      backgroundColor="white"
     >
-      <Text wrap="truncate" backgroundColor="red">{snapshot}</Text>
+      <Text wrap="truncate">{snapshot}</Text>
     </Box>
   );
 }

@@ -11,13 +11,9 @@ export function Game() {
     <Box
       height="100%"
       flexDirection="column"
-      backgroundColor="yellow"
       gap={GAP}
     >
-      <Box
-        flexDirection="column"
-        backgroundColor="black"
-      >
+      <Box flexDirection="column">
         <Box>
           <FocusableHeading message={HEADING} />
         </Box>

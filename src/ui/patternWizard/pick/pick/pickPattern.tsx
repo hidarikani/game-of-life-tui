@@ -69,7 +69,6 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
       height="100%"
       flexDirection="column"
       gap={GAP}
-      backgroundColor="yellow"
     >
       <Box flexDirection="column">
         <FocusableHeading message={heading} />

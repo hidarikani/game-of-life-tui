@@ -5,11 +5,7 @@ import {
   type IGrid,
   type IPatternLib,
 } from "@cell-auto/game-of-life-engine";
-import type {
-  EngineContext,
-  EngineProviderProps,
-  IEngineStore,
-} from "../types/engine.ts";
+import type { EngineContext, EngineProviderProps } from "../types/engine.ts";
 
 import {
   createContext,
@@ -26,35 +22,8 @@ import {
 import type { FirstGenerationProps } from "../types/state.ts";
 import { usePatternLib } from "../pattern/pattern.tsx";
 import type { EmptyCallback } from "../types/general.ts";
-
-/**
- * @deprecated use implementation from @cell-auto/game-of-life-engine
- */
-export class EngineStore implements IEngineStore {
-  #engine: IEngine;
-  #listeners = new Set<EmptyCallback>();
-  constructor(engine: IEngine) {
-    this.#engine = engine;
-
-    this.subscribe = this.subscribe.bind(this);
-    this.getSnapshot = this.getSnapshot.bind(this);
-    this.tick = this.tick.bind(this);
-  }
-
-  subscribe(listener: EmptyCallback): EmptyCallback {
-    this.#listeners.add(listener);
-    return () => void this.#listeners.delete(listener);
-  }
-
-  getSnapshot(): string {
-    return this.#engine.presentGeneration.toString();
-  }
-
-  tick(): void {
-    (this.#engine as Engine).evolveGrid();
-    for (const listener of this.#listeners) listener();
-  }
-}
+import { EngineStore, GridNext } from "../next/next.ts";
+import type { IEngineStore, IGridNext } from "../next/types.ts";
 
 export function makeFirstGeneration(
   patternLib: IPatternLib,
@@ -152,13 +121,13 @@ export function EngineProvider(
 }
 
 /**
- * Subscribes to the engine and returns the current generation as a snapshot.
- * Re-renders the calling component on every generation that changes the grid.
- * To advance the simulation without subscribing, use {@link useEngineTick}.
+ * Subscribes to the engine and returns the present generation.
+ * Re-renders the calling component on every tick.
+ * To advance the simulation without subscribing, use {@link useTick}.
  *
  * @throws If called outside of an `EngineProvider`.
  */
-export function useEngineSnapshot(): string {
+export function usePresent(): IGridNext {
   const engineStore = useContext(EngineContext);
   if (engineStore === null) {
     throw new Error(
@@ -174,7 +143,7 @@ export function useEngineSnapshot(): string {
     engineStore.getSnapshot,
   );
 
-  return snapshot;
+  return GridNext.fromGrid(snapshot);
 }
 
 /**
@@ -182,11 +151,11 @@ export function useEngineSnapshot(): string {
  * Does not subscribe to the engine, so the calling component won't re-render
  * as the simulation runs. The returned function has a stable identity and is
  * safe to use as an effect dependency.
- * To read the current generation, use {@link useEngineSnapshot}.
+ * To read the current generation, use {@link usePresent}.
  *
  * @throws If called outside of an `EngineProvider`.
  */
-export function useEngineTick(): EmptyCallback {
+export function useTick(): EmptyCallback {
   const engineStore = useContext(EngineContext);
   if (engineStore === null) {
     throw new Error(

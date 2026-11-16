@@ -9,5 +9,5 @@ export function FocusableHeading(
     prefix += "#";
   }
   const headingText = `${prefix} ${message}`;
-  return <Text bold underline={isFocused}>{headingText}</Text>;
+  return <Text bold underline={isFocused} wrap="truncate">{headingText}</Text>;
 }

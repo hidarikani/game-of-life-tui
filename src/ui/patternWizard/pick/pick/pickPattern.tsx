@@ -65,7 +65,12 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
   const isNextDisabled = selectedKey === null || selectedGeneration === null;
 
   return (
-    <Box flexDirection="column" gap={GAP}>
+    <Box
+      height="100%"
+      flexDirection="column"
+      gap={GAP}
+      backgroundColor="yellow"
+    >
       <Box flexDirection="column">
         <FocusableHeading message={heading} />
         <Text dimColor>{INSTRUCTIONS}</Text>

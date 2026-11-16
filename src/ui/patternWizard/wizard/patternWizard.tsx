@@ -1,54 +1,63 @@
-import { type ReactNode, useCallback, useState } from "react";
+import { type ReactNode, useCallback, useMemo, useState } from "react";
 import { PickPattern } from "../pick/pick/pickPattern.tsx";
 import { PlacePattern } from "../place/place/placePattern.tsx";
-import { Grid, type IGrid } from "@cell-auto/game-of-life-engine";
-import { useAppSelector } from "../../../store/hooks.ts";
-import { selectGridSize } from "../../../store/terminalSlice.ts";
-import { Props } from "./types.ts";
+import type { Point } from "@cell-auto/game-of-life-engine";
+import type { Props } from "./types.ts";
+import { usePatternLib } from "../../../pattern/pattern.tsx";
+import { genErrPatternNotFound } from "../../../constants/messages.ts";
 
-export function PatternWizard({ onCancel }: Props) {
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const [selectedGeneration, setSelectedGeneration] = useState<number | null>(
+export function PatternWizard({ onCancel, onSubmit }: Props) {
+  const [key, setKey] = useState<string | null>(null);
+  const [generationIndex, setGenerationIndex] = useState<number | null>(
     null,
   );
-  const gridSize = useAppSelector(selectGridSize);
-  const [grid, setGrid] = useState<IGrid>(new Grid({ gridSize }));
+  const patternLib = usePatternLib();
+
+  const isSelectionComplete = key !== null &&
+    generationIndex !== null;
 
   const handleCancel = useCallback(() => {
     onCancel();
-  }, []);
+  }, [onCancel]);
 
-  const handlePickContinue = useCallback(
+  const handlePickSubmit = useCallback(
     (key: string, generation: number) => {
-      setSelectedKey(key);
-      setSelectedGeneration(generation);
+      setKey(key);
+      setGenerationIndex(generation);
     },
     [],
   );
 
-  const handlePlaceContinue = useCallback((grid: IGrid) => {
-    setGrid(grid);
-  }, []);
+  const handlePlaceSubmit = useCallback((offset: Point) => {
+    if (key !== null && generationIndex !== null) {
+      onSubmit(key, generationIndex, offset);
+    }
+  }, [key, generationIndex, onSubmit]);
 
-  const handleFinish = useCallback((grid: IGrid) => {
-    setGrid(grid);
-  }, []);
+  const patternPlacementFragment = useMemo(() => {
+    if (!isSelectionComplete) {
+      return null;
+    }
 
-  const isSelectionComplete = selectedKey !== null &&
-    selectedGeneration !== null;
+    const pattern = patternLib.getPatternByKey(key);
+    if (pattern === null) {
+      throw new Error(genErrPatternNotFound(key));
+    }
+
+    const generation = pattern.generations[generationIndex];
+
+    return (
+      <PlacePattern
+        inner={generation}
+        onCancel={handleCancel}
+        onSubmit={handlePlaceSubmit}
+      />
+    );
+  }, [key, generationIndex, patternLib, handleCancel, handlePlaceSubmit]);
 
   const visibleStep: ReactNode = isSelectionComplete
-    ? (
-      <PlacePattern
-        patternKey={selectedKey}
-        patternGeneration={selectedGeneration}
-        grid={grid}
-        onCancel={handleCancel}
-        onSubmit={handlePlaceContinue}
-        onFinish={handleFinish}
-      />
-    )
-    : <PickPattern onCancel={handleCancel} onSubmit={handlePickContinue} />;
+    ? patternPlacementFragment
+    : <PickPattern onCancel={handleCancel} onSubmit={handlePickSubmit} />;
 
   return (
     <>

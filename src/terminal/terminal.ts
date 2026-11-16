@@ -26,7 +26,6 @@ import {
 
 import { renderRoot } from "../ui/GRoot.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
-import { UNKNOWN_CONSOLE_SIZE } from "../constants/messages.ts";
 import { makeEngine } from "../engine/engine.tsx";
 import {
   setPatternKey,
@@ -68,11 +67,7 @@ export async function write(s: string) {
 }
 
 export function getSize(): ViewportSize {
-  try {
-    return Deno.consoleSize();
-  } catch {
-    throw new Error(UNKNOWN_CONSOLE_SIZE);
-  }
+  return Deno.consoleSize();
 }
 
 export async function enterAltScreen() {
@@ -107,33 +102,28 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
     h: args[CLI_ARGS.GRID_HEIGHT],
   };
 
-  try {
-    await writeHeading("InitialSeed");
-    const patternLib = makePatternLib();
-    const firstGeneration: FirstGenerationProps = {
-      patternKey: args[CLI_ARGS.PATTERN].key,
-      patternOffset: ORIGIN,
-      patternGeneration: 0,
-      gridSize,
-      gridMode: GRID_MODES.FINITE,
-    };
+  await writeHeading("InitialSeed");
+  const patternLib = makePatternLib();
+  const firstGeneration: FirstGenerationProps = {
+    patternKey: args[CLI_ARGS.PATTERN].key,
+    patternOffset: ORIGIN,
+    patternGeneration: 0,
+    gridSize,
+    gridMode: GRID_MODES.FINITE,
+  };
 
-    const engine = makeEngine(
-      patternLib,
-      firstGeneration,
-    );
-    await write((engine as Engine).toString());
+  const engine = makeEngine(
+    patternLib,
+    firstGeneration,
+  );
+  await write((engine as Engine).toString());
 
-    if (args.generations > 1) {
-      for (let i = 1; i < args.generations; i++) {
-        await writeHeading(`Generation ${i}`);
-        (engine as Engine).evolveGrid();
-        await write((engine as Engine).toString());
-      }
+  if (args.generations > 1) {
+    for (let i = 1; i < args.generations; i++) {
+      await writeHeading(`Generation ${i}`);
+      (engine as Engine).evolveGrid();
+      await write((engine as Engine).toString());
     }
-  } catch (error) {
-    console.error(error instanceof Error ? error.message : error);
-    Deno.exit(1);
   }
 }
 

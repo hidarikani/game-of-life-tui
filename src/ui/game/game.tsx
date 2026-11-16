@@ -5,6 +5,8 @@ import { Heading } from "../heading/heading.tsx";
 import { DESCRIPTION, HEADING } from "./messages.ts";
 import { GAP } from "../../constants/constants.ts";
 import { Description } from "../description/description.tsx";
+import { Hints } from "../hints/hints.tsx";
+import { QUIT_APP_HINT } from "../app/messages.ts";
 
 export function Game() {
   const present = usePresent();
@@ -17,6 +19,7 @@ export function Game() {
       <Box flexDirection="column">
         <Heading message={HEADING} />
         <Description>{DESCRIPTION}</Description>
+        <Hints>{QUIT_APP_HINT}</Hints>
       </Box>
       <GridView grid={present} />
     </Box>

@@ -8,7 +8,7 @@ import { render } from "ink";
 import { store } from "../store/store.ts";
 import { PatternProvider } from "../pattern/pattern.tsx";
 import { EngineProvider } from "../engine/engine.tsx";
-import { App } from "./App.tsx";
+import { App } from "./app/App.tsx";
 import { useAppSelector } from "../store/hooks.ts";
 import {
   selectPatternKey,

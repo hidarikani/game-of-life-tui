@@ -1,4 +1,4 @@
-import type { View } from "../types/app.ts";
+import type { View } from "../../types/app.ts";
 
 import { useCallback, useState } from "react";
 import { Box, useApp, useInput } from "ink";
@@ -10,18 +10,18 @@ import {
   KEY_REFRESH_UPPER,
   KEY_WIZARD,
   VIEWS,
-} from "../constants/constants.ts";
-import { useTick } from "../engine/engine.tsx";
-import { useAppDispatch, useAppSelector } from "../store/hooks.ts";
+} from "../../constants/constants.ts";
+import { useTick } from "../../engine/engine.tsx";
+import { useAppDispatch, useAppSelector } from "../../store/hooks.ts";
 import {
   setPatternGeneration,
   setPatternKey,
   setPatternOffset,
-} from "../store/firstGenerationSlice.ts";
-import { PatternWizard } from "./patternWizard/wizard/patternWizard.tsx";
+} from "../../store/firstGenerationSlice.ts";
+import { PatternWizard } from "../patternWizard/wizard/patternWizard.tsx";
 import type { Point } from "@cell-auto/game-of-life-engine";
-import { selectColumns, selectRows } from "../store/terminalSlice.ts";
-import { Game } from "./game/game.tsx";
+import { selectColumns, selectRows } from "../../store/terminalSlice.ts";
+import { Game } from "../game/game.tsx";
 
 export function App() {
   const [view, setView] = useState<View>(VIEWS.GAME);

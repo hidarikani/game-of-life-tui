@@ -56,10 +56,12 @@ export const SEPARATOR_WIDTH = {
   MAX: 80,
 } as const;
 
+export const HINT_SEPARATOR = " · ";
+
 export const PADDING = 1;
 export const GAP = 1;
 
 export const MAX_SELECT_WIDTH = 20;
 
-export const HEADER_HEIGHT = 2;
+export const HEADER_HEIGHT = 3;
 export const FOOTER_HEIGHT = 3;

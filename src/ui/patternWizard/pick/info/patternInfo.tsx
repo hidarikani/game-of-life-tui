@@ -9,7 +9,7 @@ import {
 } from "./messages.ts";
 import type { Props } from "./types.ts";
 import { NONE } from "../../../../constants/messages.ts";
-import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
+import { Heading } from "../../../heading/heading.tsx";
 import { PADDING } from "../../../../constants/constants.ts";
 
 export function PatternInfo(
@@ -40,7 +40,7 @@ export function PatternInfo(
 
   return (
     <Box flexDirection="column">
-      <FocusableHeading level={2} isFocused={false} message={HEADING} />
+      <Heading level={2} isFocused={false} message={HEADING} />
       <Box borderStyle="single" flexDirection="column" padding={PADDING}>
         {final}
       </Box>

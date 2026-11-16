@@ -3,7 +3,7 @@ import { Select } from "@inkjs/ui";
 import type { Props } from "./types.ts";
 import { usePatternLib } from "../../../../pattern/pattern.tsx";
 import { PATTERNS_BY_NAME_HEADING } from "./messages.ts";
-import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
+import { Heading } from "../../../heading/heading.tsx";
 import { MAX_SELECT_WIDTH } from "../../../../constants/constants.ts";
 
 export function PatternNameSelect({ onChange }: Props) {
@@ -20,7 +20,7 @@ export function PatternNameSelect({ onChange }: Props) {
 
   return (
     <Box flexDirection="column">
-      <FocusableHeading
+      <Heading
         level={2}
         isFocused={isFocused}
         message={PATTERNS_BY_NAME_HEADING}

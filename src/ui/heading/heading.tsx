@@ -1,7 +1,7 @@
 import { Box, Text } from "ink";
 import type { Props } from "./types.ts";
 
-export function FocusableHeading(
+export function Heading(
   { level = 1, isFocused = false, message }: Props,
 ) {
   let prefix = "";

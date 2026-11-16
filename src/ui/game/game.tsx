@@ -1,7 +1,7 @@
-import { Box, Text } from "ink";
+import { Box } from "ink";
 import { usePresent } from "../../engine/engine.tsx";
 import { GridView } from "../grid/GridView.tsx";
-import { FocusableHeading } from "../heading/focusableHeading.tsx";
+import { Heading } from "../heading/heading.tsx";
 import { DESCRIPTION, HEADING } from "./messages.ts";
 import { GAP } from "../../constants/constants.ts";
 import { Description } from "../description/description.tsx";
@@ -15,7 +15,7 @@ export function Game() {
       gap={GAP}
     >
       <Box flexDirection="column">
-        <FocusableHeading message={HEADING} />
+        <Heading message={HEADING} />
         <Description>{DESCRIPTION}</Description>
       </Box>
       <GridView grid={present} />

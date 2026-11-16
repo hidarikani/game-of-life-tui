@@ -7,7 +7,7 @@ import {
   STEP,
   SUBMIT,
 } from "./messages.ts";
-import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
+import { Heading } from "../../../heading/heading.tsx";
 import { GAP } from "../../../../constants/constants.ts";
 import { Button } from "../../button/Button.tsx";
 import type { Props } from "./types.ts";
@@ -83,7 +83,7 @@ export function PlacePattern(
       gap={GAP}
     >
       <Box flexDirection="column">
-        <FocusableHeading message={heading} />
+        <Heading message={heading} />
         <Description>{INSTRUCTIONS}</Description>
       </Box>
       <GridView grid={outer} />

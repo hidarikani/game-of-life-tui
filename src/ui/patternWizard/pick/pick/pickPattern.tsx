@@ -13,7 +13,7 @@ import {
   NEXT,
   STEP,
 } from "./messages.ts";
-import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
+import { Heading } from "../../../heading/heading.tsx";
 import { CANCEL, HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
 import { GAP } from "../../../../constants/constants.ts";
 import type { Props } from "./types.ts";
@@ -72,7 +72,7 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
       gap={GAP}
     >
       <Box flexDirection="column">
-        <FocusableHeading message={heading} />
+        <Heading message={heading} />
         <Description>{INSTRUCTIONS}</Description>
       </Box>
       <Box width="100%" flexDirection="row">

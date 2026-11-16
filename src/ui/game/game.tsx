@@ -4,6 +4,7 @@ import { GridView } from "../grid/GridView.tsx";
 import { FocusableHeading } from "../heading/focusableHeading.tsx";
 import { DESCRIPTION, HEADING } from "./messages.ts";
 import { GAP } from "../../constants/constants.ts";
+import { Description } from "../description/description.tsx";
 
 export function Game() {
   const present = usePresent();
@@ -14,12 +15,8 @@ export function Game() {
       gap={GAP}
     >
       <Box flexDirection="column">
-        <Box>
-          <FocusableHeading message={HEADING} />
-        </Box>
-        <Box>
-          <Text wrap="truncate">{DESCRIPTION}</Text>
-        </Box>
+        <FocusableHeading message={HEADING} />
+        <Description>{DESCRIPTION}</Description>
       </Box>
       <GridView grid={present} />
     </Box>

@@ -17,6 +17,7 @@ import { FocusableHeading } from "../../../heading/focusableHeading.tsx";
 import { CANCEL, HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
 import { GAP } from "../../../../constants/constants.ts";
 import type { Props } from "./types.ts";
+import { Description } from "../../../description/description.tsx";
 
 export function PickPattern({ onCancel, onSubmit }: Props) {
   const heading = `${WIZARD_HEADING} / ${STEP_HEADING}`;
@@ -72,7 +73,7 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
     >
       <Box flexDirection="column">
         <FocusableHeading message={heading} />
-        <Text dimColor>{INSTRUCTIONS}</Text>
+        <Description>{INSTRUCTIONS}</Description>
       </Box>
       <Box width="100%" flexDirection="row">
         <Box flexDirection="column">

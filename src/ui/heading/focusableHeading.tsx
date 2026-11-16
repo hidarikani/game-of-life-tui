@@ -1,4 +1,4 @@
-import { Text } from "ink";
+import { Box, Text } from "ink";
 import type { Props } from "./types.ts";
 
 export function FocusableHeading(
@@ -9,5 +9,9 @@ export function FocusableHeading(
     prefix += "#";
   }
   const headingText = `${prefix} ${message}`;
-  return <Text bold underline={isFocused} wrap="truncate">{headingText}</Text>;
+  return (
+    <Box>
+      <Text bold underline={isFocused} wrap="truncate">{headingText}</Text>
+    </Box>
+  );
 }

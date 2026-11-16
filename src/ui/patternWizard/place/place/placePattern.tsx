@@ -13,6 +13,7 @@ import { Button } from "../../button/Button.tsx";
 import type { Props } from "./types.ts";
 import { GridView } from "../../../grid/GridView.tsx";
 import { usePresent } from "../../../../engine/engine.tsx";
+import { Description } from "../../../description/description.tsx";
 
 export function PlacePattern(
   { inner, onCancel, onSubmit }: Props,
@@ -82,12 +83,8 @@ export function PlacePattern(
       gap={GAP}
     >
       <Box flexDirection="column">
-        <Box>
-          <FocusableHeading message={heading} />
-        </Box>
-        <Box>
-          <Text dimColor>{INSTRUCTIONS}</Text>
-        </Box>
+        <FocusableHeading message={heading} />
+        <Description>{INSTRUCTIONS}</Description>
       </Box>
       <GridView grid={outer} />
       <Box gap={GAP} alignItems="center">

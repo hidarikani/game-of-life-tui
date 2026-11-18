@@ -28,7 +28,7 @@ export function Root() {
     patternOffset,
     gridSize,
     patternGeneration: 0,
-    gridMode: GRID_MODES.FINITE,
+    gridMode: GRID_MODES.TOROIDAL,
   };
 
   return (

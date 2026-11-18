@@ -30,11 +30,11 @@ import { makeEngine } from "../engine/engine.tsx";
 import {
   setPatternKey,
   setPatternOffset,
-} from "../store/firstGenerationSlice.ts";
+} from "../store/firstGeneration/firstGenerationSlice.ts";
 import { makePatternLib } from "../pattern/pattern.tsx";
-import type { FirstGenerationProps } from "../types/state.ts";
 import { store } from "../store/store.ts";
-import { setColumns, setRows } from "../store/terminalSlice.ts";
+import { setColumns, setRows } from "../store/terminal/terminalSlice.ts";
+import type { FirstGenerationProps } from "../engine/types.ts";
 
 export function handleArguments(): ValidArgs {
   /*

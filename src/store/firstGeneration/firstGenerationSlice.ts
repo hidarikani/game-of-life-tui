@@ -3,12 +3,12 @@ import {
   type GridMode,
   type Point,
 } from "@cell-auto/game-of-life-engine";
-import type { FirstGenerationState } from "../types/state.ts";
+import type { FirstGenerationState } from "./types.ts";
 
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { SLICES } from "../constants/messages.ts";
-import { required } from "../util/misc.ts";
-import { ORIGIN } from "../constants/constants.ts";
+import { SLICES } from "../../constants/messages.ts";
+import { required } from "../../util/misc.ts";
+import { ORIGIN } from "../../constants/constants.ts";
 
 const initialState: FirstGenerationState = {
   patternKey: null,

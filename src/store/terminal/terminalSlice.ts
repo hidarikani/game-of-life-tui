@@ -3,11 +3,11 @@ import {
   createSlice,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import { SLICES } from "../constants/messages.ts";
-import type { TerminalState } from "../types/state.ts";
-import { required } from "../util/misc.ts";
+import { SLICES } from "../../constants/messages.ts";
+import type { TerminalState } from "./types.ts";
+import { required } from "../../util/misc.ts";
 import type { GridSize } from "@cell-auto/game-of-life-engine";
-import { HEADER_HEIGHT } from "../constants/constants.ts";
+import { HEADER_HEIGHT } from "../../constants/constants.ts";
 
 const initialState: TerminalState = {
   rows: null,

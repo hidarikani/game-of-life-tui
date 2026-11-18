@@ -17,10 +17,10 @@ import {
   setPatternGeneration,
   setPatternKey,
   setPatternOffset,
-} from "../../store/firstGenerationSlice.ts";
+} from "../../store/firstGeneration/firstGenerationSlice.ts";
 import { PatternWizard } from "../patternWizard/wizard/patternWizard.tsx";
 import type { Point } from "@cell-auto/game-of-life-engine";
-import { selectColumns, selectRows } from "../../store/terminalSlice.ts";
+import { selectColumns, selectRows } from "../../store/terminal/terminalSlice.ts";
 import { Game } from "../game/game.tsx";
 
 export function App() {

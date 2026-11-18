@@ -13,10 +13,10 @@ import { useAppSelector } from "../store/hooks.ts";
 import {
   selectPatternKey,
   selectPatternOffset,
-} from "../store/firstGenerationSlice.ts";
+} from "../store/firstGeneration/firstGenerationSlice.ts";
 import { GRID_MODES } from "@cell-auto/game-of-life-engine";
-import type { FirstGenerationProps } from "../types/state.ts";
-import { selectGridSize } from "../store/terminalSlice.ts";
+import { selectGridSize } from "../store/terminal/terminalSlice.ts";
+import type { FirstGenerationProps } from "../engine/types.ts";
 
 export function Root() {
   const patternKey = useAppSelector(selectPatternKey);

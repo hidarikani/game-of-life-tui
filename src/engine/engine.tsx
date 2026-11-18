@@ -5,7 +5,6 @@ import {
   type IGrid,
   type IPatternLib,
 } from "@cell-auto/game-of-life-engine";
-import type { EngineContext, EngineProviderProps } from "../types/engine.ts";
 
 import {
   createContext,
@@ -19,7 +18,7 @@ import {
   genMsgContextMissing,
   UNKNOWN,
 } from "../constants/messages.ts";
-import type { FirstGenerationProps } from "../types/state.ts";
+import type { EngineProviderProps, FirstGenerationProps } from "./types.ts";
 import { usePatternLib } from "../pattern/pattern.tsx";
 import type { EmptyCallback } from "../types/general.ts";
 import { EngineStore, GridNext } from "../next/next.ts";

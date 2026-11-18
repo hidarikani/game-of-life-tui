@@ -16,7 +16,7 @@ import { usePresent } from "../../../../engine/engine.tsx";
 import { Description } from "../../../description/description.tsx";
 import { clamp } from "../../../../util/misc.ts";
 import { useAppSelector } from "../../../../store/hooks.ts";
-import { selectGridSize } from "../../../../store/terminalSlice.ts";
+import { selectGridSize } from "../../../../store/terminal/terminalSlice.ts";
 
 export function PlacePattern(
   { inner, onCancel, onSubmit }: Props,

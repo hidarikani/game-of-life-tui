@@ -20,13 +20,13 @@ import {
 } from "../../store/firstGeneration/firstGenerationSlice.ts";
 import { PatternWizard } from "../patternWizard/wizard/patternWizard.tsx";
 import type { Point } from "@cell-auto/game-of-life-engine";
-import { selectColumns, selectRows } from "../../store/terminal/terminalSlice.ts";
+import { selectRows } from "../../store/terminal/terminalSlice.ts";
 import { Game } from "../game/game.tsx";
 
 export function App() {
   const [view, setView] = useState<View>(VIEWS.GAME);
   const terminalRows = useAppSelector(selectRows);
-  const terminalCols = useAppSelector(selectColumns);
+
   const dispatch = useAppDispatch();
   const tick = useTick();
   const { exit } = useApp();

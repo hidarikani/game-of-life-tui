@@ -24,7 +24,7 @@ import {
   SEPARATOR_WIDTH,
 } from "../constants/constants.ts";
 
-import { renderRoot } from "../ui/GRoot.tsx";
+import { renderRoot } from "../ui/root.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
 import { makeEngine } from "../engine/engine.tsx";
 import {

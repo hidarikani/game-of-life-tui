@@ -1,7 +1,5 @@
 import {
-  Engine,
   Grid,
-  type IEngine,
   type IGrid,
   type IPatternLib,
 } from "@cell-auto/game-of-life-engine";
@@ -21,8 +19,8 @@ import {
 import type { EngineProviderProps, FirstGenerationProps } from "./types.ts";
 import { usePatternLib } from "../pattern/pattern.tsx";
 import type { EmptyCallback } from "../types/general.ts";
-import { EngineStore, GridNext } from "../next/next.ts";
-import type { IEngineStore, IGridNext } from "../next/types.ts";
+import { EngineNext, GridNext } from "../next/next.ts";
+import type { IEngineNext, IGridNext } from "../next/types.ts";
 
 export function makeFirstGeneration(
   patternLib: IPatternLib,
@@ -50,20 +48,13 @@ export function makeFirstGeneration(
 export function makeEngine(
   patternLib: IPatternLib,
   firstGeneration: FirstGenerationProps,
-): IEngine {
-  return new Engine({
+): IEngineNext {
+  return new EngineNext({
     firstGeneration: makeFirstGeneration(patternLib, firstGeneration),
   });
 }
 
-function makeEngineStore(
-  patternLib: IPatternLib,
-  firstGeneration: FirstGenerationProps,
-): IEngineStore {
-  return new EngineStore(makeEngine(patternLib, firstGeneration));
-}
-
-const EngineContext = createContext<IEngineStore | null>(null);
+const EngineContext = createContext<IEngineNext | null>(null);
 EngineContext.displayName = CONTEXTS.ENGINE;
 
 function EngineStoreProvider(
@@ -79,11 +70,9 @@ function EngineStoreProvider(
    * matters on mount, so the lazy initializer form avoids calling
    * `makeEngineStore` on every render.
    */
-  const [engineStore] = useState(() =>
-    makeEngineStore(patternLib, firstGeneration)
-  );
+  const [engine] = useState(() => makeEngine(patternLib, firstGeneration));
 
-  return <EngineContext value={engineStore}>{children}</EngineContext>;
+  return <EngineContext value={engine}>{children}</EngineContext>;
 }
 
 function makeKey(

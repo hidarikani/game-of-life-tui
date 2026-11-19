@@ -116,13 +116,13 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
     patternLib,
     firstGeneration,
   );
-  await write((engine as Engine).toString());
+  await write(engine.toString());
 
   if (args.generations > 1) {
     for (let i = 1; i < args.generations; i++) {
       await writeHeading(`Generation ${i}`);
-      (engine as Engine).evolveGrid();
-      await write((engine as Engine).toString());
+      engine.evolveGrid();
+      await write(engine.toString());
     }
   }
 }

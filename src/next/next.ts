@@ -6,14 +6,35 @@
 
 import {
   type CellKey,
-  type Engine,
+  Engine,
   Grid,
   type IEngine,
   type IGrid,
   type LiveCells,
 } from "@cell-auto/game-of-life-engine";
-import type { IEngineStore, IGridNext } from "./types.ts";
+import type { IEngineNext, IEngineStore, IGridNext } from "./types.ts";
 import type { EmptyCallback } from "../types/general.ts";
+
+/**
+ * @deprecated use implementation from @cell-auto/game-of-life-engine
+ */
+export class EngineNext extends Engine implements IEngineNext {
+  #listeners = new Set<EmptyCallback>();
+
+  subscribe = (listener: EmptyCallback): EmptyCallback => {
+    this.#listeners.add(listener);
+    return () => void this.#listeners.delete(listener);
+  };
+
+  getSnapshot = (): IGrid => {
+    return this.presentGeneration;
+  };
+
+  tick = (): void => {
+    this.evolveGrid();
+    for (const listener of this.#listeners) listener();
+  };
+}
 
 /**
  * @deprecated use implementation from @cell-auto/game-of-life-engine

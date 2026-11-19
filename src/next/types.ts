@@ -10,6 +10,18 @@ export interface IEngineStore {
   tick(): void;
 }
 
-export interface IGridNext extends IGrid {
+/**
+ * @deprecated use implementation from @cell-auto/game-of-life-engine
+ */
+export interface IEngineNext {
+  subscribe(listener: EmptyCallback): EmptyCallback;
+  getSnapshot(): IGrid;
+  tick(): void;
+}
+
+/**
+ * @deprecated use implementation from @cell-auto/game-of-life-engine
+ */
+export interface IGridNext {
   clone(): IGridNext;
 }

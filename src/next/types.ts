@@ -16,4 +16,5 @@ export interface IEngineNext extends IEngine {
  */
 export interface IGridNext extends IGrid {
   clone(): IGridNext;
+  serialize(): string;
 }

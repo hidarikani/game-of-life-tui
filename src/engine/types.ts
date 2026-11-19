@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
 import type { GridMode, GridSize, Point } from "@cell-auto/game-of-life-engine";
 import type { EmptyCallback } from "../types/general.ts";
+import type { IGridNext } from "../next/types.ts";
 
-export type FirstGenerationProps = {
+export type GenerationProps = {
   patternKey: string;
   patternOffset: Point;
   patternGeneration: number;
@@ -16,6 +17,6 @@ export type EngineContext = {
 };
 
 export type EngineProviderProps = {
-  firstGeneration: FirstGenerationProps;
+  firstGeneration: IGridNext;
   children: ReactNode;
 };

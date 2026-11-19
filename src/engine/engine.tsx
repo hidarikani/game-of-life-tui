@@ -16,18 +16,17 @@ import {
   genMsgContextMissing,
   UNKNOWN,
 } from "../constants/messages.ts";
-import type { EngineProviderProps, FirstGenerationProps } from "./types.ts";
-import { usePatternLib } from "../pattern/pattern.tsx";
+import type { EngineProviderProps, GenerationProps } from "./types.ts";
 import type { EmptyCallback } from "../types/general.ts";
 import { EngineNext, GridNext } from "../next/next.ts";
 import type { IEngineNext, IGridNext } from "../next/types.ts";
 
-export function makeFirstGeneration(
+export function makeGeneration(
   patternLib: IPatternLib,
   { patternKey, patternOffset, patternGeneration, gridSize, gridMode }:
-    FirstGenerationProps,
-): IGrid {
-  const firstGeneration = new Grid({
+    GenerationProps,
+): IGridNext {
+  const firstGeneration = new GridNext({
     gridSize,
     mode: gridMode,
   });
@@ -46,11 +45,10 @@ export function makeFirstGeneration(
 }
 
 export function makeEngine(
-  patternLib: IPatternLib,
-  firstGeneration: FirstGenerationProps,
+  firstGeneration: IGrid,
 ): IEngineNext {
   return new EngineNext({
-    firstGeneration: makeFirstGeneration(patternLib, firstGeneration),
+    firstGeneration,
   });
 }
 
@@ -60,8 +58,6 @@ EngineContext.displayName = CONTEXTS.ENGINE;
 function EngineStoreProvider(
   { firstGeneration, children }: EngineProviderProps,
 ) {
-  const patternLib = usePatternLib();
-
   /*
    * The store is stateful: each tick appends to the generation history,
    * which must survive re-renders. `useMemo` won't do, because React may
@@ -70,25 +66,13 @@ function EngineStoreProvider(
    * matters on mount, so the lazy initializer form avoids calling
    * `makeEngineStore` on every render.
    */
-  const [engine] = useState(() => makeEngine(patternLib, firstGeneration));
+  const [engine] = useState(() =>
+    new EngineNext({
+      firstGeneration,
+    })
+  );
 
   return <EngineContext value={engine}>{children}</EngineContext>;
-}
-
-function makeKey(
-  firstGeneration: FirstGenerationProps,
-): string {
-  /*
-   * without separator `,` keys can collide, for example
-   * w=1, h=23 and w=12, h=3 both give "123"
-   */
-  const key = `(${firstGeneration.gridSize.w},${firstGeneration.gridSize.h}),` +
-    `${firstGeneration.patternKey},` +
-    `(${firstGeneration.patternOffset.x},${firstGeneration.patternOffset.y}),` +
-    `${firstGeneration.patternGeneration},` +
-    `${firstGeneration.gridMode}.`;
-
-  return key;
 }
 
 export function EngineProvider(
@@ -100,7 +84,7 @@ export function EngineProvider(
    */
   return (
     <EngineStoreProvider
-      key={makeKey(firstGeneration)}
+      key={firstGeneration.serialize()}
       firstGeneration={firstGeneration}
     >
       {children}

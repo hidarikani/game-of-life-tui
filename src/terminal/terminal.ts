@@ -8,11 +8,7 @@ import { ArgSchema } from "../types/terminal.ts";
 
 import { parseArgs } from "@std/cli/parse-args";
 import * as v from "@valibot/valibot";
-import {
-  type Engine,
-  GRID_MODES,
-  type GridSize,
-} from "@cell-auto/game-of-life-engine";
+import { GRID_MODES, type GridSize } from "@cell-auto/game-of-life-engine";
 
 import {
   ALTERNATE_SCREEN_ENTER,
@@ -26,7 +22,7 @@ import {
 
 import { renderRoot } from "../ui/root.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
-import { makeEngine } from "../engine/engine.tsx";
+import { makeEngine, makeGeneration } from "../engine/engine.tsx";
 import {
   setPatternKey,
   setPatternOffset,
@@ -34,7 +30,6 @@ import {
 import { makePatternLib } from "../pattern/pattern.tsx";
 import { store } from "../store/store.ts";
 import { setColumns, setRows } from "../store/terminal/terminalSlice.ts";
-import type { FirstGenerationProps } from "../engine/types.ts";
 
 export function handleArguments(): ValidArgs {
   /*
@@ -104,16 +99,19 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
 
   await writeHeading("InitialSeed");
   const patternLib = makePatternLib();
-  const firstGeneration: FirstGenerationProps = {
-    patternKey: args[CLI_ARGS.PATTERN].key,
-    patternOffset: ORIGIN,
-    patternGeneration: 0,
-    gridSize,
-    gridMode: GRID_MODES.FINITE,
-  };
+
+  const firstGeneration = makeGeneration(
+    patternLib,
+    {
+      patternKey: args[CLI_ARGS.PATTERN].key,
+      patternOffset: ORIGIN,
+      patternGeneration: 0,
+      gridSize,
+      gridMode: GRID_MODES.FINITE,
+    },
+  );
 
   const engine = makeEngine(
-    patternLib,
     firstGeneration,
   );
   await write(engine.toString());

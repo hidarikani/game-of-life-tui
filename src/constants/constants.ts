@@ -10,8 +10,10 @@ export const CURSOR_SHOW = `${ESC}?25h`;
 // Keyboard commands ===
 export const KEY_QUIT_LOWER = "q";
 export const KEY_QUIT_UPPER = "Q";
-export const KEY_REFRESH_LOWER = "r";
-export const KEY_REFRESH_UPPER = "R";
+export const KEY_TICK = {
+  UPPER: "T",
+  LOWER: "t",
+} as const;
 export const KEY_WIZARD = {
   UPPER: "N",
   LOWER: "n",

@@ -6,8 +6,7 @@ import { Box, useApp, useInput } from "ink";
 import {
   KEY_QUIT_LOWER,
   KEY_QUIT_UPPER,
-  KEY_REFRESH_LOWER,
-  KEY_REFRESH_UPPER,
+  KEY_TICK,
   KEY_WIZARD,
   VIEWS,
 } from "../../constants/constants.ts";
@@ -17,7 +16,7 @@ import {
   setLiveCells,
 } from "../../store/firstGeneration/firstGenerationSlice.ts";
 import { PatternWizard } from "../patternWizard/wizard/patternWizard.tsx";
-import type { IGrid, Point } from "@cell-auto/game-of-life-engine";
+import type { IGrid } from "@cell-auto/game-of-life-engine";
 import { selectRows } from "../../store/terminal/terminalSlice.ts";
 import { Game } from "../game/game.tsx";
 
@@ -45,7 +44,7 @@ export function App() {
         return;
       }
       if (view === VIEWS.GAME) {
-        if (ch === KEY_REFRESH_LOWER || ch === KEY_REFRESH_UPPER) {
+        if (ch === KEY_TICK.LOWER || ch === KEY_TICK.UPPER) {
           tick();
         } else if (ch === KEY_WIZARD.LOWER || ch === KEY_WIZARD.UPPER) {
           setView(VIEWS.PATTERN_WIZARD);

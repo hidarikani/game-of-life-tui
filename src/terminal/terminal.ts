@@ -10,14 +10,7 @@ import { parseArgs } from "@std/cli/parse-args";
 import * as v from "@valibot/valibot";
 import { GRID_MODES, type GridSize } from "@cell-auto/game-of-life-engine";
 
-import {
-  ALTERNATE_SCREEN_ENTER,
-  ALTERNATE_SCREEN_EXIT,
-  CLI_ARGS,
-  CURSOR_HIDE,
-  CURSOR_SHOW,
-  SEPARATOR_WIDTH,
-} from "../constants/constants.ts";
+import { CLI_ARGS, SEPARATOR_WIDTH } from "../constants/constants.ts";
 
 import { renderRoot } from "../ui/root.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
@@ -68,16 +61,6 @@ export async function write(s: string) {
 
 export function getSize(): ViewportSize {
   return Deno.consoleSize();
-}
-
-export async function enterAltScreen() {
-  await write(ALTERNATE_SCREEN_ENTER);
-  await write(CURSOR_HIDE);
-}
-
-export async function leaveAltScreen() {
-  await write(CURSOR_SHOW);
-  await write(ALTERNATE_SCREEN_EXIT);
 }
 
 function genSeparatorLine(len: number = SEPARATOR_WIDTH.MAX): string {
@@ -132,7 +115,6 @@ export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
 
 export async function enterInteractiveMode(args: InteractiveArgs) {
   const terminalSize = getSize();
-  await enterAltScreen();
   const bridge = createStdinBridge();
   try {
     const pattern = args[CLI_ARGS.PATTERN];
@@ -162,7 +144,6 @@ export async function enterInteractiveMode(args: InteractiveArgs) {
     await app.waitUntilExit();
   } finally {
     bridge.stop();
-    await leaveAltScreen();
   }
 
   // Ink's stdin handling keeps the Deno event loop alive after unmount, so

@@ -34,6 +34,7 @@ export function renderRoot(
     </StrictMode>),
     {
       stdin: stdin as unknown as NodeJS.ReadStream,
+      alternateScreen: true,
     },
   );
 }

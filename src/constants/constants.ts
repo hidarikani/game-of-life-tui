@@ -1,10 +1,3 @@
-// Terminal control sequences ===
-export const ESC = "\x1b["; // ANSI escape sequence prefix
-export const ALTERNATE_SCREEN_ENTER = `${ESC}?1049h`;
-export const ALTERNATE_SCREEN_EXIT = `${ESC}?1049l`;
-export const CURSOR_HIDE = `${ESC}?25l`;
-export const CURSOR_SHOW = `${ESC}?25h`;
-
 // Keyboard commands ===
 export const KEY_QUIT = {
   UPPER: "Q",

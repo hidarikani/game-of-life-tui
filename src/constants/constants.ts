@@ -1,5 +1,3 @@
-import type { Point } from "@cell-auto/game-of-life-engine";
-
 // Terminal control sequences ===
 export const ESC = "\x1b["; // ANSI escape sequence prefix
 export const ALTERNATE_SCREEN_ENTER = `${ESC}?1049h`;
@@ -32,22 +30,6 @@ export const CLI_ARGS = {
 
 export const LONG_ARG_PREFIX = "--";
 
-// Game ===
-/**
- * @deprecated use PatternLib API
- */
-export const PATTERN_KEYS = {
-  PULSAR: "pulsar",
-};
-
-/**
- * @deprecated @cell-auto/game-of-life-engine
- */
-export const MIN_GENERATIONS = 1 as const;
-/**
- * @deprecated @cell-auto/game-of-life-engine
- */
-export const ORIGIN: Point = { x: 0, y: 0 };
 
 // tui
 export const VIEWS = {

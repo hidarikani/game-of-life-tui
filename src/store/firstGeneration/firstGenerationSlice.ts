@@ -8,8 +8,8 @@ import type { FirstGenerationState } from "./types.ts";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { SLICES } from "../../constants/messages.ts";
 import { required } from "../../util/misc.ts";
-import { ORIGIN } from "../../constants/constants.ts";
 import { checkLiveCellsEqual } from "../../next/helpers.ts";
+import { ORIGIN } from "../../next/constants.ts";
 
 const initialState: FirstGenerationState = {
   liveCells: [],

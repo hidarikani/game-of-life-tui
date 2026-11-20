@@ -16,7 +16,6 @@ import {
   CLI_ARGS,
   CURSOR_HIDE,
   CURSOR_SHOW,
-  ORIGIN,
   SEPARATOR_WIDTH,
 } from "../constants/constants.ts";
 
@@ -35,6 +34,7 @@ import {
   setColumns,
   setRows,
 } from "../store/terminal/terminalSlice.ts";
+import { ORIGIN } from "../next/constants.ts";
 
 export function handleArguments(): ValidArgs {
   /*

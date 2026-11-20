@@ -4,6 +4,7 @@ import { CANCEL, HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
 import {
   HEADING as STEP_HEADING,
   INSTRUCTIONS,
+  OFFSET_HINT,
   STEP,
   SUBMIT,
 } from "./messages.ts";
@@ -17,6 +18,8 @@ import { Description } from "../../../description/description.tsx";
 import { clamp } from "../../../../util/misc.ts";
 import { useAppSelector } from "../../../../store/hooks.ts";
 import { selectGridSize } from "../../../../store/terminal/terminalSlice.ts";
+import { Hints } from "../../../hints/hints.tsx";
+import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../../../app/messages.ts";
 
 export function PlacePattern(
   { inner, onCancel, onSubmit }: Props,
@@ -86,6 +89,11 @@ export function PlacePattern(
       <Box gap={GAP} alignItems="center">
         <Button label={CANCEL} onPress={handleCancel}></Button>
         <Button label={SUBMIT} onPress={handleSubmit}></Button>
+        <Hints>
+          {QUIT_APP_HINT}
+          {CYCLE_FOCUS_HINT}
+          {OFFSET_HINT}
+        </Hints>
         <Box>
           <Text dimColor>{STEP}</Text>
         </Box>

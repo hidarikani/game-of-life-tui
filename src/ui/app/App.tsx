@@ -4,8 +4,7 @@ import { useCallback, useState } from "react";
 import { Box, useApp, useInput } from "ink";
 
 import {
-  KEY_QUIT_LOWER,
-  KEY_QUIT_UPPER,
+  KEY_QUIT,
   KEY_TICK,
   KEY_WIZARD,
   VIEWS,
@@ -39,7 +38,7 @@ export function App() {
     // character against the state the previous character produced — the way
     // the old one-byte read loop did.
     for (const ch of input) {
-      if (ch === KEY_QUIT_LOWER || ch === KEY_QUIT_UPPER) {
+      if (ch === KEY_QUIT.LOWER || ch === KEY_QUIT.UPPER) {
         exit();
         return;
       }

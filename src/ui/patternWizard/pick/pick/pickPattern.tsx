@@ -8,16 +8,20 @@ import { PatternInfo } from "../info/patternInfo.tsx";
 import { PatternPreview } from "../preview/patternPreview.tsx";
 import { Button } from "../../button/Button.tsx";
 import {
+  CONFIRM_SELECTION,
   HEADING as STEP_HEADING,
   INSTRUCTIONS,
   NEXT,
   STEP,
+  TRAVERSE_LIST,
 } from "./messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
 import { CANCEL, HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
 import { GAP } from "../../../../constants/constants.ts";
 import type { Props } from "./types.ts";
 import { Description } from "../../../description/description.tsx";
+import { Hints } from "../../../hints/hints.tsx";
+import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../../../app/messages.ts";
 
 export function PickPattern({ onCancel, onSubmit }: Props) {
   const heading = `${WIZARD_HEADING} / ${STEP_HEADING}`;
@@ -88,10 +92,18 @@ export function PickPattern({ onCancel, onSubmit }: Props) {
       </Box>
       <Box>
       </Box>
-      <Box gap={GAP} alignItems="center">
-        <Button label={CANCEL} onPress={handleCancel}></Button>
-        <Button label={NEXT} isDisabled={isNextDisabled} onPress={handleNext}>
-        </Button>
+      <Box gap={GAP} flexDirection="column">
+        <Box gap={GAP} alignItems="center">
+          <Button label={CANCEL} onPress={handleCancel}></Button>
+          <Button label={NEXT} isDisabled={isNextDisabled} onPress={handleNext}>
+          </Button>
+        </Box>
+        <Hints>
+          {QUIT_APP_HINT}
+          {CYCLE_FOCUS_HINT}
+          {TRAVERSE_LIST}
+          {CONFIRM_SELECTION}
+        </Hints>
         <Text dimColor>{STEP}</Text>
       </Box>
     </Box>

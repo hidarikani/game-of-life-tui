@@ -8,15 +8,17 @@ export const CURSOR_HIDE = `${ESC}?25l`;
 export const CURSOR_SHOW = `${ESC}?25h`;
 
 // Keyboard commands ===
-export const KEY_QUIT_LOWER = "q";
-export const KEY_QUIT_UPPER = "Q";
+export const KEY_QUIT = {
+  UPPER: "Q",
+  LOWER: "q",
+} as const;
 export const KEY_TICK = {
   UPPER: "T",
   LOWER: "t",
 } as const;
 export const KEY_WIZARD = {
-  UPPER: "N",
-  LOWER: "n",
+  UPPER: "P",
+  LOWER: "p",
 } as const;
 
 // args ===

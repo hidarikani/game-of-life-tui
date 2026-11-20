@@ -1,7 +1,7 @@
 import { Box, Text } from "ink";
-import { HINT_SEPARATOR } from "../../constants/constants.ts";
 import type { Props } from "./types.ts";
 import { CONTROLS } from "./messages.ts";
+import { HINT_SEPARATOR } from "./hints.const.ts";
 
 export function Hints({ children }: Props) {
   const items = Array.isArray(children) ? children : [children];

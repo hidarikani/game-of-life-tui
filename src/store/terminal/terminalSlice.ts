@@ -7,7 +7,7 @@ import { SLICES } from "../../constants/messages.ts";
 import type { TerminalState } from "./types.ts";
 import { required } from "../../util/misc.ts";
 import type { GridSize } from "@cell-auto/game-of-life-engine";
-import { HEADER_HEIGHT } from "../../constants/constants.ts";
+import { FOOTER_HEIGHT, HEADER_HEIGHT } from "../../ui/app/app.const.ts";
 
 const initialState: TerminalState = {
   rows: null,
@@ -37,7 +37,7 @@ export const selectGridSize = createSelector([
   terminalSlice.selectors.selectColumns,
 ], (rows, columns): GridSize => {
   const spacedColumns = Math.floor(columns / 2);
-  const appRows = rows - HEADER_HEIGHT;
+  const appRows = rows - HEADER_HEIGHT - FOOTER_HEIGHT;
 
   return { w: spacedColumns, h: appRows };
 });

@@ -8,10 +8,10 @@ import {
   HEADING,
   TICK_HINT,
 } from "./messages.ts";
-import { GAP, PADDING } from "../../constants/constants.ts";
 import { Description } from "../description/description.tsx";
 import { Hints } from "../hints/hints.tsx";
 import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../app/messages.ts";
+import { GAP, PADDING } from "../app/app.const.ts";
 
 export function Game() {
   const present = usePresent();

@@ -9,7 +9,6 @@ import {
   SUBMIT,
 } from "./messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
-import { GAP } from "../../../../constants/constants.ts";
 import { Button } from "../../button/Button.tsx";
 import type { Props } from "./types.ts";
 import { GridView } from "../../../grid/GridView.tsx";
@@ -20,6 +19,7 @@ import { useAppSelector } from "../../../../store/hooks.ts";
 import { selectGridSize } from "../../../../store/terminal/terminalSlice.ts";
 import { Hints } from "../../../hints/hints.tsx";
 import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../../../app/messages.ts";
+import { GAP } from "../../../app/app.const.ts";
 
 export function PlacePattern(
   { inner, onCancel, onSubmit }: Props,

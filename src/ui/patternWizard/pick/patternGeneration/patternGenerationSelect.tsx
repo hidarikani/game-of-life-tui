@@ -5,7 +5,7 @@ import { usePatternLib } from "../../../../pattern/pattern.tsx";
 import { EMPTY, SELECT_HEADING } from "./messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
 import { useCallback } from "react";
-import { MAX_SELECT_WIDTH } from "../../../../constants/constants.ts";
+import { MAX_SELECT_WIDTH } from "../../wizard/wizardConst.const.ts";
 
 export function PatternGenerationSelect({ patternKey, onChange }: Props) {
   const { isFocused } = useFocus();

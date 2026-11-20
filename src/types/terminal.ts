@@ -3,8 +3,8 @@ import * as v from "@valibot/valibot";
 
 import { makePatternLib } from "../pattern/pattern.tsx";
 import { genErrPatternNotFound } from "../constants/messages.ts";
-import { CLI_ARGS } from "../constants/constants.ts";
 import { MIN_GENERATIONS, PATTERN_KEYS } from "../next/constants.ts";
+import { CLI_ARGS } from "../terminal/terminal.const.ts";
 
 const NonEmptyString = v.pipe(v.string(), v.trim(), v.nonEmpty());
 

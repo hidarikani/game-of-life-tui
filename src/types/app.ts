@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import type { Pattern } from "@cell-auto/game-of-life-engine";
-import type { VIEWS } from "../constants/constants.ts";
+import type { VIEWS } from "../ui/app/app.const.ts";
 
 export type View = (typeof VIEWS)[keyof typeof VIEWS];
 

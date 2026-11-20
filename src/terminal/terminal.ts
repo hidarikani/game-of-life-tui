@@ -10,8 +10,6 @@ import { parseArgs } from "@std/cli/parse-args";
 import * as v from "@valibot/valibot";
 import { GRID_MODES, type GridSize } from "@cell-auto/game-of-life-engine";
 
-import { CLI_ARGS, SEPARATOR_WIDTH } from "../constants/constants.ts";
-
 import { renderRoot } from "../ui/root.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
 import { makeEngine, makeGeneration } from "../engine/engine.tsx";
@@ -28,6 +26,7 @@ import {
   setRows,
 } from "../store/terminal/terminalSlice.ts";
 import { ORIGIN } from "../next/constants.ts";
+import { CLI_ARGS, SEPARATOR_WIDTH } from "./terminal.const.ts";
 
 export function handleArguments(): ValidArgs {
   /*

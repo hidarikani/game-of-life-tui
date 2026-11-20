@@ -10,7 +10,7 @@ import {
 import type { Props } from "./types.ts";
 import { NONE } from "../../../../constants/messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
-import { PADDING } from "../../../../constants/constants.ts";
+import { PADDING } from "../../../app/app.const.ts";
 
 export function PatternInfo(
   { pattern, generation }: Props,

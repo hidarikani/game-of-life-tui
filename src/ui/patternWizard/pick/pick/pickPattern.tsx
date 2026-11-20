@@ -17,11 +17,11 @@ import {
 } from "./messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
 import { CANCEL, HEADING as WIZARD_HEADING } from "../../wizard/messages.ts";
-import { GAP } from "../../../../constants/constants.ts";
 import type { Props } from "./types.ts";
 import { Description } from "../../../description/description.tsx";
 import { Hints } from "../../../hints/hints.tsx";
 import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../../../app/messages.ts";
+import { GAP } from "../../../app/app.const.ts";
 
 export function PickPattern({ onCancel, onSubmit }: Props) {
   const heading = `${WIZARD_HEADING} / ${STEP_HEADING}`;

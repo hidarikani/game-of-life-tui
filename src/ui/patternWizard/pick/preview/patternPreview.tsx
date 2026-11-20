@@ -1,8 +1,8 @@
 import { Box, Text } from "ink";
-import { PADDING } from "../../../../constants/constants.ts";
 import type { Props } from "./types.ts";
 import { EMPTY, HEADING } from "./messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
+import { PADDING } from "../../../app/app.const.ts";
 
 export function PatternPreview({ grid }: Props) {
   const preview = grid === null ? EMPTY : grid.toString();

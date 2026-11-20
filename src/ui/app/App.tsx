@@ -3,12 +3,6 @@ import type { View } from "../../types/app.ts";
 import { useCallback, useState } from "react";
 import { Box, useApp, useInput } from "ink";
 
-import {
-  KEY_QUIT,
-  KEY_TICK,
-  KEY_WIZARD,
-  VIEWS,
-} from "../../constants/constants.ts";
 import { useTick } from "../../engine/engine.tsx";
 import { useAppDispatch, useAppSelector } from "../../store/hooks.ts";
 import {
@@ -18,6 +12,7 @@ import { PatternWizard } from "../patternWizard/wizard/patternWizard.tsx";
 import type { IGrid } from "@cell-auto/game-of-life-engine";
 import { selectRows } from "../../store/terminal/terminalSlice.ts";
 import { Game } from "../game/game.tsx";
+import { KEY_QUIT, KEY_TICK, KEY_WIZARD, VIEWS } from "./app.const.ts";
 
 export function App() {
   const [view, setView] = useState<View>(VIEWS.GAME);

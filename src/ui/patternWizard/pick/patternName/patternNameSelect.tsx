@@ -4,7 +4,7 @@ import type { Props } from "./types.ts";
 import { usePatternLib } from "../../../../pattern/pattern.tsx";
 import { PATTERNS_BY_NAME_HEADING } from "./messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
-import { MAX_SELECT_WIDTH } from "../../../../constants/constants.ts";
+import { MAX_SELECT_WIDTH } from "../../wizard/wizardConst.const.ts";
 
 export function PatternNameSelect({ onChange }: Props) {
   const { isFocused } = useFocus({

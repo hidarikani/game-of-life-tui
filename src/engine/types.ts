@@ -16,7 +16,11 @@ export type EngineContext = {
   tick: EmptyCallback;
 };
 
-export type EngineProviderProps = {
+export type EngineStoreProviderProps = {
   firstGeneration: IGridNext;
+  children: ReactNode;
+};
+
+export type EngineProviderProps = {
   children: ReactNode;
 };

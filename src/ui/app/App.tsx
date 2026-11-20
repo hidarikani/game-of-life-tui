@@ -14,12 +14,10 @@ import {
 import { useTick } from "../../engine/engine.tsx";
 import { useAppDispatch, useAppSelector } from "../../store/hooks.ts";
 import {
-  setPatternGeneration,
-  setPatternKey,
-  setPatternOffset,
+  setLiveCells,
 } from "../../store/firstGeneration/firstGenerationSlice.ts";
 import { PatternWizard } from "../patternWizard/wizard/patternWizard.tsx";
-import type { Point } from "@cell-auto/game-of-life-engine";
+import type { IGrid, Point } from "@cell-auto/game-of-life-engine";
 import { selectRows } from "../../store/terminal/terminalSlice.ts";
 import { Game } from "../game/game.tsx";
 
@@ -61,10 +59,9 @@ export function App() {
   }, []);
 
   const handlePatternWizardSubmit = useCallback(
-    (key: string, generationIndex: number, offset: Point) => {
-      dispatch(setPatternKey(key));
-      dispatch(setPatternGeneration(generationIndex));
-      dispatch(setPatternOffset(offset));
+    (grid: IGrid) => {
+      const liveCells = grid.liveCells;
+      dispatch(setLiveCells([...liveCells]));
       setView(VIEWS.GAME);
     },
     [dispatch],

@@ -9,8 +9,10 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { SLICES } from "../../constants/messages.ts";
 import { required } from "../../util/misc.ts";
 import { ORIGIN } from "../../constants/constants.ts";
+import { checkLiveCellsEqual } from "../../next/helpers.ts";
 
 const initialState: FirstGenerationState = {
+  liveCells: [],
   patternKey: null,
   patternOffset: ORIGIN,
   patternGeneration: 0,
@@ -21,6 +23,11 @@ export const generalSlice = createSlice({
   name: SLICES.FIRST_GENERATION,
   initialState,
   reducers: {
+    setLiveCells: (state, { payload }: PayloadAction<Point[]>) => {
+      if (!checkLiveCellsEqual(state.liveCells, payload)) {
+        state.liveCells = payload;
+      }
+    },
     setPatternKey: (state, { payload }: PayloadAction<string>) => {
       state.patternKey = payload;
     },
@@ -42,6 +49,7 @@ export const generalSlice = createSlice({
     reset: () => initialState,
   },
   selectors: {
+    selectLiveCells: (state) => state.liveCells,
     selectPatternKey: (state) =>
       required(state.patternKey, SLICES.FIRST_GENERATION),
     selectPatternOffset: (state) =>
@@ -54,6 +62,7 @@ export const generalSlice = createSlice({
 });
 
 export const {
+  setLiveCells,
   setPatternKey,
   setPatternOffset,
   setPatternGeneration,
@@ -61,6 +70,7 @@ export const {
   reset,
 } = generalSlice.actions;
 export const {
+  selectLiveCells,
   selectPatternKey,
   selectPatternOffset,
   selectPatternGeneration,

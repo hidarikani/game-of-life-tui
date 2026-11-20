@@ -69,10 +69,7 @@ export function PlacePattern(
   }, [onCancel]);
 
   const handleSubmit = useCallback(() => {
-    onSubmit({
-      x: offsetX,
-      y: offsetY,
-    });
+    onSubmit(outer);
   }, [offsetX, offsetY, onSubmit]);
 
   return (

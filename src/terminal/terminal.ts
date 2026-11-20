@@ -24,12 +24,17 @@ import { renderRoot } from "../ui/root.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
 import { makeEngine, makeGeneration } from "../engine/engine.tsx";
 import {
+  setLiveCells,
   setPatternKey,
   setPatternOffset,
 } from "../store/firstGeneration/firstGenerationSlice.ts";
 import { makePatternLib } from "../pattern/pattern.tsx";
 import { store } from "../store/store.ts";
-import { setColumns, setRows } from "../store/terminal/terminalSlice.ts";
+import {
+  selectGridSize,
+  setColumns,
+  setRows,
+} from "../store/terminal/terminalSlice.ts";
 
 export function handleArguments(): ValidArgs {
   /*
@@ -136,6 +141,21 @@ export async function enterInteractiveMode(args: InteractiveArgs) {
     store.dispatch(setColumns(terminalSize.columns));
     store.dispatch(setPatternKey(pattern.key));
     store.dispatch(setPatternOffset(patternOffset));
+    const gridSize = selectGridSize(store.getState());
+    const patternLib = makePatternLib();
+    const firstGeneration = makeGeneration(
+      patternLib,
+      {
+        patternKey: pattern.key,
+        patternOffset,
+        gridSize,
+        patternGeneration: 0,
+        gridMode: GRID_MODES.TOROIDAL,
+      },
+    );
+    const liveCells = firstGeneration.liveCells;
+    store.dispatch(setLiveCells([...liveCells]));
+
     const app = renderRoot(
       bridge.stdin,
     );

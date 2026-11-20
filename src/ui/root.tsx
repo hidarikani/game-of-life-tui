@@ -6,38 +6,13 @@ import { Provider } from "react-redux";
 import { render } from "ink";
 
 import { store } from "../store/store.ts";
-import { PatternProvider, usePatternLib } from "../pattern/pattern.tsx";
-import { EngineProvider, makeGeneration } from "../engine/engine.tsx";
+import { PatternProvider } from "../pattern/pattern.tsx";
+import { EngineProvider } from "../engine/engine.tsx";
 import { App } from "./app/App.tsx";
-import { useAppSelector } from "../store/hooks.ts";
-import {
-  selectPatternKey,
-  selectPatternOffset,
-} from "../store/firstGeneration/firstGenerationSlice.ts";
-import { GRID_MODES } from "@cell-auto/game-of-life-engine";
-import { selectGridSize } from "../store/terminal/terminalSlice.ts";
 
 export function Root() {
-  const patternKey = useAppSelector(selectPatternKey);
-  const patternOffset = useAppSelector(selectPatternOffset);
-  const gridSize = useAppSelector(selectGridSize);
-  const patternLib = usePatternLib();
-
-  const firstGeneration = makeGeneration(
-    patternLib,
-    {
-      patternKey,
-      patternOffset,
-      gridSize,
-      patternGeneration: 0,
-      gridMode: GRID_MODES.TOROIDAL,
-    },
-  );
-
   return (
-    <EngineProvider
-      firstGeneration={firstGeneration}
-    >
+    <EngineProvider>
       <App />
     </EngineProvider>
   );

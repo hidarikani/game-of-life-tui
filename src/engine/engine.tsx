@@ -1,7 +1,7 @@
 import {
-  Grid,
   type IGrid,
   type IPatternLib,
+  pointToCellKey,
 } from "@cell-auto/game-of-life-engine";
 
 import {
@@ -16,10 +16,20 @@ import {
   genMsgContextMissing,
   UNKNOWN,
 } from "../constants/messages.ts";
-import type { EngineProviderProps, GenerationProps } from "./types.ts";
+import type {
+  EngineProviderProps,
+  EngineStoreProviderProps,
+  GenerationProps,
+} from "./types.ts";
 import type { EmptyCallback } from "../types/general.ts";
 import { EngineNext, GridNext } from "../next/next.ts";
 import type { IEngineNext, IGridNext } from "../next/types.ts";
+import { useAppSelector } from "../store/hooks.ts";
+import {
+  selectGridMode,
+  selectLiveCells,
+} from "../store/firstGeneration/firstGenerationSlice.ts";
+import { selectGridSize } from "../store/terminal/terminalSlice.ts";
 
 export function makeGeneration(
   patternLib: IPatternLib,
@@ -56,7 +66,7 @@ const EngineContext = createContext<IEngineNext | null>(null);
 EngineContext.displayName = CONTEXTS.ENGINE;
 
 function EngineStoreProvider(
-  { firstGeneration, children }: EngineProviderProps,
+  { firstGeneration, children }: EngineStoreProviderProps,
 ) {
   /*
    * The store is stateful: each tick appends to the generation history,
@@ -76,8 +86,14 @@ function EngineStoreProvider(
 }
 
 export function EngineProvider(
-  { firstGeneration, children }: EngineProviderProps,
+  { children }: EngineProviderProps,
 ) {
+  const liveCellsArr = useAppSelector(selectLiveCells);
+  const liveCells = new Set(liveCellsArr.map((point) => pointToCellKey(point)));
+  const gridSize = useAppSelector(selectGridSize);
+  const mode = useAppSelector(selectGridMode);
+  const firstGeneration = new GridNext({ gridSize, liveCells, mode });
+
   /*
    * Changing the key remounts `EngineStoreProvider`, which re-runs its
    * `useState` initializer and resets the engine's generation history.

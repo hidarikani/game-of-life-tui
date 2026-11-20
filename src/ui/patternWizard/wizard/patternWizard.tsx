@@ -1,7 +1,7 @@
 import { type ReactNode, useCallback, useMemo, useState } from "react";
 import { PickPattern } from "../pick/pick/pickPattern.tsx";
 import { PlacePattern } from "../place/place/placePattern.tsx";
-import type { Point } from "@cell-auto/game-of-life-engine";
+import type { IGrid } from "@cell-auto/game-of-life-engine";
 import type { Props } from "./types.ts";
 import { usePatternLib } from "../../../pattern/pattern.tsx";
 import { genErrPatternNotFound } from "../../../constants/messages.ts";
@@ -28,11 +28,9 @@ export function PatternWizard({ onCancel, onSubmit }: Props) {
     [],
   );
 
-  const handlePlaceSubmit = useCallback((offset: Point) => {
-    if (key !== null && generationIndex !== null) {
-      onSubmit(key, generationIndex, offset);
-    }
-  }, [key, generationIndex, onSubmit]);
+  const handlePlaceSubmit = useCallback((grid: IGrid) => {
+    onSubmit(grid);
+  }, [onSubmit]);
 
   const patternPlacementFragment = useMemo(() => {
     if (!isSelectionComplete) {

@@ -3,11 +3,11 @@ import {
   createSlice,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import { SLICES } from "../../constants/messages.ts";
 import type { TerminalState } from "./types.ts";
 import { required } from "../../util/misc.ts";
 import type { GridSize } from "@cell-auto/game-of-life-engine";
 import { FOOTER_HEIGHT, HEADER_HEIGHT } from "../../ui/app/app.const.ts";
+import { SLICE_NAME } from "./constants.ts";
 
 const initialState: TerminalState = {
   rows: null,
@@ -15,7 +15,7 @@ const initialState: TerminalState = {
 };
 
 export const terminalSlice = createSlice({
-  name: SLICES.TERMINAL,
+  name: SLICE_NAME,
   initialState,
   reducers: {
     setRows: (state, action: PayloadAction<number>) => {
@@ -27,8 +27,8 @@ export const terminalSlice = createSlice({
     reset: () => initialState,
   },
   selectors: {
-    selectRows: (state): number => required(state.rows, SLICES.TERMINAL),
-    selectColumns: (state): number => required(state.columns, SLICES.TERMINAL),
+    selectRows: (state): number => required(state.rows, SLICE_NAME),
+    selectColumns: (state): number => required(state.columns, SLICE_NAME),
   },
 });
 

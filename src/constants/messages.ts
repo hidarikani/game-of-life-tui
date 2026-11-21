@@ -1,10 +1,5 @@
 export const INVALID_ARGUMENTS = "Invalid arguments.";
 
-export const SLICES = {
-  TERMINAL: "Terminal Slice",
-  FIRST_GENERATION: "First Generation Slice",
-} as const;
-
 export const CONTEXTS = {
   PATTERN_LIB: "Pattern Library Context",
   ENGINE: "Game Engine",

@@ -6,10 +6,10 @@ import {
 import type { FirstGenerationState } from "./types.ts";
 
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { SLICES } from "../../constants/messages.ts";
 import { required } from "../../util/misc.ts";
 import { checkLiveCellsEqual } from "../../next/helpers.ts";
 import { ORIGIN } from "../../next/constants.ts";
+import { SLICE_NAME } from "./constants.ts";
 
 const initialState: FirstGenerationState = {
   liveCells: [],
@@ -20,7 +20,7 @@ const initialState: FirstGenerationState = {
 };
 
 export const generalSlice = createSlice({
-  name: SLICES.FIRST_GENERATION,
+  name: SLICE_NAME,
   initialState,
   reducers: {
     setLiveCells: (state, { payload }: PayloadAction<Point[]>) => {
@@ -50,14 +50,11 @@ export const generalSlice = createSlice({
   },
   selectors: {
     selectLiveCells: (state) => state.liveCells,
-    selectPatternKey: (state) =>
-      required(state.patternKey, SLICES.FIRST_GENERATION),
-    selectPatternOffset: (state) =>
-      required(state.patternOffset, SLICES.FIRST_GENERATION),
+    selectPatternKey: (state) => required(state.patternKey, SLICE_NAME),
+    selectPatternOffset: (state) => required(state.patternOffset, SLICE_NAME),
     selectPatternGeneration: (state) =>
-      required(state.patternGeneration, SLICES.FIRST_GENERATION),
-    selectGridMode: (state) =>
-      required(state.gridMode, SLICES.FIRST_GENERATION),
+      required(state.patternGeneration, SLICE_NAME),
+    selectGridMode: (state) => required(state.gridMode, SLICE_NAME),
   },
 });
 

@@ -6,13 +6,9 @@ import { describe, it } from "@std/testing/bdd";
 import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 
 import { ArgSchema } from "./terminal.ts";
-import { genMsgPatternNotFound } from "../constants/messages.ts";
-import {
-  CLI_ARGS,
-  LONG_ARG_PREFIX,
-  MIN_GENERATIONS,
-  PATTERN_KEYS,
-} from "../constants/constants.ts";
+import { genErrPatternNotFound } from "../constants/messages.ts";
+import { MIN_GENERATIONS, PATTERN_KEYS } from "../next/constants.ts";
+import { CLI_ARGS, LONG_ARG_PREFIX } from "../terminal/terminal.const.ts";
 
 describe("argSchema", () => {
   describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} is "true"`, () => {
@@ -33,7 +29,7 @@ describe("argSchema", () => {
               [CLI_ARGS.PATTERN]: "no-such",
             }),
           v.ValiError,
-          genMsgPatternNotFound("no-such"),
+          genErrPatternNotFound("no-such"),
         );
       });
     });
@@ -217,7 +213,7 @@ describe("argSchema", () => {
               [CLI_ARGS.PATTERN]: "no-such",
             }),
           v.ValiError,
-          genMsgPatternNotFound("no-such"),
+          genErrPatternNotFound("no-such"),
         );
       });
     });

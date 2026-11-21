@@ -1,33 +1,32 @@
-import type { GridSize } from "@cell-auto/game-of-life-engine";
 import type {
   InteractiveArgs,
   NonInteractiveArgs,
   ValidArgs,
+  ViewportSize,
 } from "../types/terminal.ts";
 import { ArgSchema } from "../types/terminal.ts";
 
 import { parseArgs } from "@std/cli/parse-args";
 import * as v from "@valibot/valibot";
+import { GRID_MODES, type GridSize } from "@cell-auto/game-of-life-engine";
 
-import {
-  ALTERNATE_SCREEN_ENTER,
-  ALTERNATE_SCREEN_EXIT,
-  CLI_ARGS,
-  CURSOR_HIDE,
-  CURSOR_SHOW,
-  SEPARATOR_WIDTH,
-} from "../constants/constants.ts";
-
-import {
-  initGame,
-  renderPlacement,
-  selectPattern,
-  tick,
-} from "../game/game.ts";
-import { renderApp } from "../ui/App.tsx";
+import { renderRoot } from "../ui/root.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
-import { getPatternLib } from "../pattern/pattern.ts";
-import { UNKNOWN_CONSOLE_SIZE } from "../constants/messages.ts";
+import { makeEngine, makeGeneration } from "../engine/engine.tsx";
+import {
+  setLiveCells,
+  setPatternKey,
+  setPatternOffset,
+} from "../store/firstGeneration/firstGenerationSlice.ts";
+import { makePatternLib } from "../pattern/pattern.tsx";
+import { store } from "../store/store.ts";
+import {
+  selectGridSize,
+  setColumns,
+  setRows,
+} from "../store/terminal/terminalSlice.ts";
+import { ORIGIN } from "../next/constants.ts";
+import { CLI_ARGS, SEPARATOR_WIDTH } from "./terminal.const.ts";
 
 export function handleArguments(): ValidArgs {
   /*
@@ -59,23 +58,8 @@ export async function write(s: string) {
   await Deno.stdout.write(encoder.encode(s));
 }
 
-export function getSize(): GridSize {
-  try {
-    const { columns, rows } = Deno.consoleSize();
-    return { w: Math.floor(columns / 2), h: rows };
-  } catch {
-    throw new Error(UNKNOWN_CONSOLE_SIZE);
-  }
-}
-
-export async function enterAltScreen() {
-  await write(ALTERNATE_SCREEN_ENTER);
-  await write(CURSOR_HIDE);
-}
-
-export async function leaveAltScreen() {
-  await write(CURSOR_SHOW);
-  await write(ALTERNATE_SCREEN_EXIT);
+export function getSize(): ViewportSize {
+  return Deno.consoleSize();
 }
 
 function genSeparatorLine(len: number = SEPARATOR_WIDTH.MAX): string {
@@ -95,58 +79,70 @@ async function writeHeading(msg: string) {
 }
 
 export async function enterNonInteractiveMode(args: NonInteractiveArgs) {
-  const size: GridSize = {
+  const gridSize: GridSize = {
     w: args[CLI_ARGS.GRID_WIDTH],
     h: args[CLI_ARGS.GRID_HEIGHT],
   };
 
-  try {
-    await writeHeading("InitialSeed");
-    await write(initGame(size, args[CLI_ARGS.PATTERN]));
+  await writeHeading("InitialSeed");
+  const patternLib = makePatternLib();
 
-    if (args.generations > 1) {
-      for (let i = 1; i < args.generations; i++) {
-        await writeHeading(`Generation ${i}`);
-        await write(tick());
-      }
+  const firstGeneration = makeGeneration(
+    patternLib,
+    {
+      patternKey: args[CLI_ARGS.PATTERN].key,
+      patternOffset: ORIGIN,
+      patternGeneration: 0,
+      gridSize,
+      gridMode: GRID_MODES.FINITE,
+    },
+  );
+
+  const engine = makeEngine(
+    firstGeneration,
+  );
+  await write(engine.toString());
+
+  if (args.generations > 1) {
+    for (let i = 1; i < args.generations; i++) {
+      await writeHeading(`Generation ${i}`);
+      engine.evolveGrid();
+      await write(engine.toString());
     }
-  } catch (error) {
-    console.error(error instanceof Error ? error.message : error);
-    Deno.exit(1);
   }
 }
 
 export async function enterInteractiveMode(args: InteractiveArgs) {
-  const size = getSize();
-  // Ink terminates every frame with a newline, so a frame as tall as the
-  // terminal would scroll the alternate screen by one row on each render.
-  // The app may therefore occupy rows - 1 lines, one of which is the
-  // toolbar; the grid gets the rest.
-  const appHeight = Math.max(2, size.h - 1);
-  size.h = appHeight - 1;
-
-  const initialFrame = initGame(size, args[CLI_ARGS.PATTERN]);
-
-  await enterAltScreen();
+  const terminalSize = getSize();
   const bridge = createStdinBridge();
   try {
-    const app = renderApp(
+    const pattern = args[CLI_ARGS.PATTERN];
+    const patternOffset = ORIGIN;
+    store.dispatch(setRows(terminalSize.rows));
+    store.dispatch(setColumns(terminalSize.columns));
+    store.dispatch(setPatternKey(pattern.key));
+    store.dispatch(setPatternOffset(patternOffset));
+    const gridSize = selectGridSize(store.getState());
+    const patternLib = makePatternLib();
+    const firstGeneration = makeGeneration(
+      patternLib,
       {
-        initialFrame,
-        pattern: args[CLI_ARGS.PATTERN],
-        appHeight,
-        gridSize: size,
-        patterns: getPatternLib().getPatterns(null),
-        onTick: tick,
-        onRenderPlacement: renderPlacement,
-        onSelectPattern: selectPattern,
+        patternKey: pattern.key,
+        patternOffset,
+        gridSize,
+        patternGeneration: 0,
+        gridMode: GRID_MODES.TOROIDAL,
       },
+    );
+    const liveCells = firstGeneration.liveCells;
+    store.dispatch(setLiveCells([...liveCells]));
+
+    const app = renderRoot(
       bridge.stdin,
     );
     await app.waitUntilExit();
   } finally {
     bridge.stop();
-    await leaveAltScreen();
   }
 
   // Ink's stdin handling keeps the Deno event loop alive after unmount, so

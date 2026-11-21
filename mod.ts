@@ -8,7 +8,7 @@ import {
   handleArguments,
 } from "./src/terminal/terminal.ts";
 import { INVALID_ARGUMENTS } from "./src/constants/messages.ts";
-import { LONG_ARG_PREFIX } from "./src/constants/constants.ts";
+import { LONG_ARG_PREFIX } from "./src/terminal/terminal.const.ts";
 
 async function main() {
   let args: ValidArgs;
@@ -33,12 +33,7 @@ async function main() {
   }
 
   if (args.interactive) {
-    try {
-      await enterInteractiveMode(args);
-    } catch (e) {
-      console.error(e instanceof Error ? e.message : e);
-      Deno.exit(1);
-    }
+    await enterInteractiveMode(args);
   } else {
     await enterNonInteractiveMode(args);
   }

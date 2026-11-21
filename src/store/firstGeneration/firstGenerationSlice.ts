@@ -9,7 +9,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { required } from "../../util/misc.ts";
 import { checkLiveCellsEqual } from "../../next/helpers.ts";
 import { ORIGIN } from "../../next/constants.ts";
-import { SLICE_NAME } from "./constants.ts";
+import { SLICE_NAME } from "./messages.ts";
 
 const initialState: FirstGenerationState = {
   liveCells: [],

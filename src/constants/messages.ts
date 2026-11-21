@@ -1,10 +1,5 @@
 export const INVALID_ARGUMENTS = "Invalid arguments.";
 
-export const CONTEXTS = {
-  PATTERN_LIB: "Pattern Library Context",
-  ENGINE: "Game Engine",
-} as const;
-
 export function genMsgUninitializedSlice(slice: string): string {
   return `Redux slice "${slice}" MUST be initialized before use. Set values before selecting.`;
 }

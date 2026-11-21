@@ -3,11 +3,8 @@ import type { PatternProviderProps } from "../types/app.ts";
 
 import { createContext, useContext } from "react";
 import { PatternLib } from "@cell-auto/game-of-life-engine";
-import {
-  CONTEXTS,
-  genMsgContextMissing,
-  UNKNOWN,
-} from "../constants/messages.ts";
+import { genMsgContextMissing, UNKNOWN } from "../constants/messages.ts";
+import { CONTEXT_NAME } from "./messages.ts";
 
 let patternLib: null | IPatternLib = null;
 
@@ -16,7 +13,7 @@ export function makePatternLib(): IPatternLib {
 }
 
 const PatternContext = createContext<IPatternLib | null>(null);
-PatternContext.displayName = CONTEXTS.PATTERN_LIB;
+PatternContext.displayName = CONTEXT_NAME;
 
 export function PatternProvider({ children }: PatternProviderProps) {
   const patternLib = makePatternLib();

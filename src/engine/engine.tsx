@@ -11,7 +11,6 @@ import {
   useSyncExternalStore,
 } from "react";
 import {
-  CONTEXTS,
   genErrPatternNotFound,
   genMsgContextMissing,
   UNKNOWN,
@@ -30,6 +29,7 @@ import {
   selectLiveCells,
 } from "../store/firstGeneration/firstGenerationSlice.ts";
 import { selectGridSize } from "../store/terminal/terminalSlice.ts";
+import { CONTEXT_NAME } from "./messages.ts";
 
 export function makeGeneration(
   patternLib: IPatternLib,
@@ -63,7 +63,7 @@ export function makeEngine(
 }
 
 const EngineContext = createContext<IEngineNext | null>(null);
-EngineContext.displayName = CONTEXTS.ENGINE;
+EngineContext.displayName = CONTEXT_NAME;
 
 function EngineStoreProvider(
   { firstGeneration, children }: EngineStoreProviderProps,

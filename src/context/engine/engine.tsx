@@ -10,11 +10,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import {
-  genErrPatternNotFound,
-  genMsgContextMissing,
-  UNKNOWN,
-} from "../../constants/messages.ts";
+import { genErrPatternNotFound } from "../../constants/messages.ts";
 import type {
   EngineProviderProps,
   EngineStoreProviderProps,
@@ -30,6 +26,7 @@ import {
 } from "../../store/firstGeneration/firstGenerationSlice.ts";
 import { selectGridSize } from "../../store/terminal/terminalSlice.ts";
 import { CONTEXT_NAME } from "./messages.ts";
+import { genMsgContextMissing, UNKNOWN } from "../messages.ts";
 
 export function makeGeneration(
   patternLib: IPatternLib,

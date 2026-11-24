@@ -4,7 +4,7 @@ import { createContext, useContext } from "react";
 import { PatternLib } from "@cell-auto/game-of-life-engine";
 import { CONTEXT_NAME } from "./messages.ts";
 import type { PatternProviderProps } from "./types.ts";
-import { genMsgContextMissing, UNKNOWN } from "../../constants/messages.ts";
+import { genMsgContextMissing, UNKNOWN } from "../messages.ts";
 
 let patternLib: null | IPatternLib = null;
 

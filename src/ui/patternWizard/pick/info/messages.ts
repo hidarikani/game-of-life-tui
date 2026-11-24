@@ -1,5 +1,5 @@
 export const EMPTY = "Select a pattern to see its info.";
-
+export const NONE = "none";
 export const HEADING = "Pattern Info";
 
 export const genMsgPatternName = (name: string): string => `Name: ${name};`;

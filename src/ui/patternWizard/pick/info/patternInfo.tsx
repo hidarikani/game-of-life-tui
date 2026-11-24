@@ -5,10 +5,10 @@ import {
   genMsgGenerationSize,
   genMsgPatternName,
   genMsgPeriod,
-  HEADING as HEADING,
+  HEADING,
+  NONE,
 } from "./messages.ts";
 import type { Props } from "./types.ts";
-import { NONE } from "../../../../constants/messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
 import { PADDING } from "../../../app/app.const.ts";
 

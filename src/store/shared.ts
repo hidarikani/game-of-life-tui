@@ -1,4 +1,4 @@
-import { genMsgUninitializedSlice } from "./messages";
+import { genMsgUninitializedSlice } from "./messages.ts";
 
 export const required = <T>(value: T | null, slice: string): T => {
   if (value === null) {

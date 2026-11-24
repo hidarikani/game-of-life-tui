@@ -3,8 +3,8 @@ import { PickPattern } from "../pick/pick/pickPattern.tsx";
 import { PlacePattern } from "../place/place/placePattern.tsx";
 import type { IGrid } from "@cell-auto/game-of-life-engine";
 import type { Props } from "./types.ts";
-import { usePatternLib } from "../../../pattern/pattern.tsx";
 import { genErrPatternNotFound } from "../../../constants/messages.ts";
+import { usePatternLib } from "../../../context/pattern/pattern.tsx";
 
 export function PatternWizard({ onCancel, onSubmit }: Props) {
   const [key, setKey] = useState<string | null>(null);

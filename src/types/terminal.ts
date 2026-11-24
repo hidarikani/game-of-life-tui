@@ -1,10 +1,10 @@
 import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 import * as v from "@valibot/valibot";
 
-import { makePatternLib } from "../pattern/pattern.tsx";
 import { genErrPatternNotFound } from "../constants/messages.ts";
 import { MIN_GENERATIONS, PATTERN_KEYS } from "../next/constants.ts";
 import { CLI_ARGS } from "../terminal/terminal.const.ts";
+import { makePatternLib } from "../context/pattern/pattern.tsx";
 
 const NonEmptyString = v.pipe(v.string(), v.trim(), v.nonEmpty());
 

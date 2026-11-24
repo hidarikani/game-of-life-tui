@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { Box, Text } from "ink";
 import { genErrPatternNotFound } from "../../../../constants/messages.ts";
-import { usePatternLib } from "../../../../pattern/pattern.tsx";
 import { PatternNameSelect } from "../patternName/patternNameSelect.tsx";
 import { PatternGenerationSelect } from "../patternGeneration/patternGenerationSelect.tsx";
 import { PatternInfo } from "../info/patternInfo.tsx";
@@ -22,6 +21,7 @@ import { Description } from "../../../description/description.tsx";
 import { Hints } from "../../../hints/hints.tsx";
 import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../../../app/messages.ts";
 import { GAP } from "../../../app/app.const.ts";
+import { usePatternLib } from "../../../../context/pattern/pattern.tsx";
 
 export function PickPattern({ onCancel, onSubmit }: Props) {
   const heading = `${WIZARD_HEADING} / ${STEP_HEADING}`;

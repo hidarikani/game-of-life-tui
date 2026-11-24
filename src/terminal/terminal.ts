@@ -18,7 +18,6 @@ import {
   setPatternKey,
   setPatternOffset,
 } from "../store/firstGeneration/firstGenerationSlice.ts";
-import { makePatternLib } from "../pattern/pattern.tsx";
 import { store } from "../store/store.ts";
 import {
   selectGridSize,
@@ -27,6 +26,7 @@ import {
 } from "../store/terminal/terminalSlice.ts";
 import { ORIGIN } from "../next/constants.ts";
 import { CLI_ARGS, SEPARATOR_WIDTH } from "./terminal.const.ts";
+import { makePatternLib } from "../context/pattern/pattern.tsx";
 
 export function handleArguments(): ValidArgs {
   /*

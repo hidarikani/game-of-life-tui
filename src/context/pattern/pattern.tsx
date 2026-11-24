@@ -1,10 +1,10 @@
 import type { IPatternLib } from "@cell-auto/game-of-life-engine";
-import type { PatternProviderProps } from "../types/app.ts";
 
 import { createContext, useContext } from "react";
 import { PatternLib } from "@cell-auto/game-of-life-engine";
-import { genMsgContextMissing, UNKNOWN } from "../constants/messages.ts";
 import { CONTEXT_NAME } from "./messages.ts";
+import type { PatternProviderProps } from "./types.ts";
+import { genMsgContextMissing, UNKNOWN } from "../../constants/messages.ts";
 
 let patternLib: null | IPatternLib = null;
 

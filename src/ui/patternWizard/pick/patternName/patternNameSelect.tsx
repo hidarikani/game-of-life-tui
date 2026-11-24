@@ -1,10 +1,10 @@
 import { Box, useFocus } from "ink";
 import { Select } from "@inkjs/ui";
 import type { Props } from "./types.ts";
-import { usePatternLib } from "../../../../pattern/pattern.tsx";
 import { PATTERNS_BY_NAME_HEADING } from "./messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
 import { MAX_SELECT_WIDTH } from "../../wizard/wizardConst.const.ts";
+import { usePatternLib } from "../../../../context/pattern/pattern.tsx";
 
 export function PatternNameSelect({ onChange }: Props) {
   const { isFocused } = useFocus({

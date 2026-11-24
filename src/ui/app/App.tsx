@@ -1,5 +1,3 @@
-import type { View } from "../../types/app.ts";
-
 import { useCallback, useState } from "react";
 import { Box, useApp, useInput } from "ink";
 
@@ -13,6 +11,7 @@ import type { IGrid } from "@cell-auto/game-of-life-engine";
 import { selectRows } from "../../store/terminal/terminalSlice.ts";
 import { Game } from "../game/game.tsx";
 import { KEY_QUIT, KEY_TICK, KEY_WIZARD, VIEWS } from "./app.const.ts";
+import type { View } from "./types.ts";
 
 export function App() {
   const [view, setView] = useState<View>(VIEWS.GAME);

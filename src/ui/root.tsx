@@ -6,9 +6,9 @@ import { Provider } from "react-redux";
 import { render } from "ink";
 
 import { store } from "../store/store.ts";
-import { PatternProvider } from "../pattern/pattern.tsx";
 import { EngineProvider } from "../engine/engine.tsx";
 import { App } from "./app/App.tsx";
+import { PatternProvider } from "../context/pattern/pattern.tsx";
 
 export function Root() {
   return (

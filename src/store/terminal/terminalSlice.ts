@@ -4,10 +4,10 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import type { TerminalState } from "./types.ts";
-import { required } from "../../util/misc.ts";
 import type { GridSize } from "@cell-auto/game-of-life-engine";
 import { FOOTER_HEIGHT, HEADER_HEIGHT } from "../../ui/app/app.const.ts";
 import { SLICE_NAME } from "./messages.ts";
+import { required } from "../shared.ts";
 
 const initialState: TerminalState = {
   rows: null,

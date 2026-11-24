@@ -1,9 +1,5 @@
 export const INVALID_ARGUMENTS = "Invalid arguments.";
 
-export function genMsgUninitializedSlice(slice: string): string {
-  return `Redux slice "${slice}" MUST be initialized before use. Set values before selecting.`;
-}
-
 export function genMsgContextMissing(
   hookName: string,
   providerName: string,

@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { Box, useApp, useInput } from "ink";
 
-import { useTick } from "../../engine/engine.tsx";
+import { useTick } from "../../context/engine/engine.tsx";
 import { useAppDispatch, useAppSelector } from "../../store/hooks.ts";
 import {
   setLiveCells,

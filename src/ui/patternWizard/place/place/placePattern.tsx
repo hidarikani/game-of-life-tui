@@ -12,7 +12,7 @@ import { Heading } from "../../../heading/heading.tsx";
 import { Button } from "../../button/Button.tsx";
 import type { Props } from "./types.ts";
 import { GridView } from "../../../grid/GridView.tsx";
-import { usePresent } from "../../../../engine/engine.tsx";
+import { usePresent } from "../../../../context/engine/engine.tsx";
 import { Description } from "../../../description/description.tsx";
 import { useAppSelector } from "../../../../store/hooks.ts";
 import { selectGridSize } from "../../../../store/terminal/terminalSlice.ts";

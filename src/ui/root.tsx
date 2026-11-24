@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { render } from "ink";
 
 import { store } from "../store/store.ts";
-import { EngineProvider } from "../engine/engine.tsx";
+import { EngineProvider } from "../context/engine/engine.tsx";
 import { App } from "./app/App.tsx";
 import { PatternProvider } from "../context/pattern/pattern.tsx";
 

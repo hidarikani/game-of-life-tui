@@ -12,7 +12,7 @@ import { GRID_MODES, type GridSize } from "@cell-auto/game-of-life-engine";
 
 import { renderRoot } from "../ui/root.tsx";
 import { createStdinBridge } from "./stdin/stdin-bridge.ts";
-import { makeEngine, makeGeneration } from "../engine/engine.tsx";
+import { makeEngine, makeGeneration } from "../context/engine/engine.tsx";
 import {
   setLiveCells,
   setPatternKey,

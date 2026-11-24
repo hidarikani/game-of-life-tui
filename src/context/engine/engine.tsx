@@ -14,21 +14,21 @@ import {
   genErrPatternNotFound,
   genMsgContextMissing,
   UNKNOWN,
-} from "../constants/messages.ts";
+} from "../../constants/messages.ts";
 import type {
   EngineProviderProps,
   EngineStoreProviderProps,
   GenerationProps,
 } from "./types.ts";
-import type { EmptyCallback } from "../types/general.ts";
-import { EngineNext, GridNext } from "../next/next.ts";
-import type { IEngineNext, IGridNext } from "../next/types.ts";
-import { useAppSelector } from "../store/hooks.ts";
+import type { EmptyCallback } from "../../types/general.ts";
+import { EngineNext, GridNext } from "../../next/next.ts";
+import type { IEngineNext, IGridNext } from "../../next/types.ts";
+import { useAppSelector } from "../../store/hooks.ts";
 import {
   selectGridMode,
   selectLiveCells,
-} from "../store/firstGeneration/firstGenerationSlice.ts";
-import { selectGridSize } from "../store/terminal/terminalSlice.ts";
+} from "../../store/firstGeneration/firstGenerationSlice.ts";
+import { selectGridSize } from "../../store/terminal/terminalSlice.ts";
 import { CONTEXT_NAME } from "./messages.ts";
 
 export function makeGeneration(

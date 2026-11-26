@@ -16,7 +16,7 @@ import type {
   EngineStoreProviderProps,
   GenerationProps,
 } from "./types.ts";
-import type { EmptyCallback } from "../../general.ts";
+import type { EmptyCallback } from "../../constants.ts";
 import { EngineNext, GridNext } from "../../next/next.ts";
 import type { IEngineNext, IGridNext } from "../../next/types.ts";
 import { useAppSelector } from "../../store/hooks.ts";

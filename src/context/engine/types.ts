@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { GridMode, GridSize, Point } from "@cell-auto/game-of-life-engine";
-import type { EmptyCallback } from "../../general.ts";
+import type { EmptyCallback } from "../../constants.ts";
 import type { IGridNext } from "../../next/types.ts";
 
 export type GenerationProps = {

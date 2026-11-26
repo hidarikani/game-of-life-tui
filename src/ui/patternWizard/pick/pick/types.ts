@@ -1,4 +1,4 @@
-import type { EmptyCallback } from "../../../../general.ts";
+import type { EmptyCallback } from "../../../../constants.ts";
 
 export type SubmitCallback = (
   patternKey: string,

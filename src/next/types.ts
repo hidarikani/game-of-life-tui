@@ -1,5 +1,5 @@
 import type { IEngine, IGrid } from "@cell-auto/game-of-life-engine";
-import type { EmptyCallback } from "../general.ts";
+import type { EmptyCallback } from "../constants.ts";
 
 /**
  * @deprecated use implementation from @cell-auto/game-of-life-engine

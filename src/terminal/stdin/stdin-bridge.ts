@@ -1,6 +1,6 @@
 import { PassThrough } from "node:stream";
 
-import type { EmptyCallback } from "../../general.ts";
+import type { EmptyCallback } from "../../constants.ts";
 import type { RawStdin } from "./types.ts";
 
 /**

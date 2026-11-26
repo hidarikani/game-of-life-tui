@@ -1,6 +1,7 @@
 import { PassThrough } from "node:stream";
-import type { RawStdin } from "../../types/terminal.ts";
+
 import type { EmptyCallback } from "../../types/general.ts";
+import type { RawStdin } from "./types.ts";
 
 /**
  * A Node-style stdin stream Ink can consume, backed by a pump that this

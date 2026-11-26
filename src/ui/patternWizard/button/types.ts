@@ -1,4 +1,4 @@
-import type { EmptyCallback } from "../../../types/general.ts";
+import type { EmptyCallback } from "../../../general.ts";
 
 export type Props = {
   label: string;

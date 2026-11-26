@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
 import { createStdinBridge } from "./stdin-bridge.ts";
-import type { EmptyCallback } from "../../types/general.ts";
+import type { EmptyCallback } from "../../general.ts";
 
 function sourceFromController(): {
   source: ReadableStream<Uint8Array>;

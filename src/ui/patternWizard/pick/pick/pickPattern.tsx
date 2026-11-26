@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Box, Text } from "ink";
-import { genErrPatternNotFound } from "../../../../constants/messages.ts";
+import { genErrPatternNotFound } from "../../../../messages.ts";
 import { PatternNameSelect } from "../patternName/patternNameSelect.tsx";
 import { PatternGenerationSelect } from "../patternGeneration/patternGenerationSelect.tsx";
 import { PatternInfo } from "../info/patternInfo.tsx";

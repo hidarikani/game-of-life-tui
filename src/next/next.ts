@@ -13,7 +13,7 @@ import {
   pointToCellKey,
 } from "@cell-auto/game-of-life-engine";
 import type { IEngineNext, IGridNext } from "./types.ts";
-import type { EmptyCallback } from "../types/general.ts";
+import type { EmptyCallback } from "../general.ts";
 import { KEY_SEPARATOR } from "./constants.ts";
 import { comparePoints } from "./helpers.ts";
 

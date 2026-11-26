@@ -3,7 +3,7 @@ import { assertEquals, assertObjectMatch, assertThrows } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
 import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 
-import { genErrPatternNotFound } from "../../../constants/messages.ts";
+import { genErrPatternNotFound } from "../../../messages.ts";
 import { MIN_GENERATIONS, PATTERN_KEYS } from "../../../next/constants.ts";
 import { CLI_ARGS, LONG_ARG_PREFIX } from "../../terminal.const.ts";
 import { ArgSchema } from "./args.ts";

@@ -1,6 +1,6 @@
 import * as v from "@valibot/valibot";
 
-import { genErrPatternNotFound } from "../../../constants/messages.ts";
+import { genErrPatternNotFound } from "../../../messages.ts";
 import { MIN_GENERATIONS, PATTERN_KEYS } from "../../../next/constants.ts";
 import { CLI_ARGS } from "../../../terminal/terminal.const.ts";
 import { makePatternLib } from "../../../context/pattern/pattern.tsx";

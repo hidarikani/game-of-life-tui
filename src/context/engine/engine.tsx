@@ -10,13 +10,13 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { genErrPatternNotFound } from "../../constants/messages.ts";
+import { genErrPatternNotFound } from "../../messages.ts";
 import type {
   EngineProviderProps,
   EngineStoreProviderProps,
   GenerationProps,
 } from "./types.ts";
-import type { EmptyCallback } from "../../types/general.ts";
+import type { EmptyCallback } from "../../general.ts";
 import { EngineNext, GridNext } from "../../next/next.ts";
 import type { IEngineNext, IGridNext } from "../../next/types.ts";
 import { useAppSelector } from "../../store/hooks.ts";

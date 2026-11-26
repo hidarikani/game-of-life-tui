@@ -15,7 +15,7 @@ import {
   setRows,
 } from "../../store/terminal/terminalSlice.ts";
 import { ORIGIN } from "../../next/constants.ts";
-import { CLI_ARGS } from "../terminal.const.ts";
+import { CLI_ARGS } from "../constants.ts";
 import { makePatternLib } from "../../context/pattern/pattern.tsx";
 import { getSize } from "../shared/shared.ts";
 import type { InteractiveArgs } from "../entry/schema/types.ts";

@@ -5,10 +5,3 @@ export const CLI_ARGS = {
   GRID_HEIGHT: "grid-height",
   GENERATIONS: "generations",
 } as const;
-
-export const LONG_ARG_PREFIX = "--";
-
-export const SEPARATOR_WIDTH = {
-  MIN: 1,
-  MAX: 80,
-} as const;

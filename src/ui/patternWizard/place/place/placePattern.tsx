@@ -18,7 +18,7 @@ import { useAppSelector } from "../../../../store/hooks.ts";
 import { selectGridSize } from "../../../../store/terminal/terminalSlice.ts";
 import { Hints } from "../../../hints/hints.tsx";
 import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../../../app/messages.ts";
-import { GAP } from "../../../app/app.const.ts";
+import { GAP } from "../../../app/constants.ts";
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), Math.max(min, max));

@@ -4,7 +4,7 @@ import type { Props } from "./types.ts";
 import { EMPTY, SELECT_HEADING } from "./messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
 import { useCallback } from "react";
-import { MAX_SELECT_WIDTH } from "../../wizard/wizardConst.const.ts";
+import { MAX_SELECT_WIDTH } from "../../wizard/constants.ts";
 import { usePatternLib } from "../../../../context/pattern/pattern.tsx";
 
 export function PatternGenerationSelect({ patternKey, onChange }: Props) {

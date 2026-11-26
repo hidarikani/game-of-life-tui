@@ -2,7 +2,7 @@ import * as v from "@valibot/valibot";
 
 import { genErrPatternNotFound } from "../../../messages.ts";
 import { MIN_GENERATIONS, PATTERN_KEYS } from "../../../next/constants.ts";
-import { CLI_ARGS } from "../../../terminal/terminal.const.ts";
+import { CLI_ARGS } from "../../constants.ts";
 import { makePatternLib } from "../../../context/pattern/pattern.tsx";
 import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 

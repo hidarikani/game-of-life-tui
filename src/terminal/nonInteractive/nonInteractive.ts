@@ -2,9 +2,10 @@ import { GRID_MODES, type GridSize } from "@cell-auto/game-of-life-engine";
 
 import { makeEngine, makeGeneration } from "../../context/engine/engine.tsx";
 import { ORIGIN } from "../../next/constants.ts";
-import { CLI_ARGS, SEPARATOR_WIDTH } from "../terminal.const.ts";
+import { CLI_ARGS } from "../constants.ts";
 import { makePatternLib } from "../../context/pattern/pattern.tsx";
 import type { NonInteractiveArgs } from "../entry/schema/types.ts";
+import { SEPARATOR_WIDTH } from "./constants.ts";
 
 const encoder = new TextEncoder();
 

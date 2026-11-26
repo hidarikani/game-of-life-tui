@@ -1,11 +1,12 @@
 import { parseArgs } from "@std/cli/parse-args";
 import * as v from "@valibot/valibot";
-import { CLI_ARGS, LONG_ARG_PREFIX } from "../terminal.const.ts";
+import { CLI_ARGS } from "../constants.ts";
 import { enterInteractiveMode } from "../interactive/internactive.ts";
 import { enterNonInteractiveMode } from "../nonInteractive/nonInteractive.ts";
 import { ArgSchema } from "./schema/args.ts";
 import type { ValidArgs } from "./schema/types.ts";
 import { INVALID_ARGUMENTS } from "./messages.ts";
+import { LONG_ARG_PREFIX } from "./constants.ts";
 
 export function handleArguments(): ValidArgs {
   /*

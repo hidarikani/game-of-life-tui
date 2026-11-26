@@ -5,9 +5,10 @@ import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 
 import { genErrPatternNotFound } from "../../../messages.ts";
 import { MIN_GENERATIONS, PATTERN_KEYS } from "../../../next/constants.ts";
-import { CLI_ARGS, LONG_ARG_PREFIX } from "../../terminal.const.ts";
+import { CLI_ARGS } from "../../constants.ts";
 import { ArgSchema } from "./args.ts";
 import type { NonInteractiveArgs } from "./types.ts";
+import { LONG_ARG_PREFIX } from "../constants.ts";
 
 describe("argSchema", () => {
   describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} is "true"`, () => {

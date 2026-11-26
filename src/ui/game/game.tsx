@@ -11,7 +11,7 @@ import {
 import { Description } from "../description/description.tsx";
 import { Hints } from "../hints/hints.tsx";
 import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../app/messages.ts";
-import { GAP, PADDING } from "../app/app.const.ts";
+import { GAP, PADDING } from "../app/constants.ts";
 
 export function Game() {
   const present = usePresent();

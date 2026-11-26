@@ -1,0 +1,61 @@
+import * as v from "@valibot/valibot";
+
+import { genErrPatternNotFound } from "../../../constants/messages.ts";
+import { MIN_GENERATIONS, PATTERN_KEYS } from "../../../next/constants.ts";
+import { CLI_ARGS } from "../../../terminal/terminal.const.ts";
+import { makePatternLib } from "../../../context/pattern/pattern.tsx";
+import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
+
+const NonEmptyString = v.pipe(v.string(), v.trim(), v.nonEmpty());
+
+const PatternPipe = v.optional(
+  v.pipe(
+    NonEmptyString,
+    v.rawTransform(({ dataset, addIssue, NEVER }) => {
+      const pattern = makePatternLib().getPatternByKey(dataset.value);
+      if (pattern === null) {
+        addIssue({ message: genErrPatternNotFound(dataset.value) });
+        return NEVER;
+      }
+      return pattern;
+    }),
+  ),
+  PATTERN_KEYS.PULSAR,
+);
+
+const GridSizePipe = v.pipe(
+  NonEmptyString,
+  v.toNumber(),
+  v.integer(),
+  v.minValue(MIN_GRID_SIZE),
+);
+
+const GenerationsPipe = v.optional(
+  v.pipe(
+    NonEmptyString,
+    v.toNumber(),
+    v.integer(),
+    v.minValue(MIN_GENERATIONS),
+  ),
+  MIN_GENERATIONS.toString(),
+);
+
+export const ArgSchema = v.variant("interactive", [
+  v.strictObject({
+    [CLI_ARGS.INTERACTIVE]: v.pipe(
+      v.literal("true"),
+      v.transform(() => true as const),
+    ),
+    [CLI_ARGS.PATTERN]: PatternPipe,
+  }),
+  v.strictObject({
+    [CLI_ARGS.INTERACTIVE]: v.pipe(
+      v.literal("false"),
+      v.transform(() => false as const),
+    ),
+    [CLI_ARGS.PATTERN]: PatternPipe,
+    [CLI_ARGS.GRID_WIDTH]: GridSizePipe,
+    [CLI_ARGS.GRID_HEIGHT]: GridSizePipe,
+    [CLI_ARGS.GENERATIONS]: GenerationsPipe,
+  }),
+]);

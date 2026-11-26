@@ -1,14 +1,13 @@
-import type { NonInteractiveArgs } from "./terminal.ts";
-
 import * as v from "@valibot/valibot";
 import { assertEquals, assertObjectMatch, assertThrows } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
 import { MIN_GRID_SIZE } from "@cell-auto/game-of-life-engine";
 
-import { ArgSchema } from "./terminal.ts";
-import { genErrPatternNotFound } from "../constants/messages.ts";
-import { MIN_GENERATIONS, PATTERN_KEYS } from "../next/constants.ts";
-import { CLI_ARGS, LONG_ARG_PREFIX } from "../terminal/terminal.const.ts";
+import { genErrPatternNotFound } from "../../../constants/messages.ts";
+import { MIN_GENERATIONS, PATTERN_KEYS } from "../../../next/constants.ts";
+import { CLI_ARGS, LONG_ARG_PREFIX } from "../../terminal.const.ts";
+import { ArgSchema } from "./args.ts";
+import type { NonInteractiveArgs } from "./types.ts";
 
 describe("argSchema", () => {
   describe(`${LONG_ARG_PREFIX}${CLI_ARGS.INTERACTIVE} is "true"`, () => {

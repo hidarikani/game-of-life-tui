@@ -1,25 +1,15 @@
-import type {
-  NonInteractiveArgs,
-  ViewportSize,
-} from "../../types/terminal.ts";
-
 import { GRID_MODES, type GridSize } from "@cell-auto/game-of-life-engine";
 
 import { makeEngine, makeGeneration } from "../../context/engine/engine.tsx";
 import { ORIGIN } from "../../next/constants.ts";
 import { CLI_ARGS, SEPARATOR_WIDTH } from "../terminal.const.ts";
 import { makePatternLib } from "../../context/pattern/pattern.tsx";
-
-
+import type { NonInteractiveArgs } from "../entry/schema/types.ts";
 
 const encoder = new TextEncoder();
 
 export async function write(s: string) {
   await Deno.stdout.write(encoder.encode(s));
-}
-
-export function getSize(): ViewportSize {
-  return Deno.consoleSize();
 }
 
 function genSeparatorLine(len: number = SEPARATOR_WIDTH.MAX): string {

@@ -1,5 +1,3 @@
-import type { InteractiveArgs, ViewportSize } from "../../types/terminal.ts";
-
 import { GRID_MODES } from "@cell-auto/game-of-life-engine";
 
 import { renderRoot } from "../../ui/root.tsx";
@@ -19,16 +17,8 @@ import {
 import { ORIGIN } from "../../next/constants.ts";
 import { CLI_ARGS } from "../terminal.const.ts";
 import { makePatternLib } from "../../context/pattern/pattern.tsx";
-
-const encoder = new TextEncoder();
-
-export async function write(s: string) {
-  await Deno.stdout.write(encoder.encode(s));
-}
-
-export function getSize(): ViewportSize {
-  return Deno.consoleSize();
-}
+import { getSize } from "../shared/shared.ts";
+import type { InteractiveArgs } from "../entry/schema/types.ts";
 
 export async function enterInteractiveMode(args: InteractiveArgs) {
   const terminalSize = getSize();

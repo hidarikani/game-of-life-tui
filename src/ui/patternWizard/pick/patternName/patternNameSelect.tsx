@@ -1,0 +1,37 @@
+import { Box, useFocus } from "ink";
+import { Select } from "@inkjs/ui";
+import type { Props } from "./types.ts";
+import { PATTERNS_BY_NAME_HEADING } from "./messages.ts";
+import { Heading } from "../../../heading/heading.tsx";
+import { MAX_SELECT_WIDTH } from "../../wizard/constants.ts";
+import { usePatternLib } from "../../../../context/pattern/pattern.tsx";
+
+export function PatternNameSelect({ onChange }: Props) {
+  const { isFocused } = useFocus({
+    autoFocus: true,
+  });
+  const isSelectDisabled = !isFocused;
+  const patternLib = usePatternLib();
+  const allPatterns = patternLib.getPatterns(null);
+  const patternOptions = allPatterns.map((pattern) => ({
+    label: pattern.name,
+    value: pattern.key,
+  }));
+
+  return (
+    <Box flexDirection="column">
+      <Heading
+        level={2}
+        isFocused={isFocused}
+        message={PATTERNS_BY_NAME_HEADING}
+      />
+      <Box maxWidth={MAX_SELECT_WIDTH} borderStyle="round">
+        <Select
+          options={patternOptions}
+          onChange={onChange}
+          isDisabled={isSelectDisabled}
+        />
+      </Box>
+    </Box>
+  );
+}

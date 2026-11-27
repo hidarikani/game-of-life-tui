@@ -7,7 +7,7 @@ import { render } from "ink";
 
 import { store } from "../store/store.ts";
 import { EngineProvider } from "../context/engine/engine.tsx";
-import { App } from "./app/App.tsx";
+import { App } from "./layout/layout.tsx";
 import { PatternProvider } from "../context/pattern/pattern.tsx";
 
 export function Root() {

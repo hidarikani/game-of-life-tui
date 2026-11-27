@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import type { TerminalState } from "./types.ts";
 import type { GridSize } from "@cell-auto/game-of-life-engine";
-import { FOOTER_HEIGHT, HEADER_HEIGHT } from "../../ui/app/constants.ts";
+import { FOOTER_HEIGHT, HEADER_HEIGHT } from "../../ui/layout/constants.ts";
 import { SLICE_NAME } from "./messages.ts";
 import { required } from "../shared.ts";
 

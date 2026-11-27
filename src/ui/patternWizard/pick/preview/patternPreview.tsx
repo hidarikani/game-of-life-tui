@@ -2,7 +2,7 @@ import { Box, Text } from "ink";
 import type { Props } from "./types.ts";
 import { EMPTY, HEADING } from "./messages.ts";
 import { Heading } from "../../../heading/heading.tsx";
-import { PADDING } from "../../../app/constants.ts";
+import { PADDING } from "../../../layout/constants.ts";
 
 export function PatternPreview({ grid }: Props) {
   const preview = grid === null ? EMPTY : grid.toString();

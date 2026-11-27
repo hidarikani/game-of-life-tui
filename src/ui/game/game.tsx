@@ -10,8 +10,8 @@ import {
 } from "./messages.ts";
 import { Description } from "../description/description.tsx";
 import { Hints } from "../hints/hints.tsx";
-import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../app/messages.ts";
-import { GAP, PADDING } from "../app/constants.ts";
+import { CYCLE_FOCUS_HINT, QUIT_APP_HINT } from "../layout/messages.ts";
+import { GAP, PADDING } from "../layout/constants.ts";
 
 export function Game() {
   const present = usePresent();
